@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c4af98ab474e1182cac0d9faa48cbe, type: 3}
+  m_Name: Pangolin
+  m_EditorClassIdentifier: 
+  TotalStats: 550
+  Name: Pangolin
+  Status:
+    Health: 200
+    Attack: 20
+    Defense: 10
+    Critical: 15
+    Speed: 225
+    Step: 2
+    Agility: 80
+    Aim: 2
+  CharacterTags: 010000000b00000006000000

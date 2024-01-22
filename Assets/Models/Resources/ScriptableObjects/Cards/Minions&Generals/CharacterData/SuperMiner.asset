@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c4af98ab474e1182cac0d9faa48cbe, type: 3}
+  m_Name: SuperMiner
+  m_EditorClassIdentifier: 
+  TotalStats: 1050
+  Name: Super Miner
+  Status:
+    Health: 700
+    Attack: 55
+    Defense: 30
+    Critical: 25
+    Speed: 150
+    Step: 1
+    Agility: 90
+    Aim: 1
+  CharacterTags: 000000000f00000013000000
