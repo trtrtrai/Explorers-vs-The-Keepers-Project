@@ -1,5 +1,6 @@
 using System.Collections;
 using Models;
+using ScriptableObjects;
 using UnityEngine;
 
 namespace Controllers
@@ -34,11 +35,26 @@ namespace Controllers
         public void SetupAndStart()
         {
             if (isSetup) return;
-
+            
             isSetup = true;
+
+            WorldManager.Instance.OnGameReset += OnGameReset;
             timePerEnergyInRealTime = timePerEnergy;
             timerScale = 1f;
             StartCoroutine(EnergyCooldown());
+        }
+        
+        private void OnGameReset(object sender, System.EventArgs args)
+        {
+            if (sender is WorldManager)
+            {
+                StopAllCoroutines();
+                
+                energy = maximumEnergy / 2;
+                timePerEnergyInRealTime = timePerEnergy;
+                timerScale = 1f;
+                StartCoroutine(EnergyCooldown());
+            }
         }
 
         private IEnumerator EnergyCooldown()
@@ -72,6 +88,30 @@ namespace Controllers
             {
                 if (energy == MaximumEnergy) StartCoroutine(EnergyCooldown());
                 energy -= (int)realCost;
+                
+                return true;
+            }
+
+            return false;
+        }
+        
+        public bool CardCanBeUsed(CardInfo target)
+        {
+            //var realCost = CardUsingEvent?.Invoke(target);
+            var realCost = target.Cost;
+
+            return energy >= realCost;
+        }
+
+        public bool UseCard(CardInfo target)
+        {
+            //var realCost = CardUsingEvent?.Invoke(target);
+            var realCost = target.Cost;
+
+            if (energy >= realCost)
+            {
+                if (energy == MaximumEnergy) StartCoroutine(EnergyCooldown());
+                energy -= realCost;
                 
                 return true;
             }

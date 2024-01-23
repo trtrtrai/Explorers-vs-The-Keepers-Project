@@ -181,112 +181,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3914927456970982411, guid: 880a20bc22125c94399c1b1bdfc065f1,
+    - target: {fileID: 5740239883790897438, guid: 880a20bc22125c94399c1b1bdfc065f1,
         type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6334511973529978028, guid: 880a20bc22125c94399c1b1bdfc065f1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
+      propertyPath: Position
+      value: 
+      objectReference: {fileID: 1550381503}
     - target: {fileID: 6689435883732841840, guid: 880a20bc22125c94399c1b1bdfc065f1,
         type: 3}
       propertyPath: m_Name
       value: Headquarter
       objectReference: {fileID: 0}
-    - target: {fileID: 6689435883732841840, guid: 880a20bc22125c94399c1b1bdfc065f1,
-        type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6689435883732841840, guid: 880a20bc22125c94399c1b1bdfc065f1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1096170688}
-    - targetCorrespondingSourceObject: {fileID: 6689435883732841840, guid: 880a20bc22125c94399c1b1bdfc065f1,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1096170687}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 880a20bc22125c94399c1b1bdfc065f1, type: 3}
---- !u!1 &1096170686 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6689435883732841840, guid: 880a20bc22125c94399c1b1bdfc065f1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1096170685}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1096170687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096170686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc6222b97a7d42ed882d86168c7b32a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Position: {fileID: 1550381503}
-  team: 0
-  roadIndex: 0
-  positionIndex: 0
-  characterInfo: {fileID: 11400000, guid: b31f5bc2d2eb75e448ac8fc700192954, type: 2}
-  status:
-    health: []
-    attack:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    defense:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    critical:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    speed:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    step:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    agility:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    aim:
-      StatsName: 0
-      Immutable: 0
-      Mutable: 0
-    groupNumber: 0
-    groupNumberImmutable: 0
-  characterObjs: []
-  behaviour: {fileID: 0}
-  moving: {fileID: 0}
-  attacking: {fileID: 0}
-  isMoving: 0
-  isAttacking: 0
---- !u!114 &1096170688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1096170686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5afbc047cfb24c699385ec6509a3e4c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1312680511
 GameObject:
   m_ObjectHideFlags: 0

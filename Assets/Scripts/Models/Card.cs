@@ -5,9 +5,9 @@ namespace Models
 {
     public class Card : MonoBehaviour
     {
-        #region test
-
         [SerializeField] private CardInfo cardInfo;
+        
+        /*#region test
 
         private void Awake()
         {
@@ -15,7 +15,7 @@ namespace Models
             //Debug.Log(cardInfo.Radius);
         }
 
-        #endregion
+        #endregion*/
 
         [SerializeField] private string cardName;
         [SerializeField] private CardType cardType;
@@ -43,25 +43,29 @@ namespace Models
         public GameObject Character => character;
 
         public bool IsSetup => isSetup;
+        
+        public int HandIndex { get; private set; }
 
-        public void SetupCard(CardInfo cardInfo)
+        public void SetupCard(CardInfo card, int handIndex)
         {
             if (isSetup) return;
             isSetup = true;
-            
+
+            cardInfo = card;
+            HandIndex = handIndex;
             canvasGroup = GetComponent<CanvasGroup>();
             
-            cardName = cardInfo.Name;
+            cardName = card.Name;
             gameObject.name = Name;
-            cardType = cardInfo.CardType;
-            activeType = cardInfo.ActiveType;
-            radius = cardInfo.Radius;
-            cost = cardInfo.Cost;
-            cardIcon = cardInfo.CardIcon;
-            description = cardInfo.Description;
+            cardType = card.CardType;
+            activeType = card.ActiveType;
+            radius = card.Radius;
+            cost = card.Cost;
+            cardIcon = card.CardIcon;
+            description = card.Description;
             
-            spellsEffect = cardInfo.SpellsEffect;
-            character = cardInfo.Character;
+            spellsEffect = card.SpellsEffect;
+            character = card.Character;
             
             UnHideCard();
         }

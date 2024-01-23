@@ -1,6 +1,9 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Controllers;
+using EventArgs;
+using Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,12 +11,58 @@ namespace GUI
 {
     public class Hand : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
+        public GameObject cardInfoUIPrefab;
         public GameObject cardTagContentPrefab;
         public GameObject cardTagPrefab;
 
         [SerializeField] private CardTagTooltip tagTooltip;
         
         [SerializeField] private List<TagExplain> listTagExplain;
+
+        private void Start()
+        {
+            StartCoroutine(WaitToSetup());
+        }
+
+        private IEnumerator WaitToSetup()
+        {
+            while (WorldManager.Instance is null || CardController.Instance is null)
+            {
+                yield return null;
+            }
+
+            WorldManager.Instance.OnGameReset += OnGameReset;
+
+            if (WorldManager.Instance.Team1Player)
+            {
+                CardController.Instance.OnTeam1DrawCard += OnPlayerDrawNewCard;
+            }
+            else
+            {
+                CardController.Instance.OnTeam2DrawCard += OnPlayerDrawNewCard;
+            }
+        }
+
+        private void OnGameReset(object sender, System.EventArgs args)
+        {
+            if (sender is WorldManager)
+            {
+                foreach (Transform t in transform)
+                {
+                    Destroy(t.gameObject);
+                }
+            }
+        }
+
+        private void OnPlayerDrawNewCard(object sender, DrawNewCardEventArgs args)
+        {
+            if (sender is CardController)
+            {
+                var cardObj = Instantiate(cardInfoUIPrefab, transform);
+                var script = cardObj.GetComponent<Card>();
+                script.SetupCard(args.Card, args.HandIndex);
+            }
+        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {

@@ -2,12 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Agents;
 using EventArgs;
 using Extensions;
 using GUI;
 using Models;
+using Models.SpecialCharacter;
 using Models.Spells;
 using ScriptableObjects;
+using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -25,11 +28,22 @@ namespace Controllers
         }
 
         public event EventHandler<CharacterSpawnEventArgs> CharacterSpawn;
+        public event EventHandler OnGameEnded;
+        public event EventHandler OnGameReset;
+
+        [SerializeField] private Transform aiBot;
 
         [SerializeField] private GameObject energyManagerPref;
         [SerializeField] private GameObject cardControllerPref;
+        [SerializeField] private GameObject characterContainer;
+        [SerializeField] private GameObject headquarter;
 
         [SerializeField] private EnergyManager playerEnergy;
+        [SerializeField] private EnergyManager enemyEnergy;
+
+        [SerializeField] private Character team1Hq;
+        [SerializeField] private Character team2Hq;
+        
         [SerializeField] private bool team1Player;
         [SerializeField] private Card cardWaitingActive = null;
         [SerializeField] private bool cardCanActive;
@@ -48,6 +62,9 @@ namespace Controllers
         public TileData Team2StartPoint => team2StartPoint;
 
         public EnergyManager PlayerEnergy => playerEnergy;
+        public EnergyManager EnemyEnergy => enemyEnergy;
+
+        public bool Team1Player => team1Player;
 
         [SerializeField] private int characterTagAmount;
         private List<Character> worldCharacters;
@@ -56,9 +73,12 @@ namespace Controllers
         private BitArray prioritiesBitArr;
 
         private List<List<TileData>> team1Paths;
-        private List<List<TileData>> team2Paths; // reverse from team 1?
+        private List<List<TileData>> team2Paths;
 
-        private int Counting; //test
+        [SerializeField] private List<CardName> team1CardList;
+        [SerializeField] private List<CardName> team2CardList;
+
+        [SerializeField] private bool initialize;
 
         private void Awake()
         {
@@ -100,13 +120,105 @@ namespace Controllers
                 characterTagAmount = Enum.GetValues(typeof(CharacterTag)).Length;
                 var characterTag = Priorities.Select(p => p.Subject).ToList();
                 prioritiesBitArr = CreateCharacterTag(characterTag);
-
-                Instantiate(cardControllerPref, transform);
                 
-                var obj = Instantiate(energyManagerPref, transform); // setup layer after
-                playerEnergy = obj.GetComponent<EnergyManager>();
-                playerEnergy.SetupAndStart();
+                var pMng = Instantiate(energyManagerPref, transform);
+                pMng.layer = GetAllyLayerOfPlayer();
+                playerEnergy = pMng.GetComponent<EnergyManager>();
+                
+                var eMng = Instantiate(energyManagerPref, transform);
+                eMng.layer = GetEnemyLayerOfPlayer();
+                enemyEnergy = eMng.GetComponent<EnergyManager>();
+
+                characterContainer = new GameObject();
+                characterContainer.name = "Character Container";
+                
+                var team1Headquarter = Instantiate(headquarter, characterContainer.transform);
+                team1Hq = team1Headquarter.GetComponent<Headquarter>();
+                team1Hq.Position = team1StartPoint;
+                team1Headquarter.transform.localPosition = team1StartPoint.transform.localPosition;
+                team1Hq.Setup(0, 0);
+                team1Hq.OnCharacterDeath += OnEndGame;
+                
+                var team2Headquarter = Instantiate(headquarter, characterContainer.transform);
+                team2Hq = team2Headquarter.GetComponent<Headquarter>();
+                team2Hq.Position = team2StartPoint;
+                team2Headquarter.transform.localPosition = team2StartPoint.transform.localPosition;
+                team2Hq.Setup(0, 1);
+                team2Hq.OnCharacterDeath += OnEndGame;
             }
+        }
+
+        private void Start()
+        {
+            Instantiate(cardControllerPref, transform);
+            StartCoroutine(WaitToSettingCardController());
+        }
+
+        public void SoftReset()
+        {
+            initialize = !initialize;
+            if (initialize) return;
+            
+            OnGameEnded -= aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
+            aiBot.GetComponent<Agent>().enabled = false;
+            
+            OnGameReset?.Invoke(this, System.EventArgs.Empty);
+            worldCharacters.ForEach(c => Destroy(c.gameObject));
+            worldCharacters.Clear();
+            
+            team1Hq.OnCharacterDeath -= OnEndGame;
+            team2Hq.OnCharacterDeath -= OnEndGame;
+            Destroy(team1Hq.gameObject);
+            Destroy(team2Hq.gameObject);
+            
+            var team1Headquarter = Instantiate(headquarter, characterContainer.transform);
+            team1Hq = team1Headquarter.GetComponent<Headquarter>();
+            team1Hq.Position = team1StartPoint;
+            team1Headquarter.transform.localPosition = team1StartPoint.transform.localPosition;
+            team1Hq.Setup(0, 0);
+            team1Hq.OnCharacterDeath += OnEndGame;
+                
+            var team2Headquarter = Instantiate(headquarter, characterContainer.transform);
+            team2Hq = team2Headquarter.GetComponent<Headquarter>();
+            team2Hq.Position = team2StartPoint;
+            team2Headquarter.transform.localPosition = team2StartPoint.transform.localPosition;
+            team2Hq.Setup(0, 1);
+            team2Hq.OnCharacterDeath += OnEndGame;
+            
+            StartCoroutine(WaitToSettingCardController());
+        }
+
+        private IEnumerator WaitToSettingCardController()
+        {
+            while (CardController.Instance is null)
+            {
+                yield return null;
+            }
+            
+            CardController.Instance.Setup(team1CardList, team2CardList);
+
+            yield return new WaitForSeconds(0.1f);
+            GameStart();
+        }
+
+        private void GameStart()
+        {
+            playerEnergy.SetupAndStart();
+            enemyEnergy.SetupAndStart();
+            
+            CardController.Instance.StartGame();
+            
+            aiBot.GetComponent<Agent>().enabled = true;
+            OnGameEnded += aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
+        }
+
+        private void OnEndGame(object sender, CharacterDeathEventArgs args)
+        {
+            if (sender is not Headquarter hq) return;
+
+            var won = LayerMask.LayerToName(hq.gameObject.layer).Equals("Team1") ? 1 : 0;
+            Debug.Log("Game ended " + won + " won!");
+            OnGameEnded?.Invoke(won, System.EventArgs.Empty);
         }
         
         #region Card drag system control all behaviour of card dragging.
@@ -457,15 +569,6 @@ namespace Controllers
                     if (TryConsumeCard(card, playerEnergy))
                     {
                         CreateCharacter(prefab, dropPosition.RoadIndex, team1Player ? 0 : 1);
-                        
-                        //test enemy spawn
-                        if (Counting % 2 == 0)
-                        {
-                            CreateCharacter(prefab, dropPosition.RoadIndex,
-                                team1Player ? 1 : 0);
-                        }
-
-                        Counting++;
                     }
                     break;
                 }
@@ -921,7 +1024,7 @@ namespace Controllers
         
         private void CreateCharacter(GameObject prefab, int roadIndex, int team) // After, it will also be assigned in event of AI script
         {
-            var characterObj = Instantiate(prefab);
+            var characterObj = Instantiate(prefab, characterContainer.transform);
             var character = characterObj.GetComponent<Character>();
             var startPoint = team == 0 ? team1StartPoint : team2StartPoint;
             character.Position = startPoint;

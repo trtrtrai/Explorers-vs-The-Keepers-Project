@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 106408762599938221}
   - component: {fileID: 4425369613318198285}
   - component: {fileID: 2907384339406878833}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9166541549848817269}
   - component: {fileID: 3732005555056332406}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3358238670304772595}
-  m_Layer: 0
+  - component: {fileID: 273210794958490191}
+  - component: {fileID: 5740239883790897438}
+  m_Layer: 6
   m_Name: Headquarter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,3 +171,70 @@ Transform:
   - {fileID: 106408762599938221}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &273210794958490191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689435883732841840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5afbc047cfb24c699385ec6509a3e4c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5740239883790897438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6689435883732841840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc6222b97a7d42ed882d86168c7b32a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Position: {fileID: 0}
+  team: 0
+  roadIndex: 0
+  positionIndex: 0
+  characterInfo: {fileID: 11400000, guid: b31f5bc2d2eb75e448ac8fc700192954, type: 2}
+  status:
+    health: []
+    attack:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    defense:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    critical:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    speed:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    step:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    agility:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    aim:
+      StatsName: 0
+      Immutable: 0
+      Mutable: 0
+    groupNumber: 0
+    groupNumberImmutable: 0
+  characterObjs: []
+  behaviour: {fileID: 0}
+  moving: {fileID: 0}
+  attacking: {fileID: 0}
+  isMoving: 0
+  isAttacking: 0
