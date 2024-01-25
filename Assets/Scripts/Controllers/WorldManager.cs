@@ -13,6 +13,7 @@ using ScriptableObjects;
 using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Controllers
 {
@@ -32,6 +33,7 @@ namespace Controllers
         public event EventHandler OnGameReset;
 
         [SerializeField] private Transform aiBot;
+        [SerializeField] private Transform aiBotTeam0;
 
         [SerializeField] private GameObject energyManagerPref;
         [SerializeField] private GameObject cardControllerPref;
@@ -67,7 +69,7 @@ namespace Controllers
         public bool Team1Player => team1Player;
 
         [SerializeField] private int characterTagAmount;
-        private List<Character> worldCharacters;
+        [SerializeField] private List<Character> worldCharacters;
 
         public List<CharacterTagPriority> Priorities;
         private BitArray prioritiesBitArr;
@@ -159,8 +161,13 @@ namespace Controllers
             initialize = !initialize;
             if (initialize) return;
             
-            OnGameEnded -= aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
+            OnGameEnded -= aiBot.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBot.GetComponent<Mission3Bot>().OnCharacterSpawn;
             aiBot.GetComponent<Agent>().enabled = false;
+            
+            /*OnGameEnded -= aiBotTeam0.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBotTeam0.GetComponent<Mission3Bot>().OnCharacterSpawn;
+            aiBotTeam0.GetComponent<Agent>().enabled = false;*/
             
             OnGameReset?.Invoke(this, System.EventArgs.Empty);
             worldCharacters.ForEach(c => Destroy(c.gameObject));
@@ -209,7 +216,12 @@ namespace Controllers
             CardController.Instance.StartGame();
             
             aiBot.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
+            OnGameEnded += aiBot.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBot.GetComponent<Mission3Bot>().OnCharacterSpawn;
+            
+            /*aiBotTeam0.GetComponent<Agent>().enabled = true;
+            OnGameEnded += aiBotTeam0.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBotTeam0.GetComponent<Mission3Bot>().OnCharacterSpawn;*/
         }
 
         private void OnEndGame(object sender, CharacterDeathEventArgs args)
@@ -1033,12 +1045,26 @@ namespace Controllers
             
             worldCharacters.Add(character);
             character.OnCharacterDeath += OnCharacterDeath;
-            CharacterSpawn?.Invoke(this, new CharacterSpawnEventArgs(character, team));
+            CharacterSpawn?.Invoke(this, new CharacterSpawnEventArgs(character, team, roadIndex));
         }
 
         public void CreateCharacter(GameObject prefab, int roadIndex, int team, SpellsEffect a) // After, it will also be assigned in event of AI script
         {
             CreateCharacter(prefab, roadIndex, team);
+        }
+
+        public Character GetRandomAlly(int team)
+        {
+            var allies = worldCharacters.FindAll(c => c.gameObject.layer != GetEnemyLayer(team == 0 ? "Team1" : "Team2"));
+
+            return allies.Count == 0 ? null : allies[new Random().Next(allies.Count)];
+        }
+        
+        public Character GetRandomEnemy(int team)
+        {
+            var enemies = worldCharacters.FindAll(c => c.gameObject.layer == GetEnemyLayer(team == 0 ? "Team1" : "Team2"));
+
+            return enemies.Count == 0 ? null : enemies[new Random().Next(enemies.Count)];
         }
 
         private void OnCharacterDeath(object sender, CharacterDeathEventArgs args)
@@ -1049,5 +1075,172 @@ namespace Controllers
                 worldCharacters.Remove(character);
             }
         }
+        
+        #region AI training
+
+        private List<Character> GetCharacters(List<Droppable> listArea, int layer)
+        {
+            var characters = worldCharacters.FindAll(c => c.gameObject.layer == layer);
+            var charactersOnArea = characters.FindAll(c =>
+                listActive.Contains(c.Position.GetComponent<Droppable>()));
+
+            return charactersOnArea;
+        }
+        
+        public List<Character> GetCharactersInArea(TileData origin, int radius, int layerFilter)
+        {
+            var areaList = new List<Droppable>();
+            if (origin.TryGetComponent(out Droppable droppable))
+            {
+                areaList.Add(droppable);
+            }
+
+            if (radius == 0)
+            {
+                return GetCharacters(areaList, layerFilter);
+            }
+            
+            var listTiles = new List<TileData>();
+            var listTilePos = new TilePosition[6];
+            
+            for (int i = 0; i < 6; i++)
+            {
+                var neighbor = origin.GetNeighbor(i);
+
+                if (neighbor is null)
+                {
+                    var signal = origin.TilePosition.GetPositionFromDirection(i, out float x, out float z);
+                        
+                    if (signal)
+                    {
+                        listTilePos[i] = new ()
+                        {
+                            X = x,
+                            Z = z
+                        };
+                    }
+                }
+                else
+                {
+                    listTiles.Add(neighbor);
+                    listTilePos[i] = neighbor.TilePosition;
+                }
+            }
+
+            foreach (var tileData in listTiles)
+            {
+                if (tileData.TryGetComponent(out droppable))
+                {
+                    areaList.Add(droppable);
+                }
+            }
+
+            if (radius == 1)
+            {
+                return GetCharacters(areaList, layerFilter);
+            }
+            var currentRadius = 2;
+
+            while (currentRadius <= radius)
+            {
+                var newTilePos = new TilePosition[6];
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var signal = listTilePos[i].GetPositionFromDirection(i, out float x, out float z);
+
+                    if (signal)
+                    {
+                        newTilePos[i] = new()
+                        {
+                            X = x,
+                            Z = z
+                        };
+                        
+                        foreach (var path in team1Paths)
+                        {
+                            var result = path.GetEqualsTilePositionFrom(newTilePos[i], out TileData tileData);
+
+                            if (result && !tileData.Equals(team1StartPoint) && !tileData.Equals(team2StartPoint))
+                            {
+                                areaList.Add(tileData.GetComponent<Droppable>());
+                            }
+                        }
+                    }
+                }
+
+                for (int j = 0; j < 6; j++)
+                {
+                    var curTilePos = newTilePos[j];
+                    var direct = curTilePos.GetDirectionFromPosition(newTilePos[(j + 1) % 6]);
+                    if (direct == -1) continue;
+            
+                    for (int i = 0; i < currentRadius - 1; i++)
+                    {
+                        var signal = curTilePos.GetPositionFromDirection(direct, out float x, out float z);
+
+                        if (signal)
+                        {
+                            var pos = new TilePosition
+                            {
+                                X = x,
+                                Z = z
+                            };
+
+                            foreach (var path in team1Paths)
+                            {
+                                var result = path.GetEqualsTilePositionFrom(pos, out TileData tileData);
+
+                                if (result && !tileData.Equals(team1StartPoint) && !tileData.Equals(team2StartPoint))
+                                {
+                                    areaList.Add(tileData.GetComponent<Droppable>());
+                                }
+                            }
+                            
+                            curTilePos = pos;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                currentRadius++;
+                listTilePos = newTilePos;
+            }
+
+            return GetCharacters(areaList, layerFilter);
+        }
+
+        /// <summary>
+        /// ???? The logic of function was wrong! But AI still archive what I want then it will be keep.
+        /// </summary>
+        /// <param name="roadIndex"></param>
+        /// <param name="team"></param>
+        /// <returns></returns>
+        public bool IsGoodWhenPlaceCharacterOn(int roadIndex, int team)
+        {
+            var teamStr = team == 0 ? "Team1" : "Team2";
+            var allyLayer = GetEnemyLayer(teamStr == "Team1" ? "Team2" : "Team1");
+            var enemyLayer = GetEnemyLayer(teamStr);
+            var difference = UnityEngine.Random.Range(1, 3);
+            for (int i = 0; i < roadAmount; i++)
+            {
+                if (roadIndex == roadAmount) continue;
+
+                var allies = worldCharacters.FindAll(c => c.gameObject.layer == allyLayer); // allies on road?
+                var enemies = worldCharacters.FindAll(c => c.gameObject.layer == enemyLayer); // enemies on road?
+
+                if (enemies.Count - allies.Count >= difference)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        
+        #endregion
     }
 }

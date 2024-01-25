@@ -87,19 +87,19 @@ namespace Models.Spells
                     {
                         var addedDefResist = Mathf.RoundToInt(Mathf.Clamp(damage - character.GetStatus().Def * 0.75f, damage * 0.2f, damage));
                         var result= character.TakeDamage(damage + addedDefResist);
-                        Debug.Log(character.name + " take " + result + " damage from pass defense spells.");
+                        //Debug.Log(character.name + " take " + result + " damage from pass defense spells.");
                         return true;
                     }
                     else
                     {
                         var result= character.TakeDamage(Mathf.RoundToInt(damage));
-                        Debug.Log(character.name + " take " + result + " damage from spells.");
+                        //Debug.Log(character.name + " take " + result + " damage from spells.");
                         return true;
                     }
                 }
                 
                 var healing = character.Healing(healthEffSpells.Quantity, healthEffSpells.IsScale, healthEffSpells.IsScaleWithMaxHealth);
-                Debug.Log(character.name + " get heal " + healing + " point(s) from spells.");
+                //Debug.Log(character.name + " get heal " + healing + " point(s) from spells.");
                 return true;
             }
             else if (effect is ControlSpells controlSpells)

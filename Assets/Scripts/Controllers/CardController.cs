@@ -116,12 +116,12 @@ namespace Controllers
         {
             for (int i = 0; i < 5; i++)
             {
-                RandomCard(0);
-                RandomCard(1);
+                RandomCard(0, i);
+                RandomCard(1, i);
             }
         }
 
-        private void RandomCard(int team)
+        private void RandomCard(int team, int handIndex)
         {
             var listRand = new List<int>();
             if (team == 0)
@@ -134,7 +134,7 @@ namespace Controllers
                     var cardInHand = team1Hand.FindAll(index => index == j);
                     minus = cardInHand.Count;
                     
-                    var count = team1Deck[i].CardType == CardType.Generals ? 1 : 3;
+                    var count = team1Deck[i].CardType == CardType.Minions ? 3 : 1;
 
                     for (int k = 0; k < count - minus; k++)
                     {
@@ -150,7 +150,7 @@ namespace Controllers
                     var minus = 0;
                     var cardInHand = team2Hand.FindAll(index => index == j);
                     minus = cardInHand.Count;
-                    var count = team2Deck[i].CardType == CardType.Generals ? 1 : 3;
+                    var count = team2Deck[i].CardType == CardType.Minions ? 3 : 1;
 
                     for (int k = 0; k < count - minus; k++)
                     {
@@ -161,20 +161,20 @@ namespace Controllers
             
             var rand = new Random().Next(listRand.Count);
             //Debug.Log($"{rand} {listRand.Count}");
-            DrawCard(listRand[rand], team);
+            DrawCard(listRand[rand], team, handIndex);
         }
 
-        private void DrawCard(int deckIndex, int team)
+        private void DrawCard(int deckIndex, int team, int handIndex)
         {
             if (team == 0)
             {
-                team1Hand.Add(deckIndex);
-                OnTeam1DrawCard?.Invoke(this, new DrawNewCardEventArgs(team1Deck[deckIndex], team1Hand.Count - 1));
+                team1Hand.Insert(handIndex, deckIndex);
+                OnTeam1DrawCard?.Invoke(this, new DrawNewCardEventArgs(team1Deck[deckIndex], handIndex));
             }
             else
             {
-                team2Hand.Add(deckIndex);
-                OnTeam2DrawCard?.Invoke(this, new DrawNewCardEventArgs(team1Deck[deckIndex], team1Hand.Count - 1));
+                team2Hand.Insert(handIndex, deckIndex);;
+                OnTeam2DrawCard?.Invoke(this, new DrawNewCardEventArgs(team2Deck[deckIndex], handIndex));
             }
         }
 
@@ -246,13 +246,13 @@ namespace Controllers
                 {
                     team1Hand.RemoveAt(card.HandIndex);
                     Destroy(card.gameObject);
-                    if (team1Hand.Count < 5) RandomCard(team); // == 4 ? if [1:3] ?
+                    if (team1Hand.Count < 5) RandomCard(team, card.HandIndex); // == 4 ? if [1:3] ?
                 }
                 else
                 {
                     team2Hand.RemoveAt(card.HandIndex);
                     Destroy(card.gameObject);
-                    if (team2Hand.Count < 5) RandomCard(team);
+                    if (team2Hand.Count < 5) RandomCard(team, card.HandIndex);
                 }
                 
                 return true;
@@ -373,8 +373,73 @@ namespace Controllers
 
             return false;
         }
+        
+        private void RandomCard(int team)
+        {
+            var listRand = new List<int>();
+            if (team == 0)
+            {
+                for (int i = 0; i < team1Deck.Count; i++)
+                {
+                    var j = i;
+                    var minus = 0;
+                    
+                    var cardInHand = team1Hand.FindAll(index => index == j);
+                    minus = cardInHand.Count;
+                    
+                    var count = team1Deck[i].CardType == CardType.Generals ? 1 : 3;
+
+                    for (int k = 0; k < count - minus; k++)
+                    {
+                        listRand.Add(j);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < team2Deck.Count; i++)
+                {
+                    var j = i;
+                    var minus = 0;
+                    var cardInHand = team2Hand.FindAll(index => index == j);
+                    minus = cardInHand.Count;
+                    var count = team2Deck[i].CardType == CardType.Generals ? 1 : 3;
+
+                    for (int k = 0; k < count - minus; k++)
+                    {
+                        listRand.Add(j);
+                    }
+                }
+            }
+            
+            var rand = new Random().Next(listRand.Count);
+            //Debug.Log($"{rand} {listRand.Count}");
+            DrawCard(listRand[rand], team);
+        }
+        
+        private void DrawCard(int deckIndex, int team)
+        {
+            if (team == 0)
+            {
+                team1Hand.Add(deckIndex);
+                OnTeam1DrawCard?.Invoke(this, new DrawNewCardEventArgs(team1Deck[deckIndex], team1Hand.Count - 1));
+            }
+            else
+            {
+                team2Hand.Add(deckIndex);
+                OnTeam2DrawCard?.Invoke(this, new DrawNewCardEventArgs(team1Deck[deckIndex], team1Hand.Count - 1));
+            }
+        }
 
         private string TeamDeckCardName(CardInfo card) => card.name.Substring(0, card.name.Length - 4);
+
+        public int GetCardType(CardName cardName, int team)
+        {
+            var card = team == 0 ? team1Deck.FirstOrDefault(c => TeamDeckCardName(c).Equals(cardName.ToString())) : team2Deck.FirstOrDefault(c => TeamDeckCardName(c).Equals(cardName.ToString()));
+            
+            if (card is null) return -1;
+            return (int)card.CardType;
+        }
 
         #endregion
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using Controllers;
 using ScriptableObjects;
 using Unity.MLAgents;
@@ -12,10 +13,15 @@ namespace Agents
     {
         [SerializeField] private BehaviorParameters self;
         [SerializeField] private int botTeam;
+        [SerializeField] private float spawnPenalty;
 
         public override void OnEpisodeBegin()
         {
-            if (self.BehaviorType != BehaviorType.InferenceOnly) WorldManager.Instance.SoftReset();
+            if (self.BehaviorType != BehaviorType.InferenceOnly && botTeam == 1) WorldManager.Instance.SoftReset();
+            
+            //initial penalty
+            spawnPenalty = Random.Range(3f, 5f);
+            StartCoroutine(SpawnPenalty());
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -31,6 +37,8 @@ namespace Agents
             {
                 sensor.AddObservation(-1);
             }
+            
+            sensor.AddObservation(spawnPenalty);
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -44,13 +52,16 @@ namespace Agents
             if (actions.DiscreteActions[0] == 0)
             {
                 // dont use card
+                if (spawnPenalty <= 0f) SetReward(-0.02f);
+                else SetReward(0.015f);
+                
                 if (CardController.Instance.GetCardCanBeUsed(botTeam).Count == 0)
                 {
-                    SetReward(0.1f);
+                    SetReward(0.005f);
                 }
                 else
                 {
-                    SetReward(-0.5f / StepCount);
+                    SetReward(-0.01f);
                 }
             }
             else
@@ -60,16 +71,29 @@ namespace Agents
 
                 if (!CardController.Instance.IsHandContains(botTeam, cardEnum, out CardInfo card))
                 {
-                    SetReward(-0.3f);
+                    SetReward(-0.02f);
                 }
                 else
                 {
+                    SetReward(0.005f);
                     //if (isDebug) Debug.Log(card.Name);
                     if (CardController.Instance.CardCanBeUsed(botTeam, card))
                     {
-                        SetReward(0.5f);
-                        CardController.Instance.CardConsuming(botTeam, card);
-                        UseCard(card);
+                        if (spawnPenalty <= 0f)
+                        {
+                            CardController.Instance.CardConsuming(botTeam, card);
+                            UseCard(card);
+                            SetReward(0.01f);
+                            RefreshSpawnPenalty();
+                        }
+                        else
+                        {
+                            SetReward(-0.01f);
+                        }
+                    }
+                    else
+                    {
+                        SetReward(-0.01f);
                     }
                 }
             }
@@ -81,7 +105,7 @@ namespace Agents
             {
                 case CardType.Minions:
                     WorldManager.Instance.CreateCharacter(card.Character, 0, botTeam, card.SpellsEffect);
-                    SetReward(0.3f);
+                    SetReward(0.01f);
                     break;
                 case CardType.Generals:
                     
@@ -91,21 +115,50 @@ namespace Agents
             }
         }
 
+        private void RefreshSpawnPenalty()
+        {
+            spawnPenalty = Random.Range(10f, 12f); // 3.75f/Energy
+
+            StartCoroutine(SpawnPenalty());
+        }
+
+        private IEnumerator SpawnPenalty()
+        {
+            while (spawnPenalty > 0f)
+            {
+                spawnPenalty -= Time.deltaTime;
+                
+                yield return null;
+            }
+        }
+
         public void OnHeadquarterDestroy(object sender, System.EventArgs args)
         {
             if (sender is int teamWon)
             {
-                if (teamWon == botTeam)
+                if (self.BehaviorType != BehaviorType.InferenceOnly && botTeam == 1) WorldManager.Instance.SoftReset();
+                if (self.BehaviorType == BehaviorType.InferenceOnly) enabled = false;
+
+                /*if (teamWon == botTeam)
                 {
                     SetReward(1f);
-                    EndEpisode();
+                    if (self.BehaviorType != BehaviorType.InferenceOnly) EndEpisode();
+                    else enabled = false;
                 }
                 else
                 {
                     SetReward(-1f);
-                    EndEpisode();
-                }
+                    if (self.BehaviorType != BehaviorType.InferenceOnly) EndEpisode();
+                    else enabled = false;
+                }*/
             }
+        }
+
+        protected override void OnDisable()
+        {
+            StopAllCoroutines();
+            
+            base.OnDisable();
         }
     }
 }

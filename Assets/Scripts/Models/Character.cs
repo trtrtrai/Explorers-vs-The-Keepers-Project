@@ -263,7 +263,7 @@ namespace Models
         {
             if (sender is not Status || !sender.Equals(status)) return;
             
-            OnCharacterDeath?.Invoke(this, new CharacterDeathEventArgs());
+            OnCharacterDeath?.Invoke(this, new CharacterDeathEventArgs(roadIndex));
             
             gameObject.SetActive(false);
             Destroy(gameObject, 0.5f);

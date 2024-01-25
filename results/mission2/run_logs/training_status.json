@@ -1,0 +1,29 @@
+{
+    "Mission2Bot": {
+        "checkpoints": [
+            {
+                "steps": 15042,
+                "file_path": "results\\mission2\\Mission2Bot\\Mission2Bot-15042.onnx",
+                "reward": null,
+                "creation_time": 1706161927.3808393,
+                "auxillary_file_paths": [
+                    "results\\mission2\\Mission2Bot\\Mission2Bot-15042.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 15042,
+            "file_path": "results\\mission2\\Mission2Bot.onnx",
+            "reward": null,
+            "creation_time": 1706161927.3808393,
+            "auxillary_file_paths": [
+                "results\\mission2\\Mission2Bot\\Mission2Bot-15042.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.8.0+cu111"
+    }
+}

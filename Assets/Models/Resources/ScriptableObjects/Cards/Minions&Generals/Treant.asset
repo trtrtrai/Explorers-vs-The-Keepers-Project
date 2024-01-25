@@ -22,5 +22,5 @@ MonoBehaviour:
     Speed: 100
     Step: 1
     Agility: 60
-    Aim: 2
+    Aim: 1
   CharacterTags: 0100000009000000

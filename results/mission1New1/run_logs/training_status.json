@@ -2,22 +2,22 @@
     "Mission1Bot": {
         "checkpoints": [
             {
-                "steps": 1770,
-                "file_path": "results\\mission1New1\\Mission1Bot\\Mission1Bot-1770.onnx",
+                "steps": 5025,
+                "file_path": "results\\mission1New1\\Mission1Bot\\Mission1Bot-5025.onnx",
                 "reward": null,
-                "creation_time": 1706025647.534952,
+                "creation_time": 1706073915.9861145,
                 "auxillary_file_paths": [
-                    "results\\mission1New1\\Mission1Bot\\Mission1Bot-1770.pt"
+                    "results\\mission1New1\\Mission1Bot\\Mission1Bot-5025.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 1770,
+            "steps": 5025,
             "file_path": "results\\mission1New1\\Mission1Bot.onnx",
             "reward": null,
-            "creation_time": 1706025647.534952,
+            "creation_time": 1706073915.9861145,
             "auxillary_file_paths": [
-                "results\\mission1New1\\Mission1Bot\\Mission1Bot-1770.pt"
+                "results\\mission1New1\\Mission1Bot\\Mission1Bot-5025.pt"
             ]
         }
     },

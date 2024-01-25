@@ -110,7 +110,7 @@ namespace Models
                 if (CheckDeath())
                 {
                     //Debug.Log("Health below 0. Active death event!");
-                    OnDeath?.Invoke(this, new CharacterDeathEventArgs());
+                    OnDeath?.Invoke(this, new CharacterDeathEventArgs(-1));
                     return realDameTaken;
                 }
 
