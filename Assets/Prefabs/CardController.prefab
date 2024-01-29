@@ -44,8 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338c0dd06c634fed83e25983daf292b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  limits:
+  - CharacterTag: 11
+    Limit: 2
+  - CharacterTag: 13
+    Limit: 1
+  - CharacterTag: 14
+    Limit: 1
   team1Deck: []
   team2Deck: []
+  team1CardOffHand: 
+  team2CardOffHand: 
   team1Required: []
   team2Required: []
   team1Hand: 

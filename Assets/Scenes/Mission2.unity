@@ -379,6 +379,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
+      propertyPath: headquarter
+      value: 
+      objectReference: {fileID: 6689435883732841840, guid: 880a20bc22125c94399c1b1bdfc065f1,
+        type: 3}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
       propertyPath: team1Player
       value: 1
       objectReference: {fileID: 0}
@@ -409,6 +415,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3980839236499739072, guid: 9622887521d83874ea563add1e89d675,
         type: 3}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team1CardList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team2CardList.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team2CardList.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team2CardList.Array.data[1]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team2CardList.Array.data[2]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team2CardList.Array.data[3]
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team2CardList.Array.data[4]
+      value: 17
+      objectReference: {fileID: 0}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
       propertyPath: roads.Array.data[0].RoadPoints.Array.size

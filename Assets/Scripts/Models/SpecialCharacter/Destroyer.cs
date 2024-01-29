@@ -11,11 +11,11 @@ namespace Models.SpecialCharacter
                 isAttacking = true;
                 isMoving = false;
                 
-                var damage = status.Hp;
+                var damage = Mathf.RoundToInt(status.Hp * 0.8f);
 
                 target.TakeDamage(damage);
                 
-                TakeDamage(damage + Mathf.RoundToInt(status.Def * 0.75f));
+                TakeDamage(9999);
             }
         }
     }

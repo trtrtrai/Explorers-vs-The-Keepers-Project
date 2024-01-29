@@ -1,5 +1,5 @@
 behaviors:
-  Mission3:
+  Mission3BotNew1:
     trainer_type: ppo
     hyperparameters:
       batch_size: 10
@@ -20,6 +20,6 @@ behaviors:
       extrinsic:
         gamma: 0.99
         strength: 1.0
-    max_steps: 18000
+    max_steps: 21000
     time_horizon: 64
-    summary_freq: 6000
+    summary_freq: 7000

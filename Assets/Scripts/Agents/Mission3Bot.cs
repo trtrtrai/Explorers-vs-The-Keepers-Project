@@ -19,14 +19,15 @@ namespace Agents
     {
         [SerializeField] private BehaviorParameters self;
         [SerializeField] private int botTeam;
-        /*[SerializeField] private float spawnPenalty;
-        [SerializeField] private float spellsPenalty;*/
+        [SerializeField] private float spawnPenalty;
+        [SerializeField] private float spellsPenalty;
 
         [SerializeField] private int alliesRoad0;
         [SerializeField] private int alliesRoad1;
         [SerializeField] private int enemiesRoad0;
         [SerializeField] private int enemiesRoad1;
         [SerializeField] private bool theForestCanSummon;
+        [SerializeField] private int myHqPrior;
 
         public override void OnEpisodeBegin()
         {
@@ -37,12 +38,13 @@ namespace Agents
             enemiesRoad0 = 0;
             enemiesRoad1 = 0;
             theForestCanSummon = false;
+            myHqPrior = 0;
 
-            /*//initial penalty
+            //initial penalty
             spawnPenalty = Random.Range(1f, 1.5f);
             spellsPenalty = spawnPenalty;
             StartCoroutine(SpawnPenalty());
-            StartCoroutine(SpellsPenalty());*/
+            StartCoroutine(SpellsPenalty());
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -56,6 +58,7 @@ namespace Agents
              * Observation index 6: Vector2(x, y) x is number of allies, y is number of enemies on road index 0 => 2
              * Observation index 7: Vector2(x, y) x is number of allies, y is number of enemies on road index 1 => 2
              * Observation index 8: boolean variable if Generals can summon => 1
+             * Observation index 9: number of its Pangolins on war field => 1
              */
             
             var listCardCanUse = CardController.Instance.GetCardCanBeUsed(botTeam);
@@ -76,6 +79,7 @@ namespace Agents
             sensor.AddObservation(new Vector2Int(alliesRoad1, enemiesRoad1));
             theForestCanSummon = CardController.Instance.CheckCanSummon("TheForest", botTeam);
             sensor.AddObservation(theForestCanSummon);
+            sensor.AddObservation(myHqPrior);
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -86,7 +90,10 @@ namespace Agents
              * DiscreteActions index 2: what type of card? 0-2
              * DiscreteActions index 3: what roadIndex would use the card? 0-1
              */
-            
+            if (actions.DiscreteActions[0] == 1 && actions.DiscreteActions[1] == 7 && actions.DiscreteActions[2] == 2)
+            {
+                Debug.Log("TheForest trigger " + actions.DiscreteActions[3] + " roadIndex, Required: " + theForestCanSummon);
+            }
             if (actions.DiscreteActions[0] == 0)
             {
                 if (CardController.Instance.GetCardCanBeUsed(botTeam).Count == 0)
@@ -95,6 +102,11 @@ namespace Agents
                 }
                 else
                 {
+                    if (alliesRoad0 + alliesRoad1 == 0)
+                    {
+                        AddReward(-0.015f);
+                    }
+                    
                     AddReward(-0.005f);
                 }
             }
@@ -117,9 +129,9 @@ namespace Agents
                     AddReward(0.01f);
                     if (CardController.Instance.CardCanBeUsed(botTeam, card))
                     {
-                        if ((card.CardType == CardType.Minions/* && spawnPenalty <= 0f*/)
-                            || (card.CardType == CardType.Spells/* && spellsPenalty <= 0f*/)
-                            || card.CardType == CardType.Generals) 
+                        if ((card.CardType == CardType.Minions && spawnPenalty <= 0f)
+                            || (card.CardType == CardType.Spells && spellsPenalty <= 0f)
+                            || card.CardType == CardType.Generals) //Generals does not check
                         {
                             UseCard(card, actions.DiscreteActions[3]); // added reward in this func
                         }
@@ -139,35 +151,45 @@ namespace Agents
                 case CardType.Minions:
                     if (roadIndex < WorldManager.Instance.RoadAmount)
                     {
-                        //RefreshSpawnPenalty();
-
-                        if (WorldManager.Instance.IsGoodWhenPlaceCharacterOn(roadIndex, botTeam))
+                        // summon at road 0 while eR1 > aR1 2 units will get wrong reward (same with road 1 eR0 and aR0)
+                        var difference = 2;
+                        if ((roadIndex == 0 && enemiesRoad1 - alliesRoad1 >= difference) || (roadIndex == 1 && enemiesRoad0 - alliesRoad0 >= difference))
                         {
-                            AddReward(-0.015f); // +0.005 in total instead of +0.02
+                            AddReward(-0.025f);
+                        }
+                        else
+                        {
+                            AddReward(0.001f);
+                        }
+
+                        if (myHqPrior > 5)
+                        {
+                            AddReward(-0.0075f);
                         }
                         
+                        RefreshSpawnPenalty();
                         CardController.Instance.CardConsuming(botTeam, card);
                         WorldManager.Instance.CreateCharacter(card.Character, roadIndex, botTeam, card.SpellsEffect);
                         AddReward(0.01f);
                     }
                     else
                     {
-                        AddReward(-0.02f); // +0.01 in start of if statement => -0.01 total
+                        AddReward(-0.02f); // -0.01 total
                     }
                     break;
                 case CardType.Generals:
-                    // If cannot summon => -0.01f
-                    // If can +0.5f
                     if (roadIndex < WorldManager.Instance.RoadAmount && theForestCanSummon)
                     {
-                        //RefreshSpawnPenalty();
+                        Debug.Log(card.Name + " in coming!");
                         CardController.Instance.CardConsuming(botTeam, card);
                         WorldManager.Instance.CreateCharacter(card.Character, roadIndex, botTeam, card.SpellsEffect);
-                        AddReward(0.5f);
+                        AddReward(3f);
+                        /*if (self.BehaviorType != BehaviorType.InferenceOnly) EndEpisode();
+                        else enabled = false;*/
                     }
                     else
                     {
-                        AddReward(-0.01f); // +0.01 in start of if statement => -0.01 total
+                        AddReward(-0.01f); // +0.0 total
                     }
                     break;
                 case CardType.Spells:
@@ -186,7 +208,10 @@ namespace Agents
                             {
                                 if (roadIndex < WorldManager.Instance.RoadAmount)
                                 {
+                                    Debug.Log(botTeam + " " + card.name);
+                                    RefreshSpellsPenalty();
                                     summonSpells.RoadIndex = roadIndex;
+                                    summonSpells.Team = botTeam;
                                     CardController.Instance.CardConsuming(botTeam, card);
                                     SpellsExecute.Activate(null, card.SpellsEffect);
                                     AddReward(0.015f);
@@ -209,6 +234,7 @@ namespace Agents
                             else
                             {
                                 Debug.Log(botTeam + " " + card.name);
+                                RefreshSpellsPenalty();
                                 CardController.Instance.CardConsuming(botTeam, card);
                                 var oldPosition = character.Position.TryGetComponent(out Droppable originDroppable);
                                 SpellsExecute.Activate(character, card.SpellsEffect);
@@ -239,12 +265,14 @@ namespace Agents
                 {
                     newPosition = newDroppable.Team1PositionIndex;
                 }
-                
-                AddReward(0.01f * Mathf.Abs(oldPosition - newPosition));
+
+                var reward = 0.01f * Mathf.Abs(oldPosition - newPosition);
+                Debug.Log("Go Home reward " + reward);
+                AddReward(reward);
             }
         }
 
-        /*private void RefreshSpawnPenalty()
+        private void RefreshSpawnPenalty()
         {
             spawnPenalty = Random.Range(5f, 6f); // 3.75f/Energy - [New1 8-10] [New2 5-6]
 
@@ -276,7 +304,7 @@ namespace Agents
                 
                 yield return null;
             }
-        }*/
+        }
 
         public void OnHeadquarterDestroy(object sender, System.EventArgs args)
         {
@@ -293,7 +321,7 @@ namespace Agents
 
                 if (teamWon == botTeam)
                 {
-                    SetReward(10f);
+                    SetReward(!theForestCanSummon ? 5f : 10f); // won while General can not summon => reduce reward
                 }
                 else
                 {
@@ -311,6 +339,11 @@ namespace Agents
             {
                 if (args.Team == botTeam)
                 {
+                    if (args.Character.CharacterInfo.name.Equals("Pangolin"))
+                    {
+                        myHqPrior++;
+                    }
+                    
                     if (args.RoadIndex == 0)
                     {
                         alliesRoad0++;
@@ -355,6 +388,11 @@ namespace Agents
                 }
                 else
                 {
+                    if (character.CharacterInfo.name.Equals("Pangolin"))
+                    {
+                        myHqPrior--;
+                    }
+                    
                     if (args.RoadIndex == 0)
                     {
                         alliesRoad0--;

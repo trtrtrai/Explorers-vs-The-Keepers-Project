@@ -8,5 +8,6 @@ namespace ScriptableObjects
         public GameObject CharacterPrefab;
         public int Quantity;
         public int RoadIndex = -1;
+        public int Team;
     }
 }

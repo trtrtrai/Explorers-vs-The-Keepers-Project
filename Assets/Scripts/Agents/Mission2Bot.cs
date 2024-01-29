@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Controllers;
 using EventArgs;
+using GUI;
 using Models;
 using Models.Spells;
 using ScriptableObjects;
@@ -164,7 +166,7 @@ namespace Agents
                             break;
                         case CardActiveType.Single:
                         {
-                            // Just only check for attack buff Spells
+                            // Just only check for healing Spells
                             var character = WorldManager.Instance.GetRandomAlly(botTeam);
                             if (character is null || allies == 0)
                             {
@@ -183,7 +185,7 @@ namespace Agents
                         }
                         case CardActiveType.Area:
                         {
-                            // Just only check healing Spells
+                            // Just only check attack buff Spells
                             var character = WorldManager.Instance.GetRandomAlly(botTeam);
                             if (character is null || allies == 0)
                             {
@@ -191,7 +193,7 @@ namespace Agents
                             }
                             else
                             {
-                                var characters = WorldManager.Instance.GetCharactersInArea(character.Position, card.Radius, WorldManager.GetEnemyLayer(botTeam == 0 ? "Team2" : "Team1"));
+                                var characters = WorldManager.Instance.GetCharactersInArea(character.Position, card.Radius, WorldManager.GetEnemyLayer(botTeam == 0 ? "Team2" : "Team1"), out List<Droppable> area);
 
                                 if (characters.Count == 0)
                                 {

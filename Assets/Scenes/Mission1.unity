@@ -413,7 +413,7 @@ PrefabInstance:
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
       propertyPath: team1CardList.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}

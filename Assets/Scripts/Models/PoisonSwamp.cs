@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Controllers;
+using EventArgs;
 using ScriptableObjects;
 using UnityEngine;
 
@@ -8,6 +10,9 @@ namespace Models
 {
     public class PoisonSwamp : MonoBehaviour
     {
+        public event EventHandler<EnvironmentTriggeredEventArgs> OnTriggered;
+        public event EventHandler<EnvironmentDestroyEventArgs> OnDestroyed;
+        
         // idea for take damage per second: save List<Character>, give character a poison counting, if character in list -> reset timer counting
         [SerializeField] private int damage;
         [SerializeField] private float timer;
@@ -57,7 +62,8 @@ namespace Models
                     if (bit) return;
                 }
 
-                character.TakeDamage(damage);
+                var realDmg = character.TakeDamage(damage);
+                OnTriggered?.Invoke(this, new EnvironmentTriggeredEventArgs(character, realDmg));
             }
         }
 
@@ -69,8 +75,10 @@ namespace Models
 
                 yield return null;
             }
-
-            Destroy(transform.parent.gameObject);
+            
+            OnDestroyed?.Invoke(this, new EnvironmentDestroyEventArgs());
+            enabled = false;
+            Destroy(transform.parent.gameObject, 0.25f);
         }
     }
 }

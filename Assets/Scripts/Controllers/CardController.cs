@@ -54,14 +54,19 @@ namespace Controllers
             get;
             private set;
         }
-
+        //todo: limit 1 General card on hand + War Field, only while Generals on War Field death => have ratio draw General + reset required
         public event EventHandler<DrawNewCardEventArgs> OnTeam1DrawCard;
         public event EventHandler<DrawNewCardEventArgs> OnTeam2DrawCard;
         
         private const string Assembly = "Models.Generals.";
 
+        [SerializeField] private List<CharacterCardCopyLimit> limits;
+
         [SerializeField] private List<CardInfo> team1Deck;
         [SerializeField] private List<CardInfo> team2Deck;
+
+        [SerializeField] private List<int> team1CardOffHand;
+        [SerializeField] private List<int> team2CardOffHand;
         
         [SerializeField] private List<GeneralCheckCanSummon> team1Required;
         [SerializeField] private List<GeneralCheckCanSummon> team2Required;
@@ -88,8 +93,15 @@ namespace Controllers
             team2Deck.Clear();
             team2Deck = new();
             
+            team1CardOffHand.Clear();
+            team1CardOffHand = new();
+            team2CardOffHand.Clear();
+            team2CardOffHand = new();
+            
+            team1Required.ForEach(checker => Destroy(checker.gameObject));
             team1Required.Clear();
             team1Required = new();
+            team2Required.ForEach(checker => Destroy(checker.gameObject));
             team2Required.Clear();
             team2Required = new();
 
@@ -98,7 +110,7 @@ namespace Controllers
             team2Hand.Clear();
             team2Hand = new();
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 10; i++)
             {
                 if (i < team1.Count)
                 {
@@ -121,6 +133,22 @@ namespace Controllers
             }
         }
 
+        private int GetMaxCharacterCardOnHand(List<CharacterTag> tags)
+        {
+            /*
+             * Others 3 copy
+             * HqPrior 2 copy
+             * Destroyer 1 copy
+             * Reinforce 1 copy
+             */
+            foreach (var limitTag in from cTag in tags from limitTag in limits where cTag == limitTag.CharacterTag select limitTag) // ????
+            {
+                return limitTag.Limit;
+            }
+
+            return 3;
+        }
+
         private void RandomCard(int team, int handIndex)
         {
             var listRand = new List<int>();
@@ -134,7 +162,7 @@ namespace Controllers
                     var cardInHand = team1Hand.FindAll(index => index == j);
                     minus = cardInHand.Count;
                     
-                    var count = team1Deck[i].CardType == CardType.Minions ? 3 : 1;
+                    var count = team1CardOffHand[i];
 
                     for (int k = 0; k < count - minus; k++)
                     {
@@ -150,7 +178,7 @@ namespace Controllers
                     var minus = 0;
                     var cardInHand = team2Hand.FindAll(index => index == j);
                     minus = cardInHand.Count;
-                    var count = team2Deck[i].CardType == CardType.Minions ? 3 : 1;
+                    var count = team2CardOffHand[i];
 
                     for (int k = 0; k < count - minus; k++)
                     {
@@ -180,22 +208,43 @@ namespace Controllers
 
         private void AddCard(string cardName, int team)
         {
+            var cardInfo = Resources.Load<CardInfo>($"ScriptableObjects/Cards/{cardName}Card");
             if (team == 0)
             {
-                team1Deck.Add(Resources.Load<CardInfo>($"ScriptableObjects/Cards/{cardName}Card"));
-                
-                if (team1Deck.Last().CardType == CardType.Generals)
+                team1Deck.Add(cardInfo);
+
+                switch (cardInfo.CardType)
                 {
-                    CreateChecker(cardName, team);
+                    case CardType.Minions:
+                        var tags = cardInfo.Character.GetComponent<Character>().CharacterInfo.CharacterTags;
+                        team1CardOffHand.Add(GetMaxCharacterCardOnHand(tags));
+                        break;
+                    case CardType.Generals:
+                        CreateChecker(cardName, team);
+                        team1CardOffHand.Add(1);
+                        break;
+                    case CardType.Spells:
+                        team1CardOffHand.Add(1);
+                        break;
                 }
             }
             else
             {
-                team2Deck.Add(Resources.Load<CardInfo>($"ScriptableObjects/Cards/{cardName}Card"));
+                team2Deck.Add(cardInfo);
                 
-                if (team2Deck.Last().CardType == CardType.Generals)
+                switch (cardInfo.CardType)
                 {
-                    CreateChecker(cardName, team);
+                    case CardType.Minions:
+                        var tags = cardInfo.Character.GetComponent<Character>().CharacterInfo.CharacterTags;
+                        team2CardOffHand.Add(GetMaxCharacterCardOnHand(tags));
+                        break;
+                    case CardType.Generals:
+                        CreateChecker(cardName, team);
+                        team2CardOffHand.Add(1);
+                        break;
+                    case CardType.Spells:
+                        team2CardOffHand.Add(1);
+                        break;
                 }
             }
         }
@@ -347,7 +396,7 @@ namespace Controllers
             return signal;
         }
 
-        public bool CardConsuming(int team, CardInfo card)
+        public void CardConsuming(int team, CardInfo card)
         {
             var target = team == 0 ? WorldManager.Instance.PlayerEnergy : WorldManager.Instance.EnemyEnergy;
             if (target.UseCard(card))
@@ -355,23 +404,19 @@ namespace Controllers
                 //Debug.Log(card.name + " activated.");
                 if (team == 0)
                 {
-                    var cardDeck = team1Deck.FirstOrDefault(c => TeamDeckCardName(c).Equals(card.name));
+                    var cardDeck = team1Deck.FirstOrDefault(c => c.name.Equals(card.name));
                     var cardDeckIndex = team1Deck.IndexOf(cardDeck);
                     team1Hand.Remove(cardDeckIndex);
                     if (team1Hand.Count < 5) RandomCard(team); // == 4 ? if [1:3] ?
                 }
                 else
                 {
-                    var cardDeck = team2Deck.FirstOrDefault(c => TeamDeckCardName(c).Equals(card.name));
+                    var cardDeck = team2Deck.FirstOrDefault(c => c.name.Equals(card.name));
                     var cardDeckIndex = team2Deck.IndexOf(cardDeck);
                     team2Hand.Remove(cardDeckIndex);
                     if (team2Hand.Count < 5) RandomCard(team);
                 }
-                
-                return true;
             }
-
-            return false;
         }
         
         private void RandomCard(int team)
@@ -387,7 +432,7 @@ namespace Controllers
                     var cardInHand = team1Hand.FindAll(index => index == j);
                     minus = cardInHand.Count;
                     
-                    var count = team1Deck[i].CardType == CardType.Generals ? 1 : 3;
+                    var count = team1CardOffHand[i];
 
                     for (int k = 0; k < count - minus; k++)
                     {
@@ -403,7 +448,7 @@ namespace Controllers
                     var minus = 0;
                     var cardInHand = team2Hand.FindAll(index => index == j);
                     minus = cardInHand.Count;
-                    var count = team2Deck[i].CardType == CardType.Generals ? 1 : 3;
+                    var count = team2CardOffHand[i];
 
                     for (int k = 0; k < count - minus; k++)
                     {

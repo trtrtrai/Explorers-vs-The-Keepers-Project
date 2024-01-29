@@ -135,7 +135,7 @@ namespace Models.Spells
             {
                 for (int i = 0; i < summonSpells.Quantity; i++)
                 {
-                    WorldManager.Instance.CreateCharacter(summonSpells.CharacterPrefab, summonSpells.RoadIndex, WorldManager.Instance.GetAllyTeam(), summonSpells);
+                    WorldManager.Instance.CreateCharacter(summonSpells.CharacterPrefab, summonSpells.RoadIndex, summonSpells.Team, summonSpells);
                 }
                 
                 return true;

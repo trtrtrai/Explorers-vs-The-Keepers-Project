@@ -161,13 +161,13 @@ namespace Controllers
             initialize = !initialize;
             if (initialize) return;
             
-            OnGameEnded -= aiBot.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
-            CharacterSpawn -= aiBot.GetComponent<Mission3Bot>().OnCharacterSpawn;
+            OnGameEnded -= aiBot.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBot.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
             aiBot.GetComponent<Agent>().enabled = false;
             
-            /*OnGameEnded -= aiBotTeam0.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
-            CharacterSpawn -= aiBotTeam0.GetComponent<Mission3Bot>().OnCharacterSpawn;
-            aiBotTeam0.GetComponent<Agent>().enabled = false;*/
+            OnGameEnded -= aiBotTeam0.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBotTeam0.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
+            aiBotTeam0.GetComponent<Agent>().enabled = false;
             
             OnGameReset?.Invoke(this, System.EventArgs.Empty);
             worldCharacters.ForEach(c => Destroy(c.gameObject));
@@ -216,12 +216,12 @@ namespace Controllers
             CardController.Instance.StartGame();
             
             aiBot.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBot.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
-            CharacterSpawn += aiBot.GetComponent<Mission3Bot>().OnCharacterSpawn;
+            OnGameEnded += aiBot.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBot.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
             
-            /*aiBotTeam0.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBotTeam0.GetComponent<Mission3Bot>().OnHeadquarterDestroy;
-            CharacterSpawn += aiBotTeam0.GetComponent<Mission3Bot>().OnCharacterSpawn;*/
+            aiBotTeam0.GetComponent<Agent>().enabled = true;
+            OnGameEnded += aiBotTeam0.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBotTeam0.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
         }
 
         private void OnEndGame(object sender, CharacterDeathEventArgs args)
@@ -671,6 +671,7 @@ namespace Controllers
                         if (TryConsumeCard(card, playerEnergy))
                         {
                             summonSpells.RoadIndex = dropPosition.RoadIndex;
+                            summonSpells.Team = GetAllyTeam();
                             SpellsExecute.Activate(null, spellsEff);
                         }
                     }
@@ -1082,22 +1083,22 @@ namespace Controllers
         {
             var characters = worldCharacters.FindAll(c => c.gameObject.layer == layer);
             var charactersOnArea = characters.FindAll(c =>
-                listActive.Contains(c.Position.GetComponent<Droppable>()));
+                listArea.Contains(c.Position.GetComponent<Droppable>()));
 
             return charactersOnArea;
         }
         
-        public List<Character> GetCharactersInArea(TileData origin, int radius, int layerFilter)
+        public List<Character> GetCharactersInArea(TileData origin, int radius, int layerFilter, out List<Droppable> listArea)
         {
-            var areaList = new List<Droppable>();
+            listArea = new List<Droppable>();
             if (origin.TryGetComponent(out Droppable droppable))
             {
-                areaList.Add(droppable);
+                listArea.Add(droppable);
             }
 
             if (radius == 0)
             {
-                return GetCharacters(areaList, layerFilter);
+                return GetCharacters(listArea, layerFilter);
             }
             
             var listTiles = new List<TileData>();
@@ -1131,13 +1132,13 @@ namespace Controllers
             {
                 if (tileData.TryGetComponent(out droppable))
                 {
-                    areaList.Add(droppable);
+                    listArea.Add(droppable);
                 }
             }
 
             if (radius == 1)
             {
-                return GetCharacters(areaList, layerFilter);
+                return GetCharacters(listArea, layerFilter);
             }
             var currentRadius = 2;
 
@@ -1163,7 +1164,7 @@ namespace Controllers
 
                             if (result && !tileData.Equals(team1StartPoint) && !tileData.Equals(team2StartPoint))
                             {
-                                areaList.Add(tileData.GetComponent<Droppable>());
+                                listArea.Add(tileData.GetComponent<Droppable>());
                             }
                         }
                     }
@@ -1193,7 +1194,7 @@ namespace Controllers
 
                                 if (result && !tileData.Equals(team1StartPoint) && !tileData.Equals(team2StartPoint))
                                 {
-                                    areaList.Add(tileData.GetComponent<Droppable>());
+                                    listArea.Add(tileData.GetComponent<Droppable>());
                                 }
                             }
                             
@@ -1210,7 +1211,7 @@ namespace Controllers
                 listTilePos = newTilePos;
             }
 
-            return GetCharacters(areaList, layerFilter);
+            return GetCharacters(listArea, layerFilter);
         }
 
         /// <summary>

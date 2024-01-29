@@ -1,0 +1,29 @@
+{
+    "Mission3BotNew1": {
+        "checkpoints": [
+            {
+                "steps": 21124,
+                "file_path": "results\\mission3BotNew1\\Mission3BotNew1\\Mission3BotNew1-21124.onnx",
+                "reward": null,
+                "creation_time": 1706259930.737958,
+                "auxillary_file_paths": [
+                    "results\\mission3BotNew1\\Mission3BotNew1\\Mission3BotNew1-21124.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 21124,
+            "file_path": "results\\mission3BotNew1\\Mission3BotNew1.onnx",
+            "reward": null,
+            "creation_time": 1706259930.737958,
+            "auxillary_file_paths": [
+                "results\\mission3BotNew1\\Mission3BotNew1\\Mission3BotNew1-21124.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.8.0+cu111"
+    }
+}
