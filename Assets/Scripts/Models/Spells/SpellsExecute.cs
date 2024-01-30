@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Controllers;
 using ScriptableObjects;
 using Unity.VisualScripting;
@@ -121,7 +123,8 @@ namespace Models.Spells
                     case EnergyBoostType.BoostRegenerate:
                         return true;
                     case EnergyBoostType.ReduceConsume:
-                        var eBoostScript = WorldManager.Instance.gameObject.AddComponent<EnergyReduceConsume>();
+                        var eBoostScript = new GameObject().AddComponent<EnergyReduceConsume>();
+                        eBoostScript.transform.SetParent(energyBoostSpells.Target.transform);
                         eBoostScript.Setup(energyBoostSpells.Target, energyBoostSpells.EnergyReducePerConsume, energyBoostSpells.Loop);
                         return true;
                 }
@@ -142,12 +145,16 @@ namespace Models.Spells
             }
             else if (effect is EnvironmentSpells environmentSpells)
             {
+                environmentSpells.ListEnvironment = new List<PoisonSwamp>();
+                environmentSpells.EnvironmentChain = DateTime.Now.Ticks;
+                
                 foreach (var tile in environmentSpells.ListSettingUp)
                 {
                     var envir = WorldManager.InstantiatePrefab(environmentSpells.EnvironmentPrefab);
                     envir.transform.localPosition = tile.transform.localPosition;
                     var script = envir.GetComponentInChildren<PoisonSwamp>(); //Type will be abstract after
-                    script.Setup(environmentSpells.DamagePerContact, environmentSpells.EffectTimer, environmentSpells.IgnoreList);
+                    environmentSpells.ListEnvironment.Add(script);
+                    script.Setup(environmentSpells.DamagePerContact, environmentSpells.EffectTimer, environmentSpells.IgnoreList, environmentSpells.EnvironmentChain);
                 }
             }
             else if (effect is ApocalypseSpells apocalypseSpells)

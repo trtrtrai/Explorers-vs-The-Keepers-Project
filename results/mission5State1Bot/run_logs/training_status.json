@@ -1,0 +1,29 @@
+{
+    "Mission5State1Bot": {
+        "checkpoints": [
+            {
+                "steps": 20014,
+                "file_path": "results\\mission5State1Bot\\Mission5State1Bot\\Mission5State1Bot-20014.onnx",
+                "reward": null,
+                "creation_time": 1706597861.593604,
+                "auxillary_file_paths": [
+                    "results\\mission5State1Bot\\Mission5State1Bot\\Mission5State1Bot-20014.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 20014,
+            "file_path": "results\\mission5State1Bot\\Mission5State1Bot.onnx",
+            "reward": null,
+            "creation_time": 1706597861.593604,
+            "auxillary_file_paths": [
+                "results\\mission5State1Bot\\Mission5State1Bot\\Mission5State1Bot-20014.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "1.8.0+cu111"
+    }
+}

@@ -402,20 +402,25 @@ namespace Controllers
             if (target.UseCard(card))
             {
                 //Debug.Log(card.name + " activated.");
-                if (team == 0)
-                {
-                    var cardDeck = team1Deck.FirstOrDefault(c => c.name.Equals(card.name));
-                    var cardDeckIndex = team1Deck.IndexOf(cardDeck);
-                    team1Hand.Remove(cardDeckIndex);
-                    if (team1Hand.Count < 5) RandomCard(team); // == 4 ? if [1:3] ?
-                }
-                else
-                {
-                    var cardDeck = team2Deck.FirstOrDefault(c => c.name.Equals(card.name));
-                    var cardDeckIndex = team2Deck.IndexOf(cardDeck);
-                    team2Hand.Remove(cardDeckIndex);
-                    if (team2Hand.Count < 5) RandomCard(team);
-                }
+                CardRedraw(team, card);
+            }
+        }
+
+        public void CardRedraw(int team, CardInfo card)
+        {
+            if (team == 0)
+            {
+                var cardDeck = team1Deck.FirstOrDefault(c => c.name.Equals(card.name));
+                var cardDeckIndex = team1Deck.IndexOf(cardDeck);
+                team1Hand.Remove(cardDeckIndex);
+                if (team1Hand.Count < 5) RandomCard(team); // == 4 ? if [1:3] ?
+            }
+            else
+            {
+                var cardDeck = team2Deck.FirstOrDefault(c => c.name.Equals(card.name));
+                var cardDeckIndex = team2Deck.IndexOf(cardDeck);
+                team2Hand.Remove(cardDeckIndex);
+                if (team2Hand.Count < 5) RandomCard(team);
             }
         }
         

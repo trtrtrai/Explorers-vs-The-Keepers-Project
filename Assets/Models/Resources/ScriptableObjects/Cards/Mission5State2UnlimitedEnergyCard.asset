@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b6d88fc3cfa4b4a8323dc75f4a42133, type: 3}
+  m_Name: Mission5State2UnlimitedEnergyCard
+  m_EditorClassIdentifier: 
+  Name: Mission 5 State 2 Unlimited Energy
+  Cost: 0
+  CardIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  Description: It's never should be exists...
+  CardType: 2
+  ActiveType: 0
+  Radius: 0
+  SpellsEffect: {fileID: 11400000, guid: 458bcb83173a3164b8020c56b8e3d25d, type: 2}
+  Character: {fileID: 0}

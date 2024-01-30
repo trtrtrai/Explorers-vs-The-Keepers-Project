@@ -15,10 +15,8 @@ MonoBehaviour:
   SpellsTags: 02000000080000001000000011000000
   EnvironmentPrefab: {fileID: 2980044602555576144, guid: 822b65a1a3fab51449081849668ce9f8,
     type: 3}
-  DamagePerContact: 30
+  DamagePerContact: 75
   EffectTimer: 25
   IgnoreList: 0a000000
-  ListSettingUp:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  ListSettingUp: []
+  ListEnvironment: []

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Controllers;
 using EventArgs;
 using GUI;
@@ -16,13 +17,14 @@ using Random = UnityEngine.Random;
 namespace Agents
 {
     /// <summary>
-    /// State 2 of Mission5Bot. Wait 5-7 seconds, spawn The Rock General and many other card, spamming Go Home Spells with unlimited energy, only stop by sleep time
+    /// State 2 of Mission5Bot. Wait 5-7 seconds, spawn General and many other card, spamming Go Home Spells with unlimited energy, only stop by sleep time
     /// Play while player use Thermonuclear Bomb then disable this script. The Keeper will not do any thing after that.
-    /// Card use only: Treant (long waiting), Golem (long waiting), Go Home (unlimit), Angry Spirit (limit: 3), Mind Connect (limit all the time: 6), Poison Swamp (limit: 2) (short time to use Spells)
+    /// Card use only: Treant (long waiting), Golem (long waiting), Go Home (unlimit), Mind Connect (limit all the time: 10), Poison Swamp (limit: 3) (short time to use Spells)
     /// </summary>
     public class Mission5State2Bot : Agent
     {
         [SerializeField] private BehaviorParameters self;
+        [SerializeField] private Mission5Supporter _supporter;
         [SerializeField] private int botTeam;
         [SerializeField] private float spawnPenalty;
         [SerializeField] private float spellsPenalty;
@@ -31,12 +33,25 @@ namespace Agents
         [SerializeField] private int alliesRoad1;
         [SerializeField] private int enemiesRoad0;
         [SerializeField] private int enemiesRoad1;
-        [SerializeField] private bool theGeneralCanSummon; // don't need anymore
+        [SerializeField] private bool theGeneralCanSummon;
         [SerializeField] private int roadIndexRecommend;
+
+        [SerializeField] private int mindConnectLimit; // cannot regen
+        [SerializeField] private int poisonSwampLimit; // can regen
+
+        [SerializeField] private List<long> poisonSwampChain;
 
         public override void OnEpisodeBegin()
         {
             if (self.BehaviorType != BehaviorType.InferenceOnly && botTeam == 1) WorldManager.Instance.SoftReset();
+
+            if (_supporter is null)
+            {
+                _supporter = gameObject.AddComponent<Mission5Supporter>();
+                _supporter.Active(botTeam == 0
+                    ? WorldManager.Instance.PlayerEnergy
+                    : WorldManager.Instance.EnemyEnergy);
+            }
 
             alliesRoad0 = 0;
             alliesRoad1 = 0;
@@ -45,8 +60,13 @@ namespace Agents
             theGeneralCanSummon = false;
             roadIndexRecommend = -1;
 
+            // Train with 0 but use in random 5-7 seconds
             spellsPenalty = 0f;
             spawnPenalty = 0f;
+
+            mindConnectLimit = 10;
+            poisonSwampLimit = 3;
+            poisonSwampChain = new List<long>();
         }
 
         public override void CollectObservations(VectorSensor sensor)
@@ -99,6 +119,12 @@ namespace Agents
             if (alliesRoad1 == 0) roadIndexRecommend = 1;
             
             sensor.AddObservation(roadIndexRecommend);
+            
+            sensor.AddObservation(spawnPenalty);
+            sensor.AddObservation(spellsPenalty);
+            
+            sensor.AddObservation(mindConnectLimit);
+            sensor.AddObservation(poisonSwampLimit);
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -119,6 +145,10 @@ namespace Agents
                 {
                     AddReward(0.005f);
                 }
+                else if (spawnPenalty > 0f && spellsPenalty > 0f)
+                {
+                    AddReward(0.003f);
+                }
                 else
                 {
                     if (alliesRoad0 == 0 || alliesRoad1 == 0)
@@ -126,7 +156,7 @@ namespace Agents
                         AddReward(-0.015f);
                     }
                     
-                    AddReward(-0.005f);
+                    AddReward(-0.015f);
                 }
             }
             else
@@ -145,14 +175,33 @@ namespace Agents
                 }
                 else
                 {
-                    AddReward(0.01f);
+                    AddReward(0.015f);
                     if (CardController.Instance.CardCanBeUsed(botTeam, card))
                     {
                         if ((card.CardType == CardType.Minions && spawnPenalty <= 0f)
                             || (card.CardType == CardType.Spells && spellsPenalty <= 0f)
                             || card.CardType == CardType.Generals) //Generals does not check
                         {
-                            UseCard(card, actions.DiscreteActions[3]); // added reward in this func
+                            if (cardEnum is (int)CardName.Treant
+                                or (int)CardName.Golem
+                                or (int)CardName.GoHome
+                                or (int)CardName.PoisonSwamp
+                                or (int)CardName.MindConnect
+                                || card.CardType == CardType.Generals)
+                            {
+                                UseCard(card, actions.DiscreteActions[3]); // added reward in this func
+                            }
+                            else
+                            {
+                                // Redraw card
+                                CardController.Instance.CardRedraw(botTeam, card);
+                                
+                                AddReward(-0.01f); // 0.0 in total
+                            }
+                        }
+                        else
+                        {
+                            AddReward(-0.011f); // -0.001 in total
                         }
                     }
                     else
@@ -191,7 +240,7 @@ namespace Agents
                     }
                     else
                     {
-                        AddReward(-0.02f); // -0.01 total
+                        AddReward(-0.02f);
                     }
                     break;
                 case CardType.Generals:
@@ -204,7 +253,7 @@ namespace Agents
                     }
                     else
                     {
-                        AddReward(-0.01f); // +0.0 total
+                        AddReward(-0.015f); // +0.0 total
                     }
                     break;
                 case CardType.Spells:
@@ -212,8 +261,12 @@ namespace Agents
                     // Reward extra reward because its use less Energy to summon Wolf (0.02)
                     // Can be used fail? => minus
                     
-                    // Angry spirit - single ally - needed number of ally character minimum was 1
-                    // Reward = 0.003 per buffed ally attacked
+                    // Poison Swamp - area - at least 1 enemy to use
+                    // Reward if enemy walk in and take damage (0.003)
+                    // Can be used fail? => minus
+                    
+                    // Go Home - single enemy - needed number of enemy character minimum was 1
+                    // Reward 0.01 * back step (listen it when it continue after get the effect)
                     // Can be used fail? => minus
                     switch (card.ActiveType)
                     {
@@ -223,13 +276,34 @@ namespace Agents
                             {
                                 if (roadIndex < WorldManager.Instance.RoadAmount)
                                 {
+                                    mindConnectLimit = Mathf.Clamp(mindConnectLimit - 1, 0, mindConnectLimit);
+
+                                    if (mindConnectLimit == 0)
+                                    {
+                                        AddReward(-0.015f); // 0 in total
+                                        break;
+                                    }
+                                    
+                                    if (roadIndexRecommend != -1)
+                                    {
+                                        if (roadIndex != roadIndexRecommend)
+                                        {
+                                            AddReward(-0.03f);
+                                        }
+                                        else
+                                        {
+                                            AddReward(0.005f);
+                                        }
+                                    }
+                                    else AddReward(0.01f);
+                                    
                                     Debug.Log(botTeam + " " + card.name);
                                     RefreshSpellsPenalty();
                                     summonSpells.RoadIndex = roadIndex;
                                     summonSpells.Team = botTeam;
                                     CardController.Instance.CardConsuming(botTeam, card);
                                     SpellsExecute.Activate(null, card.SpellsEffect);
-                                    AddReward(0.02f);
+                                    AddReward(0.015f);
                                 }
                                 else
                                 {
@@ -240,31 +314,52 @@ namespace Agents
                         }
                         case CardActiveType.Area:
                         {
-                            var character = WorldManager.Instance.GetRandomAlly(botTeam);
+                            var character = WorldManager.Instance.GetRandomEnemy(botTeam);
                             if (character is null || alliesRoad0 + alliesRoad1 == 0)
                             {
                                 AddReward(-0.02f); // +0.01 in start of if statement => -0.01 total
                             }
                             else
                             {
-                                var characters = WorldManager.Instance.GetCharactersInArea(character.Position, card.Radius, WorldManager.GetEnemyLayer(botTeam == 0 ? "Team2" : "Team1"), out List<Droppable> area);
+                                WorldManager.Instance.GetCharactersInArea(character.Position, card.Radius, WorldManager.GetEnemyLayer(botTeam == 0 ? "Team1" : "Team2"), out List<Droppable> area);
 
-                                if (characters.Count == 0)
+                                if (card.SpellsEffect is EnvironmentSpells environmentSpells)
                                 {
-                                    AddReward(-0.02f); // +0.01 in start of if statement => -0.01 total
-                                }
-                                else
-                                {
+                                    poisonSwampLimit = Mathf.Clamp(poisonSwampLimit - 1, 0, 3);
+                                    
+                                    if (poisonSwampLimit == 0)
+                                    {
+                                        AddReward(-0.015f); // 0 in total
+                                        break;
+                                    }
+                                    
                                     Debug.Log(botTeam + " " + card.name);
                                     RefreshSpellsPenalty();
+                                    environmentSpells.ListSettingUp = area.ConvertAll(d => d.GetComponent<TileData>());
                                     CardController.Instance.CardConsuming(botTeam, card);
-                                    foreach (var effector in characters)
-                                    {
-                                        SpellsExecute.Activate(effector, card.SpellsEffect);
-                                        AddReward(0.003f);
-                                    }
+                                    SpellsExecute.Activate(null, card.SpellsEffect);
+                                    StartCoroutine(CountingRewardOnPoisonSwamp(environmentSpells.ListEnvironment, environmentSpells.EnvironmentChain));
                                 }
                             }
+                            break;
+                        }
+                        case CardActiveType.SingleEnemy:
+                        {
+                            var character = WorldManager.Instance.GetRandomEnemy(botTeam);
+                            if (character is null || enemiesRoad0 + enemiesRoad1 == 0)
+                            {
+                                AddReward(-0.02f); // +0.01 in start of if statement => -0.01 total
+                            }
+                            else
+                            {
+                                Debug.Log(botTeam + " " + card.name);
+                                RefreshSpellsPenalty();
+                                CardController.Instance.CardConsuming(botTeam, card);
+                                var oldPosition = character.Position.TryGetComponent(out Droppable originDroppable);
+                                SpellsExecute.Activate(character, card.SpellsEffect);
+                                StartCoroutine(EnemyStepBack(character, oldPosition ? originDroppable.Team1PositionIndex : 0));
+                            }
+                            
                             break;
                         }
                         default:
@@ -276,9 +371,72 @@ namespace Agents
                     break;
             }
         }
+        
+        private IEnumerator EnemyStepBack(Character character, int oldPosition)
+        {
+            if (oldPosition > 0)
+            {
+                yield return new WaitForSeconds(0.5f);
+
+                var haveDrop = character.Position.TryGetComponent(out Droppable newDroppable);
+                var newPosition = 0;
+                if (haveDrop)
+                {
+                    newPosition = newDroppable.Team1PositionIndex;
+                }
+
+                var reward = 0.01f * Mathf.Abs(oldPosition - newPosition);
+                Debug.Log("Go Home reward " + reward);
+                AddReward(reward);
+            }
+        }
+
+        private IEnumerator CountingRewardOnPoisonSwamp(List<PoisonSwamp> area, long chain)
+        {
+            while (!area.All(d => d.GetComponent<PoisonSwamp>().IsSetup))
+            {
+                yield return null;
+            }
+            poisonSwampChain.Add(chain);
+            area.ForEach(d =>
+            {
+                var p = d.GetComponent<PoisonSwamp>();
+                
+                p.OnTriggered += PoisonSwampTriggered;
+                p.OnDestroyed += PoisonSwampDestroyed;
+            });
+        }
+
+        private void PoisonSwampTriggered(object sender, EnvironmentTriggeredEventArgs args)
+        {
+            if (sender is PoisonSwamp poisonSwamp)
+            {
+                if (args.Amount > 0)
+                {
+                    AddReward(0.003f);
+                    Debug.Log("Poison Swamp reward 0.003");
+                }
+            }
+        }
+
+        private void PoisonSwampDestroyed(object sender, EnvironmentDestroyEventArgs args)
+        {
+            if (sender is PoisonSwamp poisonSwamp)
+            {
+                poisonSwamp.OnTriggered -= PoisonSwampTriggered;
+                poisonSwamp.OnDestroyed -= PoisonSwampDestroyed;
+
+                if (poisonSwampChain.Any(c => c == args.EnvironmentChain))
+                {
+                    poisonSwampChain.Remove(args.EnvironmentChain);
+                    poisonSwampLimit++;
+                }
+            }
+        }
+        
         private void RefreshSpawnPenalty()
         {
-            spawnPenalty = Random.Range(2f, 3f); // 3.75f/Energy
+            spawnPenalty = Random.Range(7f, 9f); // 3.75f/Energy
 
             StartCoroutine(SpawnPenalty());
         }
@@ -295,7 +453,7 @@ namespace Agents
         
         private void RefreshSpellsPenalty()
         {
-            spellsPenalty = Random.Range(2f, 3f); // 3.75f/Energy
+            spellsPenalty = Random.Range(2.5f, 3.5f); // 3.75f/Energy
 
             StartCoroutine(SpellsPenalty());
         }

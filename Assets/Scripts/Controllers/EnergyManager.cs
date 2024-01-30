@@ -10,7 +10,7 @@ namespace Controllers
         // I don't want to manage both 2 player in same script anymore...
         //public static EnergyManager Instance { get; private set; }
 
-        public delegate int CardUsing(Card card);
+        public delegate int CardUsing(int cost);
         public event CardUsing CardUsingEvent;
         
         [SerializeField] private int energy;
@@ -77,7 +77,7 @@ namespace Controllers
 
         public bool UseCard(Card target)
         {
-            var realCost = CardUsingEvent?.Invoke(target);
+            var realCost = CardUsingEvent?.Invoke(target.Cost);
 
             if (realCost is null || realCost == -1)
             {
@@ -105,13 +105,18 @@ namespace Controllers
 
         public bool UseCard(CardInfo target)
         {
-            //var realCost = CardUsingEvent?.Invoke(target);
-            var realCost = target.Cost;
+            var realCost = CardUsingEvent?.Invoke(target.Cost);
+            //var realCost = target.Cost;
+            
+            if (realCost is null || realCost == -1)
+            {
+                realCost = target.Cost;
+            }
 
             if (energy >= realCost)
             {
                 if (energy == MaximumEnergy) StartCoroutine(EnergyCooldown());
-                energy -= realCost;
+                energy -= (int)realCost;
                 
                 return true;
             }

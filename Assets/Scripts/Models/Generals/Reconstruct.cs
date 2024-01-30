@@ -37,7 +37,7 @@ namespace Models.Generals
             if (ReferenceEquals(sender, gameObject) && !args.Target.CharacterTag[(int)CharacterTag.Headquarter])
             {
                 var healingQuantity = Mathf.RoundToInt(args.DamageDeal * healRatio);
-                Debug.Log("Damage deal " + args.DamageDeal + ", heal " + healingQuantity);
+                //Debug.Log("Damage deal " + args.DamageDeal + ", heal " + healingQuantity);
                 myself.Healing(healingQuantity, false, false);
             }
         }

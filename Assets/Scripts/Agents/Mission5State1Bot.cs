@@ -61,6 +61,8 @@ namespace Agents
              * Observation index 7: Vector2(x, y) x is number of allies, y is number of enemies on road index 1 => 2
              * Observation index 8: boolean variable if Generals can summon => 1
              * Observation index 9: road index recommend for place on war field => 1
+             * Observation index 10: time sleep Minions spawn => 1
+             * Observation index 11: time sleep Spells active => 1
              */
             
             var listCardCanUse = CardController.Instance.GetCardCanBeUsed(botTeam);
@@ -99,6 +101,9 @@ namespace Agents
             if (alliesRoad1 == 0) roadIndexRecommend = 1;
             
             sensor.AddObservation(roadIndexRecommend);
+            
+            sensor.AddObservation(spawnPenalty);
+            sensor.AddObservation(spellsPenalty);
         }
 
         public override void OnActionReceived(ActionBuffers actions)
@@ -119,6 +124,10 @@ namespace Agents
                 {
                     AddReward(0.005f);
                 }
+                else if (spawnPenalty > 0f && spellsPenalty > 0f)
+                {
+                    AddReward(0.003f);
+                }
                 else
                 {
                     if (alliesRoad0 == 0 || alliesRoad1 == 0)
@@ -126,7 +135,7 @@ namespace Agents
                         AddReward(-0.015f);
                     }
                     
-                    AddReward(-0.005f);
+                    AddReward(-0.015f);
                 }
             }
             else
@@ -145,14 +154,22 @@ namespace Agents
                 }
                 else
                 {
-                    AddReward(0.01f);
+                    AddReward(0.015f);
                     if (CardController.Instance.CardCanBeUsed(botTeam, card))
                     {
                         if ((card.CardType == CardType.Minions && spawnPenalty <= 0f)
                             || (card.CardType == CardType.Spells && spellsPenalty <= 0f)
                             || card.CardType == CardType.Generals) //Generals does not check
                         {
-                            UseCard(card, actions.DiscreteActions[3]); // added reward in this func
+                            if (cardEnum is (int)CardName.TheRock or (int)CardName.AxitRain or (int)CardName.GoHome)
+                            {
+                                AddReward(-0.01f); // 0.0 in total
+                            }
+                            else UseCard(card, actions.DiscreteActions[3]); // added reward in this func
+                        }
+                        else
+                        {
+                            AddReward(-0.011f); // -0.001 in total
                         }
                     }
                     else
@@ -268,8 +285,8 @@ namespace Agents
                                     RefreshSpellsPenalty();
                                     environmentSpells.ListSettingUp = area.ConvertAll(d => d.GetComponent<TileData>());
                                     CardController.Instance.CardConsuming(botTeam, card);
-                                    SpellsExecute.Activate(null, card.SpellsEffect);
                                     StartCoroutine(CountingRewardOnPoisonSwamp(area));
+                                    SpellsExecute.Activate(null, card.SpellsEffect);
                                 }
                             }
                             break;
@@ -287,6 +304,11 @@ namespace Agents
         private IEnumerator CountingRewardOnPoisonSwamp(List<Droppable> area)
         {
             while (!area.All(d => d.TryGetComponent(out PoisonSwamp _)))
+            {
+                yield return null;
+            }
+            
+            while (!area.All(d => d.GetComponent<PoisonSwamp>().IsSetup))
             {
                 yield return null;
             }

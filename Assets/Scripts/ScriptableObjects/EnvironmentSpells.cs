@@ -12,5 +12,7 @@ namespace ScriptableObjects
         public float EffectTimer;
         public List<CharacterTag> IgnoreList;
         public List<TileData> ListSettingUp;
+        public List<PoisonSwamp> ListEnvironment;
+        public long EnvironmentChain;
     }
 }

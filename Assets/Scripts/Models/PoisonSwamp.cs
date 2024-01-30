@@ -16,12 +16,15 @@ namespace Models
         // idea for take damage per second: save List<Character>, give character a poison counting, if character in list -> reset timer counting
         [SerializeField] private int damage;
         [SerializeField] private float timer;
+        [SerializeField] private long chain;
 
         [SerializeField] private bool isSetup;
         
         private BitArray ignoreTag;
 
-        public void Setup(int damagePerContact, float effectTimer, List<CharacterTag> ignore)
+        public bool IsSetup => isSetup;
+
+        public void Setup(int damagePerContact, float effectTimer, List<CharacterTag> ignore, long chainNumber)
         {
             if (isSetup) return;
 
@@ -39,6 +42,8 @@ namespace Models
                     break;
                 }
             }
+
+            chain = chainNumber;
 
             StartCoroutine(StartCounting());
             isSetup = true;
@@ -63,6 +68,7 @@ namespace Models
                 }
 
                 var realDmg = character.TakeDamage(damage);
+                //Debug.Log("Poison Triggered " + realDmg + " dmg.");
                 OnTriggered?.Invoke(this, new EnvironmentTriggeredEventArgs(character, realDmg));
             }
         }
@@ -76,7 +82,7 @@ namespace Models
                 yield return null;
             }
             
-            OnDestroyed?.Invoke(this, new EnvironmentDestroyEventArgs());
+            OnDestroyed?.Invoke(this, new EnvironmentDestroyEventArgs(chain));
             enabled = false;
             Destroy(transform.parent.gameObject, 0.25f);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Controllers;
 using GUI;
@@ -28,14 +29,14 @@ namespace Models.Spells
             isSetup = true;
         }
 
-        private int IsReduceCost(Card card)
+        private int IsReduceCost(int cost)
         {
             var costResult = -1;
             //check if card contains in cardEffect
 
             if (counting > 0)
             {
-                costResult = Mathf.Clamp(card.Cost - energyReduce, 0, card.Cost);
+                costResult = Mathf.Clamp(cost - energyReduce, 0, cost);
                 counting--;
             }
 

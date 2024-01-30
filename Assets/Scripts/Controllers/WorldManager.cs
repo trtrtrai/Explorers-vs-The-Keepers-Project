@@ -161,12 +161,12 @@ namespace Controllers
             initialize = !initialize;
             if (initialize) return;
             
-            OnGameEnded -= aiBot.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
-            CharacterSpawn -= aiBot.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
+            OnGameEnded -= aiBot.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
             aiBot.GetComponent<Agent>().enabled = false;
             
-            OnGameEnded -= aiBotTeam0.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
-            CharacterSpawn -= aiBotTeam0.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
+            OnGameEnded -= aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBotTeam0.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
             aiBotTeam0.GetComponent<Agent>().enabled = false;
             
             OnGameReset?.Invoke(this, System.EventArgs.Empty);
@@ -216,12 +216,12 @@ namespace Controllers
             CardController.Instance.StartGame();
             
             aiBot.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBot.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
-            CharacterSpawn += aiBot.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
+            OnGameEnded += aiBot.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
             
             aiBotTeam0.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBotTeam0.GetComponent<Mission5State1Bot>().OnHeadquarterDestroy;
-            CharacterSpawn += aiBotTeam0.GetComponent<Mission5State1Bot>().OnCharacterSpawn;
+            OnGameEnded += aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBotTeam0.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
         }
 
         private void OnEndGame(object sender, CharacterDeathEventArgs args)
@@ -605,13 +605,6 @@ namespace Controllers
                                 SpellsExecute.Activate(null, card.SpellsEffect);
                             }
                             break;
-                        case EnergyBoostSpells energyBoostSpells:
-                            if (TryConsumeCard(card, playerEnergy))
-                            {
-                                energyBoostSpells.Target = playerEnergy; // because this method only use for player, not bot
-                                SpellsExecute.Activate(null, card.SpellsEffect);
-                            }
-                            break;
                         default:
                         {
                             if (listActive.Count == 0 || worldCharacters.Count == 0) break;
@@ -652,6 +645,14 @@ namespace Controllers
                             {
                                 SpellsExecute.Activate(character, card.SpellsEffect);
                             }
+                        }
+                    }
+                    else if (card.SpellsEffect is EnergyBoostSpells energyBoostSpells)
+                    {
+                        if (TryConsumeCard(card, playerEnergy))
+                        {
+                            energyBoostSpells.Target = playerEnergy; // because this method only use for player, not bot
+                            SpellsExecute.Activate(null, card.SpellsEffect);
                         }
                     }
                     else // another effect except character
