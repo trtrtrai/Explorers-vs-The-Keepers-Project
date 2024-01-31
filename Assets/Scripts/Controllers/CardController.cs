@@ -54,7 +54,7 @@ namespace Controllers
             get;
             private set;
         }
-        //todo: limit 1 General card on hand + War Field, only while Generals on War Field death => have ratio draw General + reset required
+        //todo: limit 1 General card on hand + War Field, only while Generals on War Field death => have ratio draw General (done) + reset required (in progress)
         public event EventHandler<DrawNewCardEventArgs> OnTeam1DrawCard;
         public event EventHandler<DrawNewCardEventArgs> OnTeam2DrawCard;
         
@@ -74,6 +74,10 @@ namespace Controllers
         [SerializeField] private List<int> team1Hand;
         [SerializeField] private List<int> team2Hand;
 
+        [SerializeField] private bool isSetup;
+
+        public bool IsSetup => isSetup;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -88,6 +92,7 @@ namespace Controllers
 
         public void Setup(List<CardName> team1, List<CardName> team2)
         {
+            // Do not check isSetup == false because it will stop update when training AI model
             team1Deck.Clear();
             team1Deck = new();
             team2Deck.Clear();
@@ -122,6 +127,8 @@ namespace Controllers
                     AddCard(team2[i].ToString(), 1);
                 }
             }
+
+            isSetup = true;
         }
 
         public void StartGame()
@@ -131,6 +138,16 @@ namespace Controllers
                 RandomCard(0, i);
                 RandomCard(1, i);
             }
+        }
+
+        public List<GeneralCheckCanSummon> GetGeneralRequirement(int team)
+        {
+            if (team == 0)
+            {
+                return team1Required;
+            }
+
+            return team2Required;
         }
 
         private int GetMaxCharacterCardOnHand(List<CharacterTag> tags)
@@ -157,10 +174,19 @@ namespace Controllers
                 for (int i = 0; i < team1Deck.Count; i++)
                 {
                     var j = i;
-                    var minus = 0;
-                    
+
                     var cardInHand = team1Hand.FindAll(index => index == j);
-                    minus = cardInHand.Count;
+                    var minus = cardInHand.Count;
+
+                    if (team1Deck[j].CardType == CardType.Generals && minus == 0)
+                    {
+                        var layer = WorldManager.GetEnemyLayer("Team2"); // Team1 layer
+
+                        if (WorldManager.Instance.IsGeneralOnWarField(layer, TeamDeckCardName(team1Deck[j])))
+                        {
+                            minus = 1;
+                        }
+                    }
                     
                     var count = team1CardOffHand[i];
 
@@ -175,9 +201,20 @@ namespace Controllers
                 for (int i = 0; i < team2Deck.Count; i++)
                 {
                     var j = i;
-                    var minus = 0;
+
                     var cardInHand = team2Hand.FindAll(index => index == j);
-                    minus = cardInHand.Count;
+                    var minus = cardInHand.Count;
+
+                    if (team2Deck[j].CardType == CardType.Generals && minus == 0)
+                    {
+                        var layer = WorldManager.GetEnemyLayer("Team1"); // Team2 layer
+
+                        if (WorldManager.Instance.IsGeneralOnWarField(layer, TeamDeckCardName(team2Deck[j])))
+                        {
+                            minus = 1;
+                        }
+                    }
+                    
                     var count = team2CardOffHand[i];
 
                     for (int k = 0; k < count - minus; k++)
@@ -432,10 +469,19 @@ namespace Controllers
                 for (int i = 0; i < team1Deck.Count; i++)
                 {
                     var j = i;
-                    var minus = 0;
                     
                     var cardInHand = team1Hand.FindAll(index => index == j);
-                    minus = cardInHand.Count;
+                    var minus = cardInHand.Count;
+
+                    if (team1Deck[j].CardType == CardType.Generals && minus == 0)
+                    {
+                        var layer = WorldManager.GetEnemyLayer("Team2"); // Team1 layer
+
+                        if (WorldManager.Instance.IsGeneralOnWarField(layer, TeamDeckCardName(team1Deck[j])))
+                        {
+                            minus = 1;
+                        }
+                    }
                     
                     var count = team1CardOffHand[i];
 
@@ -450,9 +496,20 @@ namespace Controllers
                 for (int i = 0; i < team2Deck.Count; i++)
                 {
                     var j = i;
-                    var minus = 0;
+
                     var cardInHand = team2Hand.FindAll(index => index == j);
-                    minus = cardInHand.Count;
+                    var minus = cardInHand.Count;
+
+                    if (team2Deck[j].CardType == CardType.Generals && minus == 0)
+                    {
+                        var layer = WorldManager.GetEnemyLayer("Team1"); // Team2 layer
+
+                        if (WorldManager.Instance.IsGeneralOnWarField(layer, TeamDeckCardName(team2Deck[j])))
+                        {
+                            minus = 1;
+                        }
+                    }
+                    
                     var count = team2CardOffHand[i];
 
                     for (int k = 0; k < count - minus; k++)

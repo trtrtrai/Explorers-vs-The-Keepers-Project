@@ -7,6 +7,7 @@ namespace Models.Generals
     public abstract class GeneralCheckDeath : GeneralCheckCanSummon
     {
         [SerializeField] protected int deathCount;
+        [SerializeField] protected int immutableCount;
 
         protected virtual void Start()
         {
@@ -28,8 +29,11 @@ namespace Models.Generals
 
             var amount = character.GetStatus().GroupNumberImmutable;
             if (amount < 0) return;
-            
+
+            var oldProgress = 1f * deathCount / immutableCount;
             deathCount = Mathf.Clamp(deathCount - amount, 0, deathCount);
+            var newProgress = 1f * deathCount / immutableCount;
+            InvokeRequireTrigger(oldProgress, newProgress);
             
             if (deathCount == 0) CanSummon = true;
         }

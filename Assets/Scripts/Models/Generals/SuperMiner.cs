@@ -11,6 +11,7 @@ namespace Models.Generals
         protected override void Start()
         {
             deathCount = 7;
+            immutableCount = deathCount;
             
             WorldManager.Instance.CharacterSpawn += CharacterSpawnDetect;
         }
@@ -24,6 +25,11 @@ namespace Models.Generals
                 
                 if (characterTag[(int)CharacterTag.Defender]) args.Character.OnCharacterDeath += CharacterDeathDetect;
             }
+        }
+        
+        public override string GetDescription()
+        {
+            return $"Can summon after {deathCount} <i>Defender</i> death on War Field.";
         }
     }
 }

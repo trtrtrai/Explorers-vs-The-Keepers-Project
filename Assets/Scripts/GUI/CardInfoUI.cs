@@ -118,14 +118,14 @@ namespace GUI
                         }
                     }
 
-                    hp.text = "" + characterInfo.Status.Health;
-                    atk.text = "" + characterInfo.Status.Attack;
-                    def.text = "" + characterInfo.Status.Defense;
-                    crit.text = "" + characterInfo.Status.Critical;
-                    spd.text = "" + characterInfo.Status.Speed;
-                    step.text = "" + characterInfo.Status.Step;
-                    agi.text = "" + characterInfo.Status.Agility;
-                    aim.text = "" + characterInfo.Status.Aim;
+                    hp.text = "<sprite=\"StatusIcon\" index=0>" + characterInfo.Status.Health;
+                    atk.text = "<sprite=\"StatusIcon\" index=1>" + characterInfo.Status.Attack;
+                    def.text = "<sprite=\"StatusIcon\" index=2>" + characterInfo.Status.Defense;
+                    crit.text = "<sprite=\"StatusIcon\" index=3>" + characterInfo.Status.Critical;
+                    spd.text = "<sprite=\"StatusIcon\" index=4>" + characterInfo.Status.Speed;
+                    step.text = "<sprite=\"StatusIcon\" index=5>" + characterInfo.Status.Step;
+                    agi.text = "<sprite=\"StatusIcon\" index=6>" + characterInfo.Status.Agility;
+                    aim.text = "<sprite=\"StatusIcon\" index=7>" + characterInfo.Status.Aim;
                 }
             }
             else

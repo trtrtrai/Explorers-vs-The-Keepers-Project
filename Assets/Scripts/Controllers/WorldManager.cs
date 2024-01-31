@@ -38,6 +38,7 @@ namespace Controllers
         [SerializeField] private GameObject energyManagerPref;
         [SerializeField] private GameObject cardControllerPref;
         [SerializeField] private GameObject characterContainer;
+        [SerializeField] private GameObject objectContainer;
         [SerializeField] private GameObject headquarter;
 
         [SerializeField] private EnergyManager playerEnergy;
@@ -67,6 +68,8 @@ namespace Controllers
         public EnergyManager EnemyEnergy => enemyEnergy;
 
         public bool Team1Player => team1Player;
+
+        public Transform ObjectContainer => objectContainer.transform;
 
         [SerializeField] private int characterTagAmount;
         [SerializeField] private List<Character> worldCharacters;
@@ -131,9 +134,16 @@ namespace Controllers
                 eMng.layer = GetEnemyLayerOfPlayer();
                 enemyEnergy = eMng.GetComponent<EnergyManager>();
 
-                characterContainer = new GameObject();
-                characterContainer.name = "Character Container";
-                
+                characterContainer = new GameObject
+                {
+                    name = "Character Container"
+                };
+
+                objectContainer = new GameObject
+                {
+                    name = "Object Container"
+                };
+
                 var team1Headquarter = Instantiate(headquarter, characterContainer.transform);
                 team1Hq = team1Headquarter.GetComponent<Headquarter>();
                 team1Hq.Position = team1StartPoint;
@@ -172,6 +182,11 @@ namespace Controllers
             OnGameReset?.Invoke(this, System.EventArgs.Empty);
             worldCharacters.ForEach(c => Destroy(c.gameObject));
             worldCharacters.Clear();
+
+            foreach (Transform t in objectContainer.transform)
+            {
+                Destroy(t.gameObject);
+            }
             
             team1Hq.OnCharacterDeath -= OnEndGame;
             team2Hq.OnCharacterDeath -= OnEndGame;
@@ -1076,6 +1091,11 @@ namespace Controllers
                 character.OnCharacterDeath -= OnCharacterDeath;
                 worldCharacters.Remove(character);
             }
+        }
+
+        public bool IsGeneralOnWarField(int layer, string generalName)
+        {
+            return worldCharacters.Any(c => c.gameObject.layer == layer && c.CharacterInfo.name.Equals(generalName));
         }
         
         #region AI training

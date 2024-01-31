@@ -17,7 +17,7 @@ using Random = UnityEngine.Random;
 namespace Agents
 {
     /// <summary>
-    /// State 2 of Mission5Bot. Wait 5-7 seconds, spawn General and many other card, spamming Go Home Spells with unlimited energy, only stop by sleep time
+    /// State 2 of Mission5Bot. Spawn General and many other card, spamming Go Home Spells with unlimited energy, only stop by sleep time
     /// Play while player use Thermonuclear Bomb then disable this script. The Keeper will not do any thing after that.
     /// Card use only: Treant (long waiting), Golem (long waiting), Go Home (unlimit), Mind Connect (limit all the time: 10), Poison Swamp (limit: 3) (short time to use Spells)
     /// </summary>
@@ -33,7 +33,8 @@ namespace Agents
         [SerializeField] private int alliesRoad1;
         [SerializeField] private int enemiesRoad0;
         [SerializeField] private int enemiesRoad1;
-        [SerializeField] private bool theGeneralCanSummon;
+        [SerializeField] private bool theForestCanSummon;
+        [SerializeField] private bool theRockCanSummon;
         [SerializeField] private int roadIndexRecommend;
 
         [SerializeField] private int mindConnectLimit; // cannot regen
@@ -57,10 +58,9 @@ namespace Agents
             alliesRoad1 = 0;
             enemiesRoad0 = 0;
             enemiesRoad1 = 0;
-            theGeneralCanSummon = false;
+            theForestCanSummon = false;
             roadIndexRecommend = -1;
-
-            // Train with 0 but use in random 5-7 seconds
+            
             spellsPenalty = 0f;
             spawnPenalty = 0f;
 
@@ -79,8 +79,13 @@ namespace Agents
              * Observation index 5: Vector2(x, y) like index 1, it is a information of the fifth card on hand => 2
              * Observation index 6: Vector2(x, y) x is number of allies, y is number of enemies on road index 0 => 2
              * Observation index 7: Vector2(x, y) x is number of allies, y is number of enemies on road index 1 => 2
-             * Observation index 8: boolean variable if Generals can summon => 1
-             * Observation index 9: road index recommend for place on war field => 1
+             * Observation index 8: boolean variable if The Forest can summon => 1
+             * Observation index 9: boolean variable if The Forest can summon => 1
+             * Observation index 10: road index recommend for place on war field => 1
+             * Observation index 11: time sleep Minions spawn => 1
+             * Observation index 12: time sleep Spells active => 1
+             * Observation index 13: Mind Connect Spells limit => 1
+             * Observation index 14: Poison Swamp Spells limit => 1
              */
             
             var listCardCanUse = CardController.Instance.GetCardCanBeUsed(botTeam);
@@ -99,8 +104,10 @@ namespace Agents
             
             sensor.AddObservation(new Vector2Int(alliesRoad0, enemiesRoad0));
             sensor.AddObservation(new Vector2Int(alliesRoad1, enemiesRoad1));
-            theGeneralCanSummon = CardController.Instance.CheckCanSummon("TheForest", botTeam);
-            sensor.AddObservation(theGeneralCanSummon);
+            theForestCanSummon = CardController.Instance.CheckCanSummon("TheForest", botTeam);
+            sensor.AddObservation(theForestCanSummon);
+            theRockCanSummon = CardController.Instance.CheckCanSummon("TheRock", botTeam);
+            sensor.AddObservation(theRockCanSummon);
 
             if (enemiesRoad1 - alliesRoad1 >= 2)
             {
@@ -135,10 +142,14 @@ namespace Agents
              * DiscreteActions index 2: what type of card? 0-2
              * DiscreteActions index 3: what roadIndex would use the card? 0-1
              */
-            if (actions.DiscreteActions[0] == 1 && actions.DiscreteActions[1] == 7 && actions.DiscreteActions[2] == 2)
+            /*if (actions.DiscreteActions[0] == 1 && actions.DiscreteActions[1] == 7 && actions.DiscreteActions[2] == 2)
             {
-                Debug.Log("TheForest trigger " + actions.DiscreteActions[3] + " roadIndex, Required: " + theGeneralCanSummon);
+                Debug.Log("TheForest trigger " + actions.DiscreteActions[3] + " roadIndex, Required: " + theForestCanSummon);
             }
+            else if (actions.DiscreteActions[0] == 1 && actions.DiscreteActions[1] == 13 && actions.DiscreteActions[2] == 2)
+            {
+                Debug.Log("TheRock trigger " + actions.DiscreteActions[3] + " roadIndex, Required: " + theRockCanSummon);
+            }*/
             if (actions.DiscreteActions[0] == 0)
             {
                 if (CardController.Instance.GetCardCanBeUsed(botTeam).Count == 0)
@@ -153,7 +164,8 @@ namespace Agents
                 {
                     if (alliesRoad0 == 0 || alliesRoad1 == 0)
                     {
-                        AddReward(-0.015f);
+                        AddReward(-1f);
+                        Debug.Log("Don't use card, allies some road 0 " + botTeam);
                     }
                     
                     AddReward(-0.015f);
@@ -196,17 +208,17 @@ namespace Agents
                                 // Redraw card
                                 CardController.Instance.CardRedraw(botTeam, card);
                                 
-                                AddReward(-0.01f); // 0.0 in total
+                                AddReward(-0.015f); // 0.0 in total
                             }
                         }
                         else
                         {
-                            AddReward(-0.011f); // -0.001 in total
+                            AddReward(-0.016f); // -0.001 in total
                         }
                     }
                     else
                     {
-                        AddReward(-0.02f); // +0.01 in start of else => -0.01 total
+                        AddReward(-0.025f); // +0.015 in start of else => -0.015 total
                     }
                 }
             }
@@ -223,11 +235,12 @@ namespace Agents
                         {
                             if (roadIndex != roadIndexRecommend)
                             {
-                                AddReward(-0.03f);
+                                AddReward(-0.5f);
+                                Debug.Log("Use card, not place in recommend road " + botTeam);
                             }
                             else
                             {
-                                AddReward(0.005f);
+                                AddReward(0.5f);
                             }
                         }
                         else AddReward(0.01f);
@@ -240,16 +253,24 @@ namespace Agents
                     }
                     else
                     {
-                        AddReward(-0.02f);
+                        AddReward(-0.025f);
                     }
                     break;
                 case CardType.Generals:
-                    if (roadIndex < WorldManager.Instance.RoadAmount && theGeneralCanSummon)
+                    if (roadIndex < WorldManager.Instance.RoadAmount)
                     {
-                        Debug.Log(card.Name + " in coming!");
-                        CardController.Instance.CardConsuming(botTeam, card);
-                        WorldManager.Instance.CreateCharacter(card.Character, roadIndex, botTeam, card.SpellsEffect);
-                        AddReward(3f);
+                        if ((card.name.Equals("TheForestCard") && theForestCanSummon) || (card.name.Equals("TheRockCard") && theRockCanSummon))
+                        {
+                            Debug.Log(card.Name + " in coming!");
+                            CardController.Instance.CardConsuming(botTeam, card);
+                            WorldManager.Instance.CreateCharacter(card.Character, roadIndex, botTeam,
+                                card.SpellsEffect);
+                            AddReward(3f);
+                        }
+                        else
+                        {
+                            AddReward(-0.015f); // +0.0 total
+                        }
                     }
                     else
                     {
@@ -276,13 +297,13 @@ namespace Agents
                             {
                                 if (roadIndex < WorldManager.Instance.RoadAmount)
                                 {
-                                    mindConnectLimit = Mathf.Clamp(mindConnectLimit - 1, 0, mindConnectLimit);
-
                                     if (mindConnectLimit == 0)
                                     {
                                         AddReward(-0.015f); // 0 in total
                                         break;
                                     }
+                                    
+                                    mindConnectLimit = Mathf.Clamp(mindConnectLimit - 1, 0, mindConnectLimit);
                                     
                                     if (roadIndexRecommend != -1)
                                     {
@@ -307,7 +328,7 @@ namespace Agents
                                 }
                                 else
                                 {
-                                    AddReward(-0.02f);
+                                    AddReward(-0.025f);
                                 }
                             }
                             break;
@@ -317,7 +338,7 @@ namespace Agents
                             var character = WorldManager.Instance.GetRandomEnemy(botTeam);
                             if (character is null || alliesRoad0 + alliesRoad1 == 0)
                             {
-                                AddReward(-0.02f); // +0.01 in start of if statement => -0.01 total
+                                AddReward(-0.025f);
                             }
                             else
                             {
@@ -325,13 +346,13 @@ namespace Agents
 
                                 if (card.SpellsEffect is EnvironmentSpells environmentSpells)
                                 {
-                                    poisonSwampLimit = Mathf.Clamp(poisonSwampLimit - 1, 0, 3);
-                                    
                                     if (poisonSwampLimit == 0)
                                     {
                                         AddReward(-0.015f); // 0 in total
                                         break;
                                     }
+                                    
+                                    poisonSwampLimit = Mathf.Clamp(poisonSwampLimit - 1, 0, 3);
                                     
                                     Debug.Log(botTeam + " " + card.name);
                                     RefreshSpellsPenalty();
@@ -348,7 +369,7 @@ namespace Agents
                             var character = WorldManager.Instance.GetRandomEnemy(botTeam);
                             if (character is null || enemiesRoad0 + enemiesRoad1 == 0)
                             {
-                                AddReward(-0.02f); // +0.01 in start of if statement => -0.01 total
+                                AddReward(-0.025f);
                             }
                             else
                             {
@@ -364,7 +385,7 @@ namespace Agents
                         }
                         default:
                         {
-                            AddReward(-0.02f);
+                            AddReward(-0.025f);
                             break;
                         }
                     }
@@ -386,7 +407,7 @@ namespace Agents
                 }
 
                 var reward = 0.01f * Mathf.Abs(oldPosition - newPosition);
-                Debug.Log("Go Home reward " + reward);
+                //Debug.Log("Go Home reward " + reward);
                 AddReward(reward);
             }
         }
@@ -414,7 +435,7 @@ namespace Agents
                 if (args.Amount > 0)
                 {
                     AddReward(0.003f);
-                    Debug.Log("Poison Swamp reward 0.003");
+                    //Debug.Log("Poison Swamp reward 0.003");
                 }
             }
         }
@@ -436,7 +457,7 @@ namespace Agents
         
         private void RefreshSpawnPenalty()
         {
-            spawnPenalty = Random.Range(7f, 9f); // 3.75f/Energy
+            spawnPenalty = Random.Range(5.5f, 7.5f); // 3.75f/Energy
 
             StartCoroutine(SpawnPenalty());
         }
@@ -483,7 +504,7 @@ namespace Agents
 
                 if (teamWon == botTeam)
                 {
-                    SetReward(!theGeneralCanSummon ? 5f : 10f); // won while General can not summon => reduce reward
+                    SetReward(!theForestCanSummon ? 3f : 5f); // won while General can not summon => reduce reward
                 }
                 else
                 {

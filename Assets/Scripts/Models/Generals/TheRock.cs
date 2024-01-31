@@ -1,5 +1,6 @@
 using Controllers;
 using EventArgs;
+using UnityEngine;
 
 namespace Models.Generals
 {
@@ -9,6 +10,7 @@ namespace Models.Generals
         protected override void Start()
         {
             summonCount = 3;
+            immutableCount = summonCount;
             
             WorldManager.Instance.CharacterSpawn += CharacterSpawnDetect;
         }
@@ -19,10 +21,19 @@ namespace Models.Generals
             {
                 if (args.Team == Team && args.Character.CharacterInfo.Name.Equals(SummonName))
                 {
-                    summonCount--;
+                    var oldProgress = 1f * summonCount / immutableCount;
+                    summonCount = Mathf.Clamp(summonCount - 1, 0, summonCount);
+                    var newProgress = 1f * summonCount / immutableCount;
+                    InvokeRequireTrigger(oldProgress, newProgress);
+                    
                     if (summonCount == 0) CanSummon = true;
                 }
             }
+        }
+        
+        public override string GetDescription()
+        {
+            return $"Can summon after {summonCount} allies Golems were summoned on War Field.";
         }
     }
 }

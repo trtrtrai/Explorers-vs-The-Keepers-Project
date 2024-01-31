@@ -448,7 +448,7 @@ PrefabInstance:
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
       propertyPath: team2CardList.Array.data[5]
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}

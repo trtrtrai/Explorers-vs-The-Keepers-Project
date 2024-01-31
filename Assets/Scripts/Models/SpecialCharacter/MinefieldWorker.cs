@@ -14,7 +14,7 @@ namespace Models.SpecialCharacter
         {
             isMoving = false;
             // setup obj
-            var obj = Instantiate(objectSetupPrefab);
+            var obj = Instantiate(objectSetupPrefab, WorldManager.Instance.ObjectContainer);
             obj.transform.localPosition = position.transform.localPosition;
             obj.layer = gameObject.layer;
 

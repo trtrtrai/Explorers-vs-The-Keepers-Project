@@ -2,22 +2,22 @@
     "Mission5State2Bot": {
         "checkpoints": [
             {
-                "steps": 5898,
-                "file_path": "results\\mission5State2Bot\\Mission5State2Bot\\Mission5State2Bot-5898.onnx",
+                "steps": 30070,
+                "file_path": "results\\mission5State2Bot\\Mission5State2Bot\\Mission5State2Bot-30070.onnx",
                 "reward": null,
-                "creation_time": 1706626798.5737844,
+                "creation_time": 1706686236.7809172,
                 "auxillary_file_paths": [
-                    "results\\mission5State2Bot\\Mission5State2Bot\\Mission5State2Bot-5898.pt"
+                    "results\\mission5State2Bot\\Mission5State2Bot\\Mission5State2Bot-30070.pt"
                 ]
             }
         ],
         "final_checkpoint": {
-            "steps": 5898,
+            "steps": 30070,
             "file_path": "results\\mission5State2Bot\\Mission5State2Bot.onnx",
             "reward": null,
-            "creation_time": 1706626798.5737844,
+            "creation_time": 1706686236.7809172,
             "auxillary_file_paths": [
-                "results\\mission5State2Bot\\Mission5State2Bot\\Mission5State2Bot-5898.pt"
+                "results\\mission5State2Bot\\Mission5State2Bot\\Mission5State2Bot-30070.pt"
             ]
         }
     },

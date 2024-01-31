@@ -8,6 +8,7 @@ namespace Models.Generals
         protected override void Start()
         {
             deathCount = 15;
+            immutableCount = deathCount;
             
             WorldManager.Instance.CharacterSpawn += CharacterSpawnDetect;
         }
@@ -18,6 +19,11 @@ namespace Models.Generals
             {
                 if (args.Team == Team) args.Character.OnCharacterDeath += CharacterDeathDetect;
             }
+        }
+
+        public override string GetDescription()
+        {
+            return $"Can summon after {deathCount} allies death on War Field.";
         }
     }
 }

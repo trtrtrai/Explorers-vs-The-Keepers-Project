@@ -150,7 +150,7 @@ namespace Models.Spells
                 
                 foreach (var tile in environmentSpells.ListSettingUp)
                 {
-                    var envir = WorldManager.InstantiatePrefab(environmentSpells.EnvironmentPrefab);
+                    var envir = WorldManager.InstantiatePrefab(environmentSpells.EnvironmentPrefab, WorldManager.Instance.ObjectContainer);
                     envir.transform.localPosition = tile.transform.localPosition;
                     var script = envir.GetComponentInChildren<PoisonSwamp>(); //Type will be abstract after
                     environmentSpells.ListEnvironment.Add(script);

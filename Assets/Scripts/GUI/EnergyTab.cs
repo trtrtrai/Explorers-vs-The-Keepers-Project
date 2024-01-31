@@ -33,8 +33,8 @@ namespace GUI
             }
 
             playerEnergy = WorldManager.Instance.PlayerEnergy;
-            energyFill.fillAmount = 1f * playerEnergy.Energy / playerEnergy.MaximumEnergy;
-            energyAmountTxt.text = playerEnergy.Energy + "";
+            energyFill.fillAmount = 0f;
+            energyAmountTxt.text = playerEnergy.Energy + " E";
             calcUI = true;
         }
 
@@ -48,8 +48,9 @@ namespace GUI
                 var curTPEIRL = playerEnergy.TimePerEnergyInRealTime;
                 var curTimer = playerEnergy.Timer;
 
-                energyFill.fillAmount = 1f * curE / maxE + 0.1f * (curTPEIRL - curTimer) / curTPEIRL;
-                energyAmountTxt.text = curE + "";
+                // energyFill.fillAmount = 1f * curE / maxE + 0.1f * (curTPEIRL - curTimer) / curTPEIRL;
+                energyFill.fillAmount = (curTPEIRL - curTimer) / curTPEIRL;
+                energyAmountTxt.text = curE + " E";
             }
         }
     }
