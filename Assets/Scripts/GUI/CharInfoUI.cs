@@ -1,4 +1,5 @@
-using ScriptableObjects;
+using Models;
+using static Extensions.GUIExtension;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,14 +41,14 @@ namespace GUI
 
             if (groupImmutable == 0) groupImmutable = 1;
             
-            hp.text = $"{charInfo.Status.Health}/{charInfo.Status.Health}";
-            atk.text = "" + charInfo.Status.Attack;
-            def.text = "" + charInfo.Status.Defense;
-            crit.text = "" + charInfo.Status.Critical;
-            spd.text = "" + charInfo.Status.Speed;
-            step.text = "" + charInfo.Status.Step;
-            agi.text = "" + charInfo.Status.Agility;
-            aim.text = "" + charInfo.Status.Aim;
+            hp.text = GetSpriteStatusIcon(StatsType.Health) + $"{charInfo.Status.Health}/{charInfo.Status.Health}";
+            atk.text = GetSpriteStatusIcon(StatsType.Attack) + charInfo.Status.Attack;
+            def.text = GetSpriteStatusIcon(StatsType.Defense) + charInfo.Status.Defense;
+            crit.text = GetSpriteStatusIcon(StatsType.Critical) + charInfo.Status.Critical;
+            spd.text = GetSpriteStatusIcon(StatsType.Speed) + charInfo.Status.Speed;
+            step.text = GetSpriteStatusIcon(StatsType.Step) + charInfo.Status.Step;
+            agi.text = GetSpriteStatusIcon(StatsType.Agility) + charInfo.Status.Agility;
+            aim.text = GetSpriteStatusIcon(StatsType.Aim) + charInfo.Status.Aim;
 
             healthBar.fillAmount = 1;
             

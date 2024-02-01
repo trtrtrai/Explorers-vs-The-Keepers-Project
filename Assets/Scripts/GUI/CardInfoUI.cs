@@ -1,8 +1,8 @@
 using System.Collections;
+using static Extensions.GUIExtension;
 using Models;
 using ScriptableObjects;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -53,7 +53,7 @@ namespace GUI
                 cardIcon.sprite = self.CardIcon;
                 description.text = self.Description;
                 cardType.text = self.CardType.ToString();
-                activeType.text = self.ActiveType.ToString();
+                activeType.text = SpaceBetweenWord(self.ActiveType.ToString());
 
                 var hand = transform.parent.GetComponent<Hand>();
                 var cardTagContent = hand.cardTagContentPrefab;
@@ -118,14 +118,14 @@ namespace GUI
                         }
                     }
 
-                    hp.text = "<sprite=\"StatusIcon\" index=0>" + characterInfo.Status.Health;
-                    atk.text = "<sprite=\"StatusIcon\" index=1>" + characterInfo.Status.Attack;
-                    def.text = "<sprite=\"StatusIcon\" index=2>" + characterInfo.Status.Defense;
-                    crit.text = "<sprite=\"StatusIcon\" index=3>" + characterInfo.Status.Critical;
-                    spd.text = "<sprite=\"StatusIcon\" index=4>" + characterInfo.Status.Speed;
-                    step.text = "<sprite=\"StatusIcon\" index=5>" + characterInfo.Status.Step;
-                    agi.text = "<sprite=\"StatusIcon\" index=6>" + characterInfo.Status.Agility;
-                    aim.text = "<sprite=\"StatusIcon\" index=7>" + characterInfo.Status.Aim;
+                    hp.text = GetSpriteStatusIcon(StatsType.Health) + characterInfo.Status.Health;
+                    atk.text = GetSpriteStatusIcon(StatsType.Attack) + characterInfo.Status.Attack;
+                    def.text = GetSpriteStatusIcon(StatsType.Defense) + characterInfo.Status.Defense;
+                    crit.text = GetSpriteStatusIcon(StatsType.Critical) + characterInfo.Status.Critical;
+                    spd.text = GetSpriteStatusIcon(StatsType.Speed) + characterInfo.Status.Speed;
+                    step.text = GetSpriteStatusIcon(StatsType.Step) + characterInfo.Status.Step;
+                    agi.text = GetSpriteStatusIcon(StatsType.Agility) + characterInfo.Status.Agility;
+                    aim.text = GetSpriteStatusIcon(StatsType.Aim) + characterInfo.Status.Aim;
                 }
             }
             else
@@ -158,7 +158,11 @@ namespace GUI
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                transform.GetChild(1).SetAsFirstSibling();
+                var show = transform.GetChild(0).gameObject;
+                var hide = transform.GetChild(1).gameObject;
+                
+                show.SetActive(!show.activeSelf);
+                hide.SetActive(!hide.activeSelf);
             }
         }
     }

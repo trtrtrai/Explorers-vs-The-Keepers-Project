@@ -6,11 +6,14 @@ using JetBrains.Annotations;
 using Models;
 using TMPro;
 using UnityEngine;
+using static Extensions.GUIExtension;
 
 namespace GUI
 {
     public class CharacterTab : MonoBehaviour
     {
+        [SerializeField] private CharacterTarget characterTarget;
+        
         [SerializeField] private Transform allyContent;
         [SerializeField] private Transform enemyContent;
         private Dictionary<Character, CharInfoUI> _characters;
@@ -70,27 +73,27 @@ namespace GUI
             
             var charUI = _characters[character];
             var statsStr = "" + args.NewValue;
-
+            var spriteTxt = GetSpriteStatusIcon(args.StatsType);
             switch (args.StatsType)
             {
                 case StatsType.Health:
                     charUI.healthBar.fillAmount = 1f * args.NewValue / args.Immutable;
-                    charUI.hp.text = $"{args.NewValue}/{args.Immutable}";
+                    charUI.hp.text = spriteTxt + $"{args.NewValue}/{args.Immutable}";
                     break;
                 case StatsType.Attack:
-                    charUI.atk.text = "" + args.NewValue * args.GroupNumber;
+                    charUI.atk.text = spriteTxt + args.NewValue * args.GroupNumber;
                     TextColorChange(charUI.atk, args.NewValue, args.Immutable);
                     break;
                 case StatsType.Defense:
-                    charUI.def.text = "" + args.NewValue * args.GroupNumber;
+                    charUI.def.text = spriteTxt + args.NewValue * args.GroupNumber;
                     TextColorChange(charUI.def, args.NewValue, args.Immutable);
                     break;
                 case StatsType.Critical:
-                    charUI.crit.text = statsStr;
+                    charUI.crit.text = spriteTxt + statsStr;
                     TextColorChange(charUI.crit, args.NewValue, args.Immutable);
                     break;
                 case StatsType.Speed:
-                    charUI.spd.text = statsStr;
+                    charUI.spd.text = spriteTxt + statsStr;
                     TextColorChange(charUI.spd, args.NewValue, args.Immutable);
                     break;
                 case StatsType.Step:
@@ -98,7 +101,7 @@ namespace GUI
                     TextColorChange(charUI.atk, args.NewValue, charUI.Immutable.Attack);*/
                     break;
                 case StatsType.Agility:
-                    charUI.agi.text = statsStr;
+                    charUI.agi.text = spriteTxt + statsStr;
                     TextColorChange(charUI.agi, args.NewValue, args.Immutable);
                     break;
                 case StatsType.Aim:
@@ -152,6 +155,16 @@ namespace GUI
         public void BringToFront(GameObject tab)
         {
             tab.transform.SetAsFirstSibling();
+        }
+
+        public void SelectCharacter(GameObject target)
+        {
+            characterTarget.SetupTarget(target);
+        }
+
+        public void DeselectCharacter()
+        {
+            characterTarget.DeselectTarget();
         }
     }
 }

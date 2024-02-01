@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace GUI
 {
-    public class CharUIDetectCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class CharUIDetectCard : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private CharacterTab _characterTab;
         private Character selfComp;
@@ -38,6 +38,11 @@ namespace GUI
                 //Debug.Log("Pointer exit");
                 WorldManager.Instance.CardExitCharacterInfoUI(selfComp);
             }
+        }
+        
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            GetComponentInParent<CharacterTab>().SelectCharacter(selfComp.gameObject);
         }
     }
 }

@@ -581,7 +581,7 @@ namespace Controllers
                         var prefab = card.Character;
                         if (prefab is null || dropPosition is null) break;
                         
-                        if (TryConsumeCard(card, playerEnergy))
+                        if (TryConsumeCard(card))
                         {
                             CreateCharacter(prefab, dropPosition.RoadIndex, team1Player ? 0 : 1);
                         }
@@ -593,7 +593,7 @@ namespace Controllers
                     var prefab = card.Character;
                     if (prefab is null || dropPosition is null) break;
 
-                    if (TryConsumeCard(card, playerEnergy))
+                    if (TryConsumeCard(card))
                     {
                         CreateCharacter(prefab, dropPosition.RoadIndex, team1Player ? 0 : 1);
                     }
@@ -602,7 +602,7 @@ namespace Controllers
                 case CardType.Spells when card.ActiveType is CardActiveType.Single or CardActiveType.SingleEnemy:
                     if (characterTarget is null) break;
                     
-                    if (TryConsumeCard(card, playerEnergy))
+                    if (TryConsumeCard(card))
                     {
                         SpellsExecute.Activate(characterTarget, card.SpellsEffect);
                     }
@@ -614,7 +614,7 @@ namespace Controllers
                         case EnvironmentSpells environmentSpells:
                             if (listActive.Count == 0) break;
                             
-                            if (TryConsumeCard(card, playerEnergy))
+                            if (TryConsumeCard(card))
                             {
                                 environmentSpells.ListSettingUp = listActive.ConvertAll(d => d.GetComponent<TileData>());
                                 SpellsExecute.Activate(null, card.SpellsEffect);
@@ -631,7 +631,7 @@ namespace Controllers
 
                             if (charactersOnArea.Count == 0) break;
                             
-                            if (TryConsumeCard(card, playerEnergy))
+                            if (TryConsumeCard(card))
                             {
                                 foreach (var character in charactersOnArea)
                                 {
@@ -654,7 +654,7 @@ namespace Controllers
 
                         if (characters.Count == 0) break;
                         
-                        if (TryConsumeCard(card, playerEnergy))
+                        if (TryConsumeCard(card))
                         {
                             foreach (var character in characters)
                             {
@@ -664,7 +664,7 @@ namespace Controllers
                     }
                     else if (card.SpellsEffect is EnergyBoostSpells energyBoostSpells)
                     {
-                        if (TryConsumeCard(card, playerEnergy))
+                        if (TryConsumeCard(card))
                         {
                             energyBoostSpells.Target = playerEnergy; // because this method only use for player, not bot
                             SpellsExecute.Activate(null, card.SpellsEffect);
@@ -672,7 +672,7 @@ namespace Controllers
                     }
                     else // another effect except character
                     {
-                        if (TryConsumeCard(card, playerEnergy)) SpellsExecute.Activate(null, card.SpellsEffect);
+                        if (TryConsumeCard(card)) SpellsExecute.Activate(null, card.SpellsEffect);
                     }
                     break;
                 }
@@ -684,7 +684,7 @@ namespace Controllers
                     {
                         if (dropPosition is null) break;
                         
-                        if (TryConsumeCard(card, playerEnergy))
+                        if (TryConsumeCard(card))
                         {
                             summonSpells.RoadIndex = dropPosition.RoadIndex;
                             summonSpells.Team = GetAllyTeam();
@@ -698,7 +698,7 @@ namespace Controllers
                     // Do not check character count, always use if it can (Mechanics)
                     //if (worldCharacters.Count == 0) break;
                     
-                    if (TryConsumeCard(card, playerEnergy))
+                    if (TryConsumeCard(card))
                     {
                         foreach (var character in worldCharacters.ToList())
                         {
@@ -1048,8 +1048,8 @@ namespace Controllers
         /// <param name="card"></param>
         /// <param name="energyManager"></param>
         /// <returns></returns>
-        public static bool TryConsumeCard(Card card, EnergyManager energyManager) =>
-            CardController.Instance.CardConsuming(card, energyManager);
+        private bool TryConsumeCard(Card card) =>
+            CardController.Instance.CardConsuming(card, team1Player ? PlayerEnergy : EnemyEnergy);
         
         private void CreateCharacter(GameObject prefab, int roadIndex, int team) // After, it will also be assigned in event of AI script
         {

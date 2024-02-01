@@ -3,6 +3,7 @@ using Models.Generals;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static Extensions.GUIExtension;
 
 namespace GUI
 {
@@ -18,7 +19,7 @@ namespace GUI
         {
             self = requirement;
             
-            label.text = self.GetType().Name + " Requirement";
+            label.text = SpaceBetweenWord(self.GetType().Name + " Requirement");
             fillProgress.fillAmount = 0f;
             progressTxt.text = "0%";
             description = self.GetDescription();
