@@ -44,10 +44,13 @@ namespace Controllers
         [SerializeField] private EnergyManager playerEnergy;
         [SerializeField] private EnergyManager enemyEnergy;
 
-        [SerializeField] private Character team1Hq;
-        [SerializeField] private Character team2Hq;
+        [SerializeField] private Headquarter team1Hq;
+        [SerializeField] private Headquarter team2Hq;
         
         [SerializeField] private bool team1Player;
+        [SerializeField] private bool playerExplorer;
+        [SerializeField] private Vector3 team1Rotation;
+        [SerializeField] private Vector3 team2Rotation;
         [SerializeField] private Card cardWaitingActive = null;
         [SerializeField] private bool cardCanActive;
         [SerializeField] private Droppable dropPosition = null;
@@ -147,6 +150,7 @@ namespace Controllers
                 var team1Headquarter = Instantiate(headquarter, characterContainer.transform);
                 team1Hq = team1Headquarter.GetComponent<Headquarter>();
                 team1Hq.Position = team1StartPoint;
+                team1Hq.SetupHeadquarter(playerExplorer, team1Rotation);
                 team1Headquarter.transform.localPosition = team1StartPoint.transform.localPosition;
                 team1Hq.Setup(0, 0);
                 team1Hq.OnCharacterDeath += OnEndGame;
@@ -154,6 +158,7 @@ namespace Controllers
                 var team2Headquarter = Instantiate(headquarter, characterContainer.transform);
                 team2Hq = team2Headquarter.GetComponent<Headquarter>();
                 team2Hq.Position = team2StartPoint;
+                team2Hq.SetupHeadquarter(!playerExplorer, team2Rotation);
                 team2Headquarter.transform.localPosition = team2StartPoint.transform.localPosition;
                 team2Hq.Setup(0, 1);
                 team2Hq.OnCharacterDeath += OnEndGame;
@@ -171,13 +176,13 @@ namespace Controllers
             initialize = !initialize;
             if (initialize) return;
             
-            OnGameEnded -= aiBot.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
-            CharacterSpawn -= aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
+            OnGameEnded -= aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
+            //CharacterSpawn -= aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
             aiBot.GetComponent<Agent>().enabled = false;
             
-            OnGameEnded -= aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
+            /*OnGameEnded -= aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
             CharacterSpawn -= aiBotTeam0.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
-            aiBotTeam0.GetComponent<Agent>().enabled = false;
+            aiBotTeam0.GetComponent<Agent>().enabled = false;*/
             
             OnGameReset?.Invoke(this, System.EventArgs.Empty);
             worldCharacters.ForEach(c => Destroy(c.gameObject));
@@ -231,12 +236,12 @@ namespace Controllers
             CardController.Instance.StartGame();
             
             aiBot.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBot.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
-            CharacterSpawn += aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
+            OnGameEnded += aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
+            //CharacterSpawn += aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
             
-            aiBotTeam0.GetComponent<Agent>().enabled = true;
+            /*aiBotTeam0.GetComponent<Agent>().enabled = true;
             OnGameEnded += aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
-            CharacterSpawn += aiBotTeam0.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
+            CharacterSpawn += aiBotTeam0.GetComponent<Mission5State2Bot>().OnCharacterSpawn;*/
         }
 
         private void OnEndGame(object sender, CharacterDeathEventArgs args)

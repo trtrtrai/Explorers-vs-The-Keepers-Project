@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 4
+  m_FillMethod: 1
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
@@ -352,7 +352,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000010162592}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &218933636247315979
@@ -457,6 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 844c97626e9f4fcf9f9f2e570f6da33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterTarget: {fileID: 0}
   allyContent: {fileID: 2840026223588194941}
   enemyContent: {fileID: 203072208860173787}
   charInfoPrefab: {fileID: 71953956680218670, guid: f4ce7f6add34e9548bcf3beff8ce1941,
@@ -467,6 +468,7 @@ MonoBehaviour:
   tabShow: 0
   showHideBtn: {fileID: 3396591447292169626}
   showHideArrowImg: {fileID: 605746340703970956}
+  characterInfoTargeted: {fileID: 0}
 --- !u!1 &2786984793837903557
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,10 +1098,10 @@ MonoBehaviour:
   m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
-  m_Elasticity: 0.1
+  m_Elasticity: 3
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 50
   m_Viewport: {fileID: 8081046518929681103}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 4643891183611748756}
@@ -1144,7 +1146,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000010162592}
+  m_AnchoredPosition: {x: 0, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &769559451397413650
@@ -1281,10 +1283,10 @@ MonoBehaviour:
   m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
-  m_Elasticity: 0.1
+  m_Elasticity: 3
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 50
   m_Viewport: {fileID: 92550501156492560}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 7431209394348983786}
@@ -2716,6 +2718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hand: {fileID: 8569794942509594914}
+  _characterTab: {fileID: 8132112629593310235}
 --- !u!1 &8954078036338228123
 GameObject:
   m_ObjectHideFlags: 0

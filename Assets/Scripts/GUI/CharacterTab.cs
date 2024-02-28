@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Models;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static Extensions.GUIExtension;
 
 namespace GUI
@@ -27,6 +28,8 @@ namespace GUI
         [SerializeField] private bool tabShow;
         [SerializeField] private Transform showHideBtn;
         [SerializeField] private Transform showHideArrowImg;
+
+        [SerializeField] private Image characterInfoTargeted;
         
         private void Start()
         {
@@ -57,7 +60,14 @@ namespace GUI
 
             character.OnCharacterDeath -= CharacterDeathDetect;
             character.OnCharacterStatsChange -= CharacterStatsChangeUI;
+            
             var charUI = _characters[character];
+            
+            if (ReferenceEquals(charUI.GetComponent<Image>(), characterInfoTargeted))
+            {
+                DeselectCharacter();
+            }
+            
             charUI.gameObject.SetActive(false);
             _characters.Remove(character);
             //Debug.Log(charUI.characterName.text + " death! Remove UI card.");
@@ -155,15 +165,27 @@ namespace GUI
         public void BringToFront(GameObject tab)
         {
             tab.transform.SetAsFirstSibling();
+            
+            if (!tabShow) ToggleTab();
         }
 
-        public void SelectCharacter(GameObject target)
+        public void SelectCharacter(Image current, GameObject target)
         {
+            if (characterInfoTargeted is not null)
+            {
+                characterInfoTargeted.enabled = false;
+            }
+
+            characterInfoTargeted = current;
+            characterInfoTargeted.enabled = true;
             characterTarget.SetupTarget(target);
         }
 
         public void DeselectCharacter()
         {
+            characterInfoTargeted.enabled = false;
+            characterInfoTargeted = null;
+            
             characterTarget.DeselectTarget();
         }
     }

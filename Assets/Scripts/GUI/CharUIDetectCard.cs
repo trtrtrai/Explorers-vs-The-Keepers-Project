@@ -2,6 +2,7 @@ using Controllers;
 using Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace GUI
 {
@@ -9,6 +10,8 @@ namespace GUI
     {
         private CharacterTab _characterTab;
         private Character selfComp;
+
+        [SerializeField] private Image img;
 
         public void Setup()
         {
@@ -42,7 +45,7 @@ namespace GUI
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            GetComponentInParent<CharacterTab>().SelectCharacter(selfComp.gameObject);
+            GetComponentInParent<CharacterTab>().SelectCharacter(img, selfComp.gameObject);
         }
     }
 }
