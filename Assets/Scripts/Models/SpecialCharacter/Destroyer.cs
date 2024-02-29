@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Models.SpecialCharacter
@@ -11,12 +12,21 @@ namespace Models.SpecialCharacter
                 isAttacking = true;
                 isMoving = false;
                 
-                var damage = Mathf.RoundToInt(status.Hp * 0.8f);
-
-                target.TakeDamage(damage);
-                
-                TakeDamage(9999);
+                StartCoroutine(AttackCoolDown(target));
             }
+        }
+
+        IEnumerator AttackCoolDown(Character target)
+        {
+            PlayAttack();
+            float secs = characterObjs[0].GetCurrentClipLength();
+            yield return new WaitForSeconds(secs);
+            
+            var damage = Mathf.RoundToInt(status.Hp * 0.8f); // problem if have Destroyer + Group(n): HP is TotalHealth, not individual
+
+            target.TakeDamage(damage);
+                
+            TakeDamage(9999);
         }
     }
 }

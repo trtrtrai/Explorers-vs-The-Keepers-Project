@@ -13,16 +13,8 @@ namespace Models.SpecialCharacter
         protected override void AttackAction(TileData position, Character target)
         {
             isMoving = false;
-            // setup obj
-            var obj = Instantiate(objectSetupPrefab, WorldManager.Instance.ObjectContainer);
-            obj.transform.localPosition = position.transform.localPosition;
-            obj.layer = gameObject.layer;
-
-            // move to headquarter
-            var pathBackToHQ = WorldManager.Instance.GetPathBackToHeadquarter(team, roadIndex, positionIndex);
-            if (pathBackToHQ.Count == 0) return;
-
-            StartCoroutine(MinefieldWorkerMoveBackToHeadquarter(pathBackToHQ));
+            
+            StartCoroutine(AttackCoolDown(position));
         }
 
         protected override void MoveAction()
@@ -55,12 +47,30 @@ namespace Models.SpecialCharacter
             }
         }
 
+        private IEnumerator AttackCoolDown(TileData position)
+        {
+            PlayAttack();
+            float secs = characterObjs[0].GetCurrentClipLength();
+            yield return new WaitForSeconds(secs);
+            
+            // setup obj
+            var obj = Instantiate(objectSetupPrefab, WorldManager.Instance.ObjectContainer);
+            obj.transform.localPosition = position.transform.localPosition;
+            obj.layer = gameObject.layer;
+
+            // move to headquarter
+            var pathBackToHQ = WorldManager.Instance.GetPathBackToHeadquarter(team, roadIndex, positionIndex);
+            if (pathBackToHQ.Count == 0) yield break;
+
+            StartCoroutine(MinefieldWorkerMoveBackToHeadquarter(pathBackToHQ));
+        }
+
         private IEnumerator MinefieldWorkerMoveSetup(List<TileData> path)
         {
             foreach (var target in path)
             {
                 TurnTo(target.transform.localPosition);
-                moving.MoveOn(target, status.Spd / 200f);
+                moving.MoveOn(target, status.Spd / 200f, PlayWalk);
 
                 while (!transform.localPosition.x.Equals(target.transform.localPosition.x) ||
                        !transform.localPosition.z.Equals(target.transform.localPosition.z))
@@ -68,12 +78,14 @@ namespace Models.SpecialCharacter
                     yield return null;
                 }
                 
+                PLayIdle();
                 yield return new WaitForSeconds(100f / status.Spd);
                 Position = target;
                 positionIndex++;
             }
 
             isAttacking = true;
+            PlayAttack();
         }
         
         private IEnumerator MinefieldWorkerMoveBackToHeadquarter(List<TileData> path)
@@ -81,7 +93,7 @@ namespace Models.SpecialCharacter
             foreach (var target in path)
             {
                 TurnTo(target.transform.localPosition);
-                moving.MoveOn(target, status.Spd / 200f);
+                moving.MoveOn(target, status.Spd / 200f, PlayWalk);
 
                 while (!transform.localPosition.x.Equals(target.transform.localPosition.x) ||
                        !transform.localPosition.z.Equals(target.transform.localPosition.z))
@@ -89,6 +101,7 @@ namespace Models.SpecialCharacter
                     yield return null;
                 }
                 
+                PLayIdle();
                 yield return new WaitForSeconds(100f / status.Spd);
                 Position = target;
             }

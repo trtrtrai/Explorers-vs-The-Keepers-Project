@@ -18,7 +18,7 @@ namespace Controllers
                 myTilePosition = character.Position;
         }
 
-        public void MoveOn(TileData target, float speed)
+        public void MoveOn(TileData target, float speed, Action movingAnim)
         {
             if (TryGetComponent(out Character character))
                 myTilePosition = character.Position;
@@ -32,13 +32,15 @@ namespace Controllers
             //Debug.Log("Moving " + myTilePosition.TilePosition + " to " + target.TilePosition);
             var targetPos = target.transform.localPosition;
             targetPos.y = 0;
-            StartCoroutine(Moving(targetPos, speed));
+            StartCoroutine(Moving(targetPos, speed, movingAnim));
         }
 
-        private IEnumerator Moving(Vector3 target, float speed)
+        private IEnumerator Moving(Vector3 target, float speed, Action movingAnim)
         {
             var position = transform.localPosition;
             var distance = (target - position).magnitude;
+
+            movingAnim();
             while (distance > 0.01f)
             {
                 /*var movementDirect = (target - position).normalized;

@@ -21,7 +21,7 @@ namespace Agents
     /// Play while player use Thermonuclear Bomb then disable this script. The Keeper will not do any thing after that.
     /// Card use only: Treant (long waiting), Golem (long waiting), Go Home (unlimit), Mind Connect (limit all the time: 10), Poison Swamp (limit: 3) (short time to use Spells)
     /// </summary>
-    public class Mission5State2Bot : Agent
+    public class Mission5State2Bot : OpponentBot
     {
         [SerializeField] private BehaviorParameters self;
         [SerializeField] private Mission5Supporter _supporter;
@@ -489,7 +489,7 @@ namespace Agents
             }
         }
 
-        public void OnHeadquarterDestroy(object sender, System.EventArgs args)
+        public override void OnHeadquarterDestroy(object sender, System.EventArgs args)
         {
             if (sender is int teamWon)
             {
@@ -516,7 +516,7 @@ namespace Agents
             }
         }
 
-        public void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
+        public override void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
         {
             if (sender is WorldManager)
             {

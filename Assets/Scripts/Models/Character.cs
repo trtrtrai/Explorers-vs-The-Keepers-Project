@@ -26,7 +26,7 @@ namespace Models
 
         public BitArray CharacterTag;
 
-        [SerializeField] protected List<Transform> characterObjs;
+        [SerializeField] protected List<CharacterAnimationController> characterObjs;
 
         [SerializeField]
         protected CharacterBehaviour behaviour;
@@ -48,7 +48,7 @@ namespace Models
             SetupMoving(); // it will be auto setup when IMovable found in every character
             SetupAttacking();
 
-            characterObjs = new List<Transform>(gameObject.GetComponentsInChildren<MeshFilter>().Select(m => m.transform.parent));
+            characterObjs = new List<CharacterAnimationController>(gameObject.GetComponentsInChildren<CharacterAnimationController>());
             
             // move it to factory
             var groupTag = characterInfo.CharacterTags.FirstOrDefault(t => t.ToString().StartsWith("Group"));
@@ -106,7 +106,8 @@ namespace Models
                 if (!isMoving) break;
                 
                 TurnTo(target.transform.localPosition);
-                moving.MoveOn(target, status.Spd / 200f);
+                
+                moving.MoveOn(target, status.Spd / 200f, PlayWalk);
                 
                 while (!transform.localPosition.x.Equals(target.transform.localPosition.x) ||
                     !transform.localPosition.z.Equals(target.transform.localPosition.z))
@@ -114,6 +115,7 @@ namespace Models
                     yield return null;
                 }
 
+                PLayIdle();
                 //Debug.Log("Check run");
                 yield return new WaitForSeconds(100f / status.Spd);
                 Position = target;
@@ -199,6 +201,7 @@ namespace Models
 
             if (!cannotAtk)
             {
+                PlayAttack();
                 attacking.AttackEnemy(target, status.GetDamage());
                 
                 yield return new WaitForSeconds(100f / status.Agi); // attack delay
@@ -253,20 +256,42 @@ namespace Models
             
             OnCharacterStatsChange?.Invoke(this, new CharacterStatsChangeEventArgs(args.StatsType, args.OldValue, args.NewValue, args.Immutable, args.GroupNumber));
 
-            if (characterObjs.Count > status.GroupNumber)
+            if (status.GroupNumber != 0 && characterObjs.Count > status.GroupNumber)
             {
-                characterObjs[status.GroupNumber].gameObject.SetActive(false);
+                PlayDeath(status.GroupNumber);
             }
         }
 
-        private void OnDeath(object sender, CharacterDeathEventArgs args)
+        protected virtual void OnDeath(object sender, CharacterDeathEventArgs args)
         {
             if (sender is not Status || !sender.Equals(status)) return;
             
             OnCharacterDeath?.Invoke(this, new CharacterDeathEventArgs(roadIndex));
-            
-            gameObject.SetActive(false);
-            Destroy(gameObject, 0.5f);
+
+            GetComponentInChildren<Collider>().enabled = false;
+            characterObjs[status.GroupNumber].PlayDeathDestroy(gameObject);
+        }
+        
+        protected void DeathInvoke(object sender, CharacterDeathEventArgs args) => OnCharacterDeath?.Invoke(sender, args);
+
+        protected void PLayIdle()
+        {
+            characterObjs.ForEach(c => c.PlayIdle());
+        }
+
+        protected void PlayWalk()
+        {
+            characterObjs.ForEach(c => c.PlayWalk());
+        }
+
+        protected void PlayAttack()
+        {
+            characterObjs.ForEach(c => c.PlayAttack());
+        }
+
+        protected void PlayDeath(int groupNumber)
+        {
+            characterObjs[groupNumber].PlayDeath();
         }
 
         protected virtual void OnDisable()

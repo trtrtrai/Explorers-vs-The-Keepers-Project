@@ -123,12 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &45583756 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7845216923249901144, guid: 3ca615173c2dcfe48b485c6c87f7d8cb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1292343203}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &89267372
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,7 +376,7 @@ PrefabInstance:
         type: 3}
       propertyPath: aiBot
       value: 
-      objectReference: {fileID: 45583756}
+      objectReference: {fileID: 1575184436}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
       propertyPath: headquarter
@@ -434,7 +428,7 @@ PrefabInstance:
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
       propertyPath: team1CardList.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
@@ -449,7 +443,12 @@ PrefabInstance:
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
       propertyPath: team1CardList.Array.data[2]
-      value: 6
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
+        type: 3}
+      propertyPath: team1CardList.Array.data[3]
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9209930800059935151, guid: 5d7e19862023e814ebacc538f3d09830,
         type: 3}
@@ -1213,7 +1212,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!1001 &1292343203
+--- !u!1001 &1575184435
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1281,6 +1280,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ca615173c2dcfe48b485c6c87f7d8cb, type: 3}
+--- !u!4 &1575184436 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7845216923249901144, guid: 3ca615173c2dcfe48b485c6c87f7d8cb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1575184435}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1863701068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1341,5 +1346,5 @@ SceneRoots:
   - {fileID: 150268444}
   - {fileID: 307050745}
   - {fileID: 1863701070}
-  - {fileID: 1292343203}
   - {fileID: 241568051}
+  - {fileID: 1575184435}

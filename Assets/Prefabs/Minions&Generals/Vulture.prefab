@@ -242,6 +242,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2955781798001115839}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 330977c2ea70c404cb3ffc6e35b5e366,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6242132067191737214}
   m_SourcePrefab: {fileID: 100100000, guid: 330977c2ea70c404cb3ffc6e35b5e366, type: 3}
 --- !u!4 &2796003478028304581 stripped
 Transform:
@@ -276,6 +280,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6242132067191737214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3280510545862728319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e5be5fcf75e42ba92c28cf2ba7ff096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  isDeath: 0
 --- !u!1001 &8189163426250730042
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -362,6 +380,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2981522394279342377}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 330977c2ea70c404cb3ffc6e35b5e366,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5206591013399425553}
   m_SourcePrefab: {fileID: 100100000, guid: 330977c2ea70c404cb3ffc6e35b5e366, type: 3}
 --- !u!4 &8516159298738769361 stripped
 Transform:
@@ -396,3 +418,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5206591013399425553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9035533043955570539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e5be5fcf75e42ba92c28cf2ba7ff096, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  isDeath: 0

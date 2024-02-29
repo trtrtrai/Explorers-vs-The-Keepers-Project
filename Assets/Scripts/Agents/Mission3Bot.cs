@@ -15,7 +15,7 @@ using Random = UnityEngine.Random;
 
 namespace Agents
 {
-    public class Mission3Bot : Agent
+    public class Mission3Bot : OpponentBot
     {
         [SerializeField] private BehaviorParameters self;
         [SerializeField] private int botTeam;
@@ -306,7 +306,7 @@ namespace Agents
             }
         }
 
-        public void OnHeadquarterDestroy(object sender, System.EventArgs args)
+        public override void OnHeadquarterDestroy(object sender, System.EventArgs args)
         {
             if (sender is int teamWon)
             {
@@ -333,7 +333,7 @@ namespace Agents
             }
         }
 
-        public void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
+        public override void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
         {
             if (sender is WorldManager)
             {

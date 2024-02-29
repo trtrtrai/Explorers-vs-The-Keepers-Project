@@ -20,7 +20,7 @@ namespace Agents
     /// State 1 of Mission5Bot. Card do not use: The Rock, Axit Rain, Go Home
     /// While headquarter take the first attack, other script will activate Axit Rain remove all characters on War Field.
     /// </summary>
-    public class Mission5State1Bot : Agent
+    public class Mission5State1Bot : OpponentBot
     {
         [SerializeField] private BehaviorParameters self;
         [SerializeField] private int botTeam;
@@ -377,7 +377,7 @@ namespace Agents
             }
         }
 
-        public void OnHeadquarterDestroy(object sender, System.EventArgs args)
+        public override void OnHeadquarterDestroy(object sender, System.EventArgs args)
         {
             if (sender is int teamWon)
             {
@@ -404,7 +404,7 @@ namespace Agents
             }
         }
 
-        public void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
+        public override void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
         {
             if (sender is WorldManager)
             {

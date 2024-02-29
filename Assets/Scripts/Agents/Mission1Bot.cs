@@ -1,5 +1,6 @@
 using System.Collections;
 using Controllers;
+using EventArgs;
 using ScriptableObjects;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Agents
 {
-    public class Mission1Bot : Agent
+    public class Mission1Bot : OpponentBot
     {
         [SerializeField] private BehaviorParameters self;
         [SerializeField] private int botTeam;
@@ -132,7 +133,7 @@ namespace Agents
             }
         }
 
-        public void OnHeadquarterDestroy(object sender, System.EventArgs args)
+        public override void OnHeadquarterDestroy(object sender, System.EventArgs args)
         {
             if (sender is int teamWon)
             {
@@ -152,6 +153,11 @@ namespace Agents
                     else enabled = false;
                 }*/
             }
+        }
+
+        public override void OnCharacterSpawn(object sender, CharacterSpawnEventArgs args)
+        {
+            
         }
 
         protected override void OnDisable()

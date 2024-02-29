@@ -176,8 +176,8 @@ namespace Controllers
             initialize = !initialize;
             if (initialize) return;
             
-            OnGameEnded -= aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
-            //CharacterSpawn -= aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
+            OnGameEnded -= aiBot.GetComponent<OpponentBot>().OnHeadquarterDestroy;
+            CharacterSpawn -= aiBot.GetComponent<OpponentBot>().OnCharacterSpawn;
             aiBot.GetComponent<Agent>().enabled = false;
             
             /*OnGameEnded -= aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;
@@ -236,8 +236,8 @@ namespace Controllers
             CardController.Instance.StartGame();
             
             aiBot.GetComponent<Agent>().enabled = true;
-            OnGameEnded += aiBot.GetComponent<Mission1Bot>().OnHeadquarterDestroy;
-            //CharacterSpawn += aiBot.GetComponent<Mission5State2Bot>().OnCharacterSpawn;
+            OnGameEnded += aiBot.GetComponent<OpponentBot>().OnHeadquarterDestroy;
+            CharacterSpawn += aiBot.GetComponent<OpponentBot>().OnCharacterSpawn;
             
             /*aiBotTeam0.GetComponent<Agent>().enabled = true;
             OnGameEnded += aiBotTeam0.GetComponent<Mission5State2Bot>().OnHeadquarterDestroy;

@@ -183,6 +183,8 @@ namespace GUI
 
         public void DeselectCharacter()
         {
+            if (!characterInfoTargeted) return;
+            
             characterInfoTargeted.enabled = false;
             characterInfoTargeted = null;
             
