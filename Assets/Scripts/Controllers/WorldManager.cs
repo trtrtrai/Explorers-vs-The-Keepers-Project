@@ -9,7 +9,9 @@ using GUI;
 using Models;
 using Models.SpecialCharacter;
 using Models.Spells;
+using Models.Structs;
 using ScriptableObjects;
+using Story;
 using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -32,6 +34,8 @@ namespace Controllers
         public event EventHandler OnGameEnded;
         public event EventHandler OnGameReset;
 
+        [SerializeField] private StoryController story;
+        
         [SerializeField] private Transform aiBot;
         [SerializeField] private Transform aiBotTeam0;
 
@@ -167,6 +171,10 @@ namespace Controllers
 
         private void Start()
         {
+            var deckData = GameObject.FindGameObjectWithTag("DataContainer");
+            team1CardList = ((DeckData)deckData.GetComponent<DataContainer>().Datas[0]).CardList;
+            Destroy(deckData);
+            
             Instantiate(cardControllerPref, transform);
             StartCoroutine(WaitToSettingCardController());
         }
@@ -225,7 +233,9 @@ namespace Controllers
             CardController.Instance.Setup(team1CardList, team2CardList);
 
             yield return new WaitForSeconds(0.1f);
-            GameStart();
+            
+            var checker = story.CheckTrigger(CutSceneTrigger.StartMission, GameStart);
+            if (!checker) GameStart();
         }
 
         private void GameStart()
@@ -251,6 +261,14 @@ namespace Controllers
             var won = LayerMask.LayerToName(hq.gameObject.layer).Equals("Team1") ? 1 : 0;
             Debug.Log("Game ended " + won + " won!");
             OnGameEnded?.Invoke(won, System.EventArgs.Empty);
+            
+            var checker = story.CheckTrigger(CutSceneTrigger.EndMission, CalculatorEndGame);
+            if (!checker) CalculatorEndGame();
+        }
+
+        private void CalculatorEndGame()
+        {
+            Debug.Log("End game calculating...");
         }
         
         #region Card drag system control all behaviour of card dragging.
@@ -1104,6 +1122,18 @@ namespace Controllers
         }
         
         #region AI training
+
+        public void HeadquarterTakeDamageListener(EventHandler<CharacterStatsChangeEventArgs> listener)
+        {
+            team2Hq.OnCharacterStatsChange += listener;
+        }
+        
+        public void HeadquarterTakeDamageRemoveListener(EventHandler<CharacterStatsChangeEventArgs> listener)
+        {
+            team2Hq.OnCharacterStatsChange -= listener;
+        }
+
+        public List<Character> GetCharactersOnWorld() => new List<Character>(worldCharacters);
 
         private List<Character> GetCharacters(List<Droppable> listArea, int layer)
         {

@@ -1,4 +1,3 @@
-using System;
 using Models;
 using ScriptableObjects;
 using UnityEngine;
@@ -18,6 +17,10 @@ namespace GUI.SelectCardDeck
         [SerializeField] private SlotType slotType;
         [SerializeField] private Card card;
 
+        [SerializeField] private CardDrag cardDrag;
+
+        public SlotType SlotType => slotType;
+
         private void Awake()
         {
             if (slotType == SlotType.Inventory)
@@ -34,6 +37,12 @@ namespace GUI.SelectCardDeck
             {
                 draggable.Parent = transform;
                 card = draggable.GetComponent<Card>();
+
+                if (cardDrag is not null)
+                {
+                    draggable.SameSlot = cardDrag;
+                }
+                cardDrag = draggable;
                 draggable.Placeholder.SetActive(true);
             }
         }
@@ -47,6 +56,8 @@ namespace GUI.SelectCardDeck
                 if (draggable.PlaceHolderDestroy) return;
                 
                 draggable.Parent = null;
+                card = GetComponentInChildren<Card>();
+                cardDrag = GetComponentInChildren<CardDrag>();
                 draggable.Placeholder.SetActive(false);
             }
         }
@@ -64,6 +75,12 @@ namespace GUI.SelectCardDeck
                 default:
                     return false;
             }
+        }
+
+        public void UpdateCardDrag()
+        {
+            card = GetComponentInChildren<Card>();
+            cardDrag = GetComponentInChildren<CardDrag>();
         }
 
         public void SetupInventoryCard(CardInfo cardInfo, int index) => card.SetupCard(cardInfo, index);

@@ -1,5 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Data;
+using GUI;
+using GUI.SelectCardDeck;
+using Models;
+using Models.Structs;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +15,9 @@ namespace Controllers
 {
     public class PlanetManager : MonoBehaviour
     {
+        [SerializeField] private SceneAsset currentSelectedScene;
         [SerializeField] private Transform cardSelectSpace;
+        public CardInventory CardInventory;
         
         public static PlanetManager Instance
         {
@@ -29,11 +37,35 @@ namespace Controllers
             }
         }
 
+        private void Start()
+        {
+            var missions = DataManager.GetPlanetData()[0].Missions;
+            var missionsUI = GetComponentsInChildren<MissionInfoUI>();
+
+            for (int i = 0; i < missionsUI.Length; i++)
+            {
+                var missionData = missions[i];
+                missionsUI[i].Setup(missionData);
+            }
+        }
+
         public Transform GetCardSelectSpace() => cardSelectSpace;
 
         public void StartMission(SceneAsset mission)
         {
-            StartCoroutine(LoadSceneAsync(mission.name));
+            currentSelectedScene = mission;
+        }
+        
+        public void BackToMainMenu()
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+
+        public void MoveToGameScene()
+        {
+            if (currentSelectedScene is null) return;
+            
+            StartCoroutine(LoadSceneAsync(currentSelectedScene.name));
         }
         
         private IEnumerator LoadSceneAsync(string sceneName)
@@ -49,7 +81,21 @@ namespace Controllers
             asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
             while (!asyncLoad.isDone) yield return null;
-            
+
+            var deckData = new GameObject();
+            deckData.name = "DeckData";
+            deckData.tag = "DataContainer";
+            var dataContainer = deckData.AddComponent<DataContainer>();
+            dataContainer.Datas = new List<object>
+            {
+                new DeckData
+                {
+                    CardList = CardInventory.GetCardSelected()
+                }
+            };
+            SceneManager.MoveGameObjectToScene(deckData, SceneManager.GetSceneByName(sceneName));
+
+            WorldManager.Instance.enabled = true;
             SceneManager.UnloadSceneAsync("Loading");
             SceneManager.UnloadSceneAsync(old);
         }

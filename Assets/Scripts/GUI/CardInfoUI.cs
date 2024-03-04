@@ -1,4 +1,6 @@
 using System.Collections;
+using Controllers;
+using GUI.SelectCardDeck;
 using static Extensions.GUIExtension;
 using Models;
 using ScriptableObjects;
@@ -48,7 +50,28 @@ namespace GUI
                     yield return null;
                 }
 
-                cardName.text = self.Name;
+                if (WorldManager.Instance is not null)
+                {
+                    SetupPlayMode();
+                }
+                else if (PlanetManager.Instance is not null)
+                {
+                    SetupSelectMode();
+                }
+                else
+                {
+                    Destroy(this);
+                }
+            }
+            else
+            {
+                Destroy(this);
+            }
+        }
+
+        private void SetupPlayMode()
+        {
+            cardName.text = self.Name;
                 cost.text = self.Cost + "";
                 cardIcon.sprite = self.CardIcon;
                 description.text = self.Description;
@@ -127,11 +150,88 @@ namespace GUI
                     agi.text = GetSpriteStatusIcon(StatsType.Agility) + characterInfo.Status.Agility;
                     aim.text = GetSpriteStatusIcon(StatsType.Aim) + characterInfo.Status.Aim;
                 }
-            }
-            else
-            {
-                Destroy(this);
-            }
+        }
+
+        private void SetupSelectMode()
+        {
+            cardName.text = self.Name;
+                cost.text = self.Cost + "";
+                cardIcon.sprite = self.CardIcon;
+                description.text = self.Description;
+                cardType.text = self.CardType.ToString();
+                activeType.text = SpaceBetweenWord(self.ActiveType.ToString());
+                
+                var cardTagContent = PlanetManager.Instance.CardInventory.cardTagContentPrefab;
+                var cardTag = PlanetManager.Instance.CardInventory.cardTagPrefab;
+
+                if (self.CardType == CardType.Spells)
+                {
+                    characterInfoLabel.SetActive(false);
+                    characterInfoContent.SetActive(false);
+                    
+                    var spellsTag = self.SpellsEffect.SpellsTags;
+
+                    var tagContent = Instantiate(cardTagContent, verticalTagContent);
+                    int loop = 0;
+                    foreach (var tags in spellsTag)
+                    {
+                        if (loop < 2)
+                        {
+                            var tagExplain = PlanetManager.Instance.CardInventory.GetTagExplain(false, tags.ToString());
+                            if (tagExplain is null) InstantiateTag(cardTag, tagContent.transform, tags.ToString());
+                            else InstantiateTag(cardTag, tagContent.transform, tags.ToString(), tagExplain.BackgroundColor);
+                            
+                            loop++;
+                        }
+                        else
+                        {
+                            tagContent = Instantiate(cardTagContent, verticalTagContent);
+                            
+                            var tagExplain = PlanetManager.Instance.CardInventory.GetTagExplain(false, tags.ToString());
+                            if (tagExplain is null) InstantiateTag(cardTag, tagContent.transform, tags.ToString());
+                            else InstantiateTag(cardTag, tagContent.transform, tags.ToString(), tagExplain.BackgroundColor);
+                            
+                            loop = 1;
+                        }
+                    }
+                }
+                else //General + Minion
+                {
+                    var characterInfo = self.Character.GetComponent<Character>().CharacterInfo;
+                    var charTag = characterInfo.CharacterTags;
+
+                    var tagContent = Instantiate(cardTagContent, verticalTagContent);
+                    int loop = 0;
+                    foreach (var tags in charTag)
+                    {
+                        if (loop < 2)
+                        {
+                            var tagExplain = PlanetManager.Instance.CardInventory.GetTagExplain(true, tags.ToString());
+                            if (tagExplain is null) InstantiateTag(cardTag, tagContent.transform, tags.ToString());
+                            else InstantiateTag(cardTag, tagContent.transform, tags.ToString(), tagExplain.BackgroundColor);
+                            loop++;
+                        }
+                        else
+                        {
+                            tagContent = Instantiate(cardTagContent, verticalTagContent);
+                            
+                            var tagExplain = PlanetManager.Instance.CardInventory.GetTagExplain(true, tags.ToString());
+                            if (tagExplain is null) InstantiateTag(cardTag, tagContent.transform, tags.ToString());
+                            else InstantiateTag(cardTag, tagContent.transform, tags.ToString(), tagExplain.BackgroundColor);
+                            
+                            loop = 1;
+                        }
+                    }
+
+                    hp.text = GetSpriteStatusIcon(StatsType.Health) + characterInfo.Status.Health;
+                    atk.text = GetSpriteStatusIcon(StatsType.Attack) + characterInfo.Status.Attack;
+                    def.text = GetSpriteStatusIcon(StatsType.Defense) + characterInfo.Status.Defense;
+                    crit.text = GetSpriteStatusIcon(StatsType.Critical) + characterInfo.Status.Critical;
+                    spd.text = GetSpriteStatusIcon(StatsType.Speed) + characterInfo.Status.Speed;
+                    step.text = GetSpriteStatusIcon(StatsType.Step) + characterInfo.Status.Step;
+                    agi.text = GetSpriteStatusIcon(StatsType.Agility) + characterInfo.Status.Agility;
+                    aim.text = GetSpriteStatusIcon(StatsType.Aim) + characterInfo.Status.Aim;
+                }
         }
 
         private void InstantiateTag(GameObject tagPref, Transform tagContent, string tagName, Color color = new Color())
