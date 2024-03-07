@@ -13,6 +13,46 @@ namespace Story
 
         public bool CheckTrigger(CutSceneTrigger currentTrigger, Action callback)
         {
+            if (currentTrigger == CutSceneTrigger.PlanetMap)
+            {
+                var planetCutSceneIndex = DataManager.PlanetTrigger.Planet1.FindIndex(p => p.triggerActive);
+
+                if (planetCutSceneIndex == -1) return false;
+                
+                // Always true in here
+                var storyCanvas = Instantiate(Resources.Load<GameObject>("StoryCanvas"));
+                var script = storyCanvas.GetComponent<StoryManager>();
+
+                void UpdateStoryProcessCallback()
+                {
+                    DataManager.PlanetTrigger.Planet1[planetCutSceneIndex].triggerActive = false;
+                }
+
+                script.PlayCutScene(DataManager.PlanetTrigger.Planet1[planetCutSceneIndex].storyIndex, callback, UpdateStoryProcessCallback);
+
+                return true;
+            }
+            
+            if (currentTrigger == CutSceneTrigger.CardSelection)
+            {
+                var planetCutSceneIndex = DataManager.CardSelectionTrigger.Planet1.FindIndex(p => p.triggerActive);
+
+                if (planetCutSceneIndex == -1) return false;
+                
+                // Always true in here
+                var storyCanvas = Instantiate(Resources.Load<GameObject>("StoryCanvas"));
+                var script = storyCanvas.GetComponent<StoryManager>();
+
+                void UpdateStoryProcessCallback()
+                {
+                    DataManager.CardSelectionTrigger.Planet1[planetCutSceneIndex].triggerActive = false;
+                }
+
+                script.PlayCutScene(DataManager.CardSelectionTrigger.Planet1[planetCutSceneIndex].storyIndex, callback, UpdateStoryProcessCallback);
+
+                return true;
+            }
+            
             var finder = attaches.Any(c => c.triggerSignal == currentTrigger);
 
             if (!finder) return false;
@@ -24,17 +64,22 @@ namespace Story
                 var storyCanvas = Instantiate(Resources.Load<GameObject>("StoryCanvas"));
                 var script = storyCanvas.GetComponent<StoryManager>();
                 var cutSceneAttach = attaches.First(c => c.triggerSignal == currentTrigger);
-                script.PlayCutScene(cutSceneAttach.cutSceneIndex, callback);
+                script.PlayCutScene(cutSceneAttach.cutSceneIndex, callback, null);
 
                 return true;
             }
 
             return false;
         }
+
+        public void OnApplicationQuit()
+        {
+            DataManager.SaveGameData();
+        }
     }
 
     [Serializable]
-    public struct CutSceneAttach
+    public class CutSceneAttach
     {
         public int cutSceneIndex;
         public CutSceneTrigger triggerSignal;
@@ -42,6 +87,8 @@ namespace Story
 
     public enum CutSceneTrigger
     {
+        PlanetMap,
+        CardSelection,
         StartMission,
         EndMission,
         Others,

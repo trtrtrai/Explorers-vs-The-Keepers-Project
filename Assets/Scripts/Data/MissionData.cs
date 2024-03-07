@@ -16,7 +16,7 @@ namespace Data
     }
     
     [Serializable]
-    public struct MissionData
+    public class MissionData
     {
         public int missionLevel;
         public MissionStatus status;

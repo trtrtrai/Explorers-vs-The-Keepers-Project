@@ -34,6 +34,9 @@ namespace Controllers
         public event EventHandler OnGameEnded;
         public event EventHandler OnGameReset;
 
+        [SerializeField] private Transform missionResult;
+        public bool GameResult;
+        
         [SerializeField] private StoryController story;
         
         [SerializeField] private Transform aiBot;
@@ -67,6 +70,7 @@ namespace Controllers
         [SerializeField] private List<RoadPath> roads;
 
         [SerializeField] private int roadAmount;
+        
         public int RoadAmount => roadAmount;
         public TileData Team1StartPoint => team1StartPoint;
         public TileData Team2StartPoint => team2StartPoint;
@@ -259,16 +263,21 @@ namespace Controllers
             if (sender is not Headquarter hq) return;
 
             var won = LayerMask.LayerToName(hq.gameObject.layer).Equals("Team1") ? 1 : 0;
+            GameResult = team1Player && won == 0 || !team1Player && won == 1;
             Debug.Log("Game ended " + won + " won!");
             OnGameEnded?.Invoke(won, System.EventArgs.Empty);
             
-            var checker = story.CheckTrigger(CutSceneTrigger.EndMission, CalculatorEndGame);
-            if (!checker) CalculatorEndGame();
+            if (GameResult)
+            {
+                var checker = story.CheckTrigger(CutSceneTrigger.EndMission, CalculatorEndGame);
+                if (!checker) CalculatorEndGame();
+            }
+            else CalculatorEndGame();
         }
 
         private void CalculatorEndGame()
         {
-            Debug.Log("End game calculating...");
+            missionResult.gameObject.SetActive(true);
         }
         
         #region Card drag system control all behaviour of card dragging.

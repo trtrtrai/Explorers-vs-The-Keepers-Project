@@ -6,6 +6,7 @@ using GUI;
 using GUI.SelectCardDeck;
 using Models;
 using Models.Structs;
+using Story;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +16,7 @@ namespace Controllers
 {
     public class PlanetManager : MonoBehaviour
     {
+        [SerializeField] private StoryController story;
         [SerializeField] private SceneAsset currentSelectedScene;
         [SerializeField] private Transform cardSelectSpace;
         public CardInventory CardInventory;
@@ -39,6 +41,7 @@ namespace Controllers
 
         private void Start()
         {
+            Debug.Log("Planet Start");
             var missions = DataManager.GetPlanetData()[0].Missions;
             var missionsUI = GetComponentsInChildren<MissionInfoUI>();
 
@@ -47,6 +50,8 @@ namespace Controllers
                 var missionData = missions[i];
                 missionsUI[i].Setup(missionData);
             }
+
+            story.CheckTrigger(CutSceneTrigger.PlanetMap, null);
         }
 
         public Transform GetCardSelectSpace() => cardSelectSpace;
@@ -54,6 +59,8 @@ namespace Controllers
         public void StartMission(SceneAsset mission)
         {
             currentSelectedScene = mission;
+
+            story.CheckTrigger(CutSceneTrigger.CardSelection, null);
         }
         
         public void BackToMainMenu()

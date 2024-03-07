@@ -26,7 +26,8 @@ namespace Data
     {
         None,
         Supporter,
-        Headquarter,
+        Platoon,
+        Spybot,
         Commander,
         SuperMiner,
     }

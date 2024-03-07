@@ -20,10 +20,12 @@ namespace Story
         [SerializeField] private int speechCurrentTextIndex;
 
         private Action callbackAction;
-        public void PlayCutScene(int index, Action callback)
+        private Action updateProcessCallbackAction;
+        public void PlayCutScene(int index, Action callback, Action updateStoryProcessCallback)
         {
             Time.timeScale = 0;
             callbackAction = callback;
+            updateProcessCallbackAction = updateStoryProcessCallback;
             
             current = GetCutScene(index).speeches;
             speechIndex = current.Count - 1;
@@ -65,6 +67,7 @@ namespace Story
                 else if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex == speechIndex)
                 {
                     Time.timeScale = 1;
+                    if (updateProcessCallbackAction is not null) updateProcessCallbackAction();
                     if (callbackAction is not null) callbackAction();
                     Destroy(gameObject);
                 }

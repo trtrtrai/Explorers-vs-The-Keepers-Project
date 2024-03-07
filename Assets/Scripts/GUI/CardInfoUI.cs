@@ -50,17 +50,14 @@ namespace GUI
                     yield return null;
                 }
 
-                if (WorldManager.Instance is not null)
-                {
-                    SetupPlayMode();
-                }
-                else if (PlanetManager.Instance is not null)
+                var parent = transform.parent.GetComponent<Hand>();
+                if (parent is null)
                 {
                     SetupSelectMode();
                 }
                 else
                 {
-                    Destroy(this);
+                    SetupPlayMode();
                 }
             }
             else

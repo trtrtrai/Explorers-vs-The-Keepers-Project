@@ -1,3 +1,4 @@
+using System.Linq;
 using Data;
 using Story;
 using UnityEngine;
@@ -25,12 +26,22 @@ namespace Controllers
         {
             if (DataManager.SettingData.IsFirstPlay)
             {
-                DataManager.SettingData.IsFirstPlay = false;
                 var storyCanvas = Instantiate(Resources.Load<GameObject>("StoryCanvas"));
                 var script = storyCanvas.GetComponent<StoryManager>();
-                script.PlayCutScene(0, Play);
+                script.PlayCutScene(0, LoadMapScene, () => {
+                    DataManager.SettingData.IsFirstPlay = false;
+                });
             }
-            else SceneManager.LoadScene("PlanetMap1");
+            else
+            {
+                LoadMapScene();
+            }
+        }
+
+        private void LoadMapScene()
+        {
+            DataManager.SettingData.IsFirstPlay = false;
+            SceneManager.LoadScene("PlanetMap1");
         }
 
         public void Setting()
