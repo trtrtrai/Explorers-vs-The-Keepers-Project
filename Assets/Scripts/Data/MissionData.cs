@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Data
 {
@@ -21,5 +22,6 @@ namespace Data
         public int missionLevel;
         public MissionStatus status;
         public bool firstPlay; // for story process
+        public List<Reward> rewards;
     }
 }

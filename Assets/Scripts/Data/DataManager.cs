@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using Controllers;
 using UnityEngine;
 
 namespace Data
@@ -10,6 +11,7 @@ namespace Data
         private static bool firstLoad = true;
         private static string planetPath = "Planet";
         private static List<PlanetData> planetDatas;
+        private static CardInventory cardInventory;
         
         public static GameSettingData SettingData;
         public static StoryData Story;
@@ -39,6 +41,9 @@ namespace Data
             firstLoad = false;
             var dataHandler = new FileDataHandler(Application.persistentDataPath, "setting.gd");
             SettingData = dataHandler.Load<GameSettingData>();
+            
+            dataHandler = new FileDataHandler(Application.persistentDataPath, "cardInventory.gd");
+            cardInventory = dataHandler.Load<CardInventory>();
 
             dataHandler = new FileDataHandler(Application.persistentDataPath, "storyLine.gd");
             Story = dataHandler.Load<StoryData>();
@@ -60,6 +65,8 @@ namespace Data
 
         public static List<PlanetData> GetPlanetData() => new (planetDatas);
 
+        public static List<CardName> GetCardInventory() => new(cardInventory.Cards);
+
         public static void UpdateDataStory()
         {
             var currentMissionIndex = planetDatas[0].Missions.FindIndex(p => p.firstPlay);
@@ -68,11 +75,28 @@ namespace Data
 
             planetDatas[0].Missions[currentMissionIndex].firstPlay = false;
 
+            foreach (var reward in planetDatas[0].Missions[currentMissionIndex].rewards)
+            {
+                switch (reward.rewardItem)
+                {
+                    case RewardItem.Card:
+                        cardInventory.Cards.Add((CardName)Enum.GetValues(typeof(CardName)).GetValue(reward.value));
+                        break;
+                    case RewardItem.Coin:
+                        cardInventory.Coin += reward.value;
+                        break;
+                    case RewardItem.Cash:
+                        cardInventory.Cash += reward.value;
+                        break;
+                }
+            }
+
             if (currentMissionIndex < planetDatas[0].Missions.Count - 1)
             {
                 // Update planet story and card selection story
                 var nextMission = ++currentMissionIndex;
                 planetDatas[0].Missions[nextMission].firstPlay = true;
+                planetDatas[0].Missions[nextMission].status = MissionStatus.Playable;
                 PlanetTrigger.Planet1[nextMission].triggerActive = true;
                 CardSelectionTrigger.Planet1[nextMission].triggerActive = true;
             }

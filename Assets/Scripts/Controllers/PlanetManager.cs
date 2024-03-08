@@ -19,7 +19,7 @@ namespace Controllers
         [SerializeField] private StoryController story;
         [SerializeField] private SceneAsset currentSelectedScene;
         [SerializeField] private Transform cardSelectSpace;
-        public CardInventory CardInventory;
+        public CardInventoryUI CardInventory;
         
         public static PlanetManager Instance
         {
@@ -41,7 +41,7 @@ namespace Controllers
 
         private void Start()
         {
-            Debug.Log("Planet Start");
+            //Debug.Log("Planet Start");
             var missions = DataManager.GetPlanetData()[0].Missions;
             var missionsUI = GetComponentsInChildren<MissionInfoUI>();
 

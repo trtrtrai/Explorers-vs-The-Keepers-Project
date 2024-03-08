@@ -52,6 +52,12 @@ namespace Agents
              * Observation index 7: number of enemies on war field
              */
             
+            if (CardController.Instance is null)
+            {
+                enabled = false;
+                return;
+            }
+
             var listCardCanUse = CardController.Instance.GetCardCanBeUsed(botTeam);
             var loop = Mathf.Clamp(listCardCanUse.Count, 0, 5);
             for (int i = 0; i < loop; i++)

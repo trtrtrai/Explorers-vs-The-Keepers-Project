@@ -549,5 +549,10 @@ namespace Controllers
         }
 
         #endregion
+
+        private void OnDisable()
+        {
+            Instance = null;
+        }
     }
 }

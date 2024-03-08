@@ -29,6 +29,7 @@ namespace Data
         Platoon,
         Spybot,
         Commander,
+        MinefieldWorker,
         SuperMiner,
     }
 }

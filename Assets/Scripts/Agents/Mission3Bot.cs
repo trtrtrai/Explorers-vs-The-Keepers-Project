@@ -61,6 +61,12 @@ namespace Agents
              * Observation index 9: number of its Pangolins on war field => 1
              */
             
+            if (CardController.Instance is null)
+            {
+                enabled = false;
+                return;
+            }
+
             var listCardCanUse = CardController.Instance.GetCardCanBeUsed(botTeam);
             var loop = Mathf.Clamp(listCardCanUse.Count, 0, 5);
             for (int i = 0; i < loop; i++)

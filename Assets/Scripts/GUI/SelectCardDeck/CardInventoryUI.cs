@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Controllers;
+using Data;
 using ScriptableObjects;
 using UnityEngine;
 
 namespace GUI.SelectCardDeck
 {
-    public class CardInventory : MonoBehaviour
+    public class CardInventoryUI : MonoBehaviour
     {
         [Header("Slot")]
         [SerializeField] private GameObject cardSlotPrefab;
@@ -26,6 +27,7 @@ namespace GUI.SelectCardDeck
         {
             inventorySlots = new List<CardSlot>();
 
+            cardsOwned = DataManager.GetCardInventory();
             for (int i = 0; i < cardsOwned.Count; i++)
             {
                 var slotObj = Instantiate(cardSlotPrefab, content);

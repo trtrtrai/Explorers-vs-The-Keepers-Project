@@ -3227,7 +3227,7 @@ MonoBehaviour:
       damage deal.
     BackgroundColor: {r: 0.3132075, g: 0.27373233, b: 0.22633673, a: 1}
   cardSlots: {fileID: 1140012063}
-  cardsOwned: 000000000200000003000000060000000e0000000f000000
+  cardsOwned: 
 --- !u!1 &625472985
 GameObject:
   m_ObjectHideFlags: 0

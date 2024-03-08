@@ -1,5 +1,6 @@
 using System.Collections;
 using Controllers;
+using ScriptableObjects;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -67,6 +68,12 @@ namespace GUI
                 energyFill.fillAmount = 1f * (maxE - curE) / maxE;
                 perEnergyFill.fillAmount = (curTPEIRL - curTimer) / curTPEIRL;
                 energyAmountTxt.text = "" + curE;
+            }
+            
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                CardController.Instance.IsHandContains(0, 0, out CardInfo card);
+                CardController.Instance.CardConsuming(0, card);
             }
         }
     }
