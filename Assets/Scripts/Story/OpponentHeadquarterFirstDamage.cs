@@ -3,16 +3,14 @@ using Controllers;
 using EventArgs;
 using Models;
 using Models.SpecialCharacter;
-using UnityEngine;
 
 namespace Story
 {
     public class OpponentHeadquarterFirstDamage : StoryTriggerSetup
     {
-        [SerializeField] private bool isFirstDamage;
         private void Start()
         {
-            isFirstDamage = false;
+            isFirstTrigger = false;
             StartCoroutine(WaitWorldManager());
         }
 
@@ -28,9 +26,9 @@ namespace Story
 
         private void HeadquarterStatsChange(object sender, CharacterStatsChangeEventArgs args)
         {
-            if (!isFirstDamage && sender is Headquarter && args.StatsType == StatsType.Health)
+            if (!isFirstTrigger && sender is Headquarter && args.StatsType == StatsType.Health)
             {
-                isFirstDamage = true;
+                isFirstTrigger = true;
                 WorldManager.Instance.HeadquarterTakeDamageRemoveListener(HeadquarterStatsChange);
                 story.CheckTrigger(CutSceneTrigger.Others, null);
             }

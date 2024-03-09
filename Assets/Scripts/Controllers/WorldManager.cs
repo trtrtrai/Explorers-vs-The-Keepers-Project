@@ -35,6 +35,7 @@ namespace Controllers
         public event EventHandler OnGameReset;
 
         [SerializeField] private Transform missionResult;
+        public MissionData MissionData;
         public bool GameResult;
         
         [SerializeField] private StoryController story;
@@ -176,7 +177,8 @@ namespace Controllers
         private void Start()
         {
             var deckData = GameObject.FindGameObjectWithTag("DataContainer");
-            team1CardList = ((DeckData)deckData.GetComponent<DataContainer>().Datas[0]).CardList;
+            MissionData = (MissionData)deckData.GetComponent<DataContainer>().Datas[0];
+            team1CardList = ((DeckData)deckData.GetComponent<DataContainer>().Datas[1]).CardList;
             Destroy(deckData);
             
             Instantiate(cardControllerPref, transform);
@@ -260,9 +262,17 @@ namespace Controllers
 
         private void OnEndGame(object sender, CharacterDeathEventArgs args)
         {
-            if (sender is not Headquarter hq) return;
+            if (sender is not Headquarter && sender is not Mission5StateControl) return;
 
-            var won = LayerMask.LayerToName(hq.gameObject.layer).Equals("Team1") ? 1 : 0;
+            int won;
+            if (sender is Headquarter hq)
+            {
+                won = LayerMask.LayerToName(hq.gameObject.layer).Equals("Team1") ? 1 : 0;
+            }
+            else
+            {
+                won = team1Player ? 0 : 1; //player win
+            }
             GameResult = team1Player && won == 0 || !team1Player && won == 1;
             Debug.Log("Game ended " + won + " won!");
             OnGameEnded?.Invoke(won, System.EventArgs.Empty);
@@ -273,6 +283,11 @@ namespace Controllers
                 if (!checker) CalculatorEndGame();
             }
             else CalculatorEndGame();
+        }
+
+        public void OnEndGame(Mission5StateControl sender)
+        {
+            OnEndGame(sender, new CharacterDeathEventArgs(0));
         }
 
         private void CalculatorEndGame()

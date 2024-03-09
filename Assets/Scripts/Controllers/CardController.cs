@@ -57,6 +57,10 @@ namespace Controllers
         //todo: limit 1 General card on hand + War Field, only while Generals on War Field death => have ratio draw General (done) + reset required (in progress)
         public event EventHandler<DrawNewCardEventArgs> OnTeam1DrawCard;
         public event EventHandler<DrawNewCardEventArgs> OnTeam2DrawCard;
+
+        public delegate void UseCard(int team, CardName card);
+
+        public event UseCard OnCardUsed;
         
         private const string Assembly = "Models.Generals.";
 
@@ -327,6 +331,7 @@ namespace Controllers
             {
                 //Debug.Log(card.name + " activated.");
                 var team = LayerMask.LayerToName(target.gameObject.layer).Equals("Team1") ? 0 : 1;
+                OnCardUsed?.Invoke(team, Enum.Parse<CardName>(TeamDeckCardName(card.ObjectName)));
 
                 if (team == 0)
                 {
@@ -439,6 +444,7 @@ namespace Controllers
             if (target.UseCard(card))
             {
                 //Debug.Log(card.name + " activated.");
+                OnCardUsed?.Invoke(team, Enum.Parse<CardName>(TeamDeckCardName(card)));
                 CardRedraw(team, card);
             }
         }
@@ -539,6 +545,8 @@ namespace Controllers
         }
 
         private string TeamDeckCardName(CardInfo card) => card.name.Substring(0, card.name.Length - 4);
+        
+        private string TeamDeckCardName(string str) => str.Substring(0, str.Length - 4);
 
         public int GetCardType(CardName cardName, int team)
         {

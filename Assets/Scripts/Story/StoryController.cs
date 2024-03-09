@@ -11,7 +11,7 @@ namespace Story
         [SerializeField] private int missionIndex;
         [SerializeField] private List<CutSceneAttach> attaches;
 
-        public bool CheckTrigger(CutSceneTrigger currentTrigger, Action callback)
+        public bool CheckTrigger(CutSceneTrigger currentTrigger, Action callback, int cardSelectionMission = -1)
         {
             if (currentTrigger == CutSceneTrigger.PlanetMap)
             {
@@ -37,7 +37,7 @@ namespace Story
             {
                 var planetCutSceneIndex = DataManager.CardSelectionTrigger.Planet1.FindIndex(p => p.triggerActive);
 
-                if (planetCutSceneIndex == -1) return false;
+                if (planetCutSceneIndex == -1 || planetCutSceneIndex != cardSelectionMission) return false;
                 
                 // Always true in here
                 var storyCanvas = Instantiate(Resources.Load<GameObject>("StoryCanvas"));

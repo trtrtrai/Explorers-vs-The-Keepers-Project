@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Data;
+using Extensions;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -42,7 +43,7 @@ namespace Story
             if (speechCurrentTextIndex == 0)
             {
                 talker.sprite = Resources.Load<Sprite>(speech.talkerSpriteName);
-                labelName.text = speech.talker.ToString();
+                labelName.text = GUIExtension.SpaceBetweenWord(speech.talker.ToString());
             }
             speechText.text = speech.speechTexts[speechCurrentTextIndex];
         }

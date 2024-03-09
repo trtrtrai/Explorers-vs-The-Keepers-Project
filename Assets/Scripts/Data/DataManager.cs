@@ -96,7 +96,10 @@ namespace Data
                 // Update planet story and card selection story
                 var nextMission = ++currentMissionIndex;
                 planetDatas[0].Missions[nextMission].firstPlay = true;
-                planetDatas[0].Missions[nextMission].status = MissionStatus.Playable;
+                if (planetDatas[0].Missions[nextMission].status != MissionStatus.ComingSoon)
+                {
+                    planetDatas[0].Missions[nextMission].status = MissionStatus.Playable;
+                }
                 PlanetTrigger.Planet1[nextMission].triggerActive = true;
                 CardSelectionTrigger.Planet1[nextMission].triggerActive = true;
             }

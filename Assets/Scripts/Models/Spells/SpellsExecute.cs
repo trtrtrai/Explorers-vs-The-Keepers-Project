@@ -87,8 +87,8 @@ namespace Models.Spells
 
                     if (healthEffSpells.IsPassDefense)
                     {
-                        var addedDefResist = Mathf.RoundToInt(Mathf.Clamp(damage - character.GetStatus().Def * 0.75f, damage * 0.2f, damage));
-                        var result= character.TakeDamage(damage + addedDefResist);
+                        var defResistDmg = Mathf.RoundToInt(Mathf.Clamp(damage - character.GetStatus().Def * 0.75f, damage * 0.2f, damage));
+                        var result= character.TakeDamage(defResistDmg);
                         //Debug.Log(character.name + " take " + result + " damage from pass defense spells.");
                         return true;
                     }

@@ -926,6 +926,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1879059425}
         m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
+        m_MethodName: MissionSelected
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1879059425}
+        m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
         m_MethodName: StartMission
         m_Mode: 2
         m_Arguments:
@@ -3849,6 +3861,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1879059425}
         m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
+        m_MethodName: MissionSelected
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1879059425}
+        m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
         m_MethodName: StartMission
         m_Mode: 2
         m_Arguments:
@@ -5966,6 +5990,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1879059425}
         m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
+        m_MethodName: MissionSelected
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1879059425}
+        m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
         m_MethodName: StartMission
         m_Mode: 2
         m_Arguments:
@@ -6735,6 +6771,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1879059425}
+        m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
+        m_MethodName: MissionSelected
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 1879059425}
         m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
         m_MethodName: StartMission
@@ -9040,6 +9088,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1879059425}
         m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
+        m_MethodName: MissionSelected
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1879059425}
+        m_TargetAssemblyTypeName: Controllers.PlanetManager, Assembly-CSharp
         m_MethodName: StartMission
         m_Mode: 2
         m_Arguments:
@@ -9154,6 +9214,7 @@ MonoBehaviour:
   story: {fileID: 1181090897}
   currentSelectedScene: {fileID: 0}
   cardSelectSpace: {fileID: 1215171552}
+  missionCurrentIndex: 0
   CardInventory: {fileID: 591717594}
 --- !u!114 &1879059426
 MonoBehaviour:

@@ -10,20 +10,24 @@ namespace GUI
 {
     public class MissionResult : MonoBehaviour
     {
+        [SerializeField] private MissionReward reward;
+        
         private void Start()
         {
             Time.timeScale = 0;
             Debug.Log(WorldManager.Instance.GameResult
-                ? "Mission result get player won"
-                : "Mission result get player lose");
+                ? $"Mission {WorldManager.Instance.MissionData.MissionIndex + 1} result get player won"
+                : $"Mission {WorldManager.Instance.MissionData.MissionIndex + 1} result get player lose");
 
             if (WorldManager.Instance.GameResult)
             {
+                // update data
+                // unlock new mission
+                // reward items
                 DataManager.UpdateDataStory();
             }
-            // update data?
-            // unlock new mission?
-            // reward new cards?
+            
+            reward.ShowReward(WorldManager.Instance.GameResult);
         }
 
         public void BackToPlanet(SceneAsset sceneAsset)

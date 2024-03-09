@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using MissionData = Data.MissionData;
 
 namespace Controllers
 {
@@ -19,6 +20,7 @@ namespace Controllers
         [SerializeField] private StoryController story;
         [SerializeField] private SceneAsset currentSelectedScene;
         [SerializeField] private Transform cardSelectSpace;
+        [SerializeField] private int missionCurrentIndex;
         public CardInventoryUI CardInventory;
         
         public static PlanetManager Instance
@@ -60,8 +62,10 @@ namespace Controllers
         {
             currentSelectedScene = mission;
 
-            story.CheckTrigger(CutSceneTrigger.CardSelection, null);
+            story.CheckTrigger(CutSceneTrigger.CardSelection, null, missionCurrentIndex);
         }
+
+        public void MissionSelected(int missionIndex) => missionCurrentIndex = missionIndex;
         
         public void BackToMainMenu()
         {
@@ -95,6 +99,11 @@ namespace Controllers
             var dataContainer = deckData.AddComponent<DataContainer>();
             dataContainer.Datas = new List<object>
             {
+                new Models.Structs.MissionData
+                {
+                    PlanetMap = 0,
+                    MissionIndex = missionCurrentIndex
+                },
                 new DeckData
                 {
                     CardList = CardInventory.GetCardSelected()
@@ -105,6 +114,11 @@ namespace Controllers
             WorldManager.Instance.enabled = true;
             SceneManager.UnloadSceneAsync("Loading");
             SceneManager.UnloadSceneAsync(old);
+        }
+
+        private void OnDisable()
+        {
+            Instance = null;
         }
     }
 }

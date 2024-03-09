@@ -93,7 +93,8 @@ namespace Models
                     }
                 }
             } while (loop);
-            
+
+            if (groupNumber - 1 < 0 || groupNumber - 1 >= groupNumberImmutable) return -1;
             var healthBar = health[groupNumber - 1];
 
             var healthAfterDamage = Mathf.Clamp(healthBar.Mutable - damageAcrossHealth, 0, healthBar.Immutable);

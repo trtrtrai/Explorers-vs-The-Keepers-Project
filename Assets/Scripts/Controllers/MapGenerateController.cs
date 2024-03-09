@@ -226,7 +226,7 @@ namespace Controllers
             }
         }
 
-        private TileData FindNeighborFromDirection(TileData originTile, int direct, int step)
+        /*private TileData FindNeighborFromDirection(TileData originTile, int direct, int step)
         {
             TileData returnTile = originTile;
             for (int i = 0; i < step; i++)
@@ -237,7 +237,7 @@ namespace Controllers
             }
 
             return returnTile;
-        }
+        }*/
 
         /// <summary>
         /// X == Z

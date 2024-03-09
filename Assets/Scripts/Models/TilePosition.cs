@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
-using Object = System.Object;
 
 namespace Models
 {
-    [System.Serializable]
+    [Serializable]
     public class TilePosition
     {
         public float X;

@@ -31,6 +31,8 @@ namespace Models
         [SerializeField] private bool isSetup;
 
         [SerializeField] private CanvasGroup canvasGroup;
+
+        public string ObjectName => cardInfo.name;
         public string Name => cardName;
         public CardType CardType => cardType;
         public CardActiveType ActiveType => activeType;
