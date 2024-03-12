@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Pangolin
   Cost: 1
-  CardIcon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 1437934241ba92341a8ac3e2ccfc55a2, type: 3}
+  Description: The speed runner creatures.
   CardType: 0
   ActiveType: 2
   Radius: 0

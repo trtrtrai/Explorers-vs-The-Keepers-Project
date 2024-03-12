@@ -1,5 +1,6 @@
 using ScriptableObjects;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Editor
@@ -21,6 +22,8 @@ namespace Editor
             {
                 teleSpellsEff.Step = EditorGUILayout.IntField(new GUIContent("Step"), teleSpellsEff.Step);
             }
+            
+            EditorUtility.SetDirty(target);
         }
     }
 }

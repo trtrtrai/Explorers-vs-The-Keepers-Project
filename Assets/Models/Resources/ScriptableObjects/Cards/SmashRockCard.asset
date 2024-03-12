@@ -15,7 +15,8 @@ MonoBehaviour:
   Name: Smash Rock
   Cost: 3
   CardIcon: {fileID: 0}
-  Description: 
+  Description: Take 50% total <sprite="StatusIcon" index=0> passed its <sprite="StatusIcon"
+    index=2>.
   CardType: 2
   ActiveType: 5
   Radius: 0

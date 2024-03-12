@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Super Miner
   Cost: 5
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 9a681e548489ffe42bd4ca35ec001de2, type: 3}
+  Description: Explorer General. Need 7 <i>Defender</i> death on war field to summon.
+    Unique skill S-DEFENDER.
   CardType: 1
   ActiveType: 2
   Radius: 0

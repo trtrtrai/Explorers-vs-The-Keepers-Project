@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wolf
   Cost: 2
-  CardIcon: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  Description: WOLF! WOLF!
+  CardIcon: {fileID: 21300000, guid: 1dfd2c30f25c6a14c83488d4c1f023ba, type: 3}
+  Description: WOLF! WOLF! It's 4, F-O-U-R.
   CardType: 0
   ActiveType: 2
   Radius: 0

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Moving Bomb
   Cost: 1
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: f71bd410420912a4380b1ef2c7220d4d, type: 3}
+  Description: Passed all enemy to attack headquarter with 80% current <sprite="StatusIcon"
+    index=0>.
   CardType: 0
   ActiveType: 2
   Radius: 0

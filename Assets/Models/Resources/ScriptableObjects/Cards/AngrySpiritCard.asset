@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Angry Spirit
   Cost: 1
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: c784e76a1396e994da57282b2b6e8005, type: 3}
+  Description: Angry of the forest. Boost all allies around <i>1 STEP</i> by 10 <sprite="StatusIcon"
+    index=1> in 5 seconds.
   CardType: 2
   ActiveType: 4
   Radius: 1

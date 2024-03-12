@@ -15,7 +15,8 @@ MonoBehaviour:
   Name: Destructive Ray
   Cost: 1
   CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  Description: Immediately decreased <sprite="StatusIcon" index=2> of enemy target
+    to 0.
   CardType: 2
   ActiveType: 5
   Radius: 0

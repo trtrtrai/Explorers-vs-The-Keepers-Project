@@ -15,6 +15,6 @@ MonoBehaviour:
   SpellsTags: 000000000500000007000000
   IsDamage: 1
   Quantity: 50
-  IsPassDefense: 0
   IsScale: 0
   IsScaleWithMaxHealth: 0
+  IsPassDefense: 0

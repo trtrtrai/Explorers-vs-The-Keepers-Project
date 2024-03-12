@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace GUI
@@ -18,13 +17,14 @@ namespace GUI
         {
             if (_renderer.enabled)
             {
-                transform.Rotate(Vector3.up, 150f * Time.deltaTime, Space.Self);
+                transform.parent.Rotate(Vector3.up, 150f * Time.deltaTime, Space.Self);
             }
         }
 
         public void SetupTarget(GameObject target)
         {
-            transform.SetParent(target.transform);
+            transform.parent.SetParent(target.transform);
+            transform.parent.localPosition = Vector3.zero;
             transform.localPosition = offset;
 
             _renderer.enabled = true;
@@ -33,11 +33,11 @@ namespace GUI
 
         public void DeselectTarget()
         {
-            transform.SetParent(null);
+            transform.parent.SetParent(null);
 
             _animator.enabled = false;
             _renderer.enabled = false;
-            transform.localEulerAngles = Vector3.zero;
+            transform.parent.localEulerAngles = Vector3.zero;
         }
     }
 }

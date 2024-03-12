@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Treant
   Cost: 3
-  CardIcon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: dc4aca20ad8efcf4f8cdd4da5758ac04, type: 3}
+  Description: The ghost tree, scary and hard.
   CardType: 0
   ActiveType: 2
   Radius: 0

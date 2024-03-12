@@ -1,6 +1,7 @@
 using System;
 using ScriptableObjects;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Editor
@@ -33,6 +34,8 @@ namespace Editor
                         energyBoostSpells.Loop);
                     break;
             }
+            
+            EditorUtility.SetDirty(target);
         }
     }
 }

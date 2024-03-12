@@ -1,5 +1,6 @@
 using ScriptableObjects;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Editor
@@ -30,6 +31,8 @@ namespace Editor
             {
                 healthEfSpells.IsPassDefense = EditorGUILayout.Toggle(new GUIContent("Is Pass Defense"), healthEfSpells.IsPassDefense);
             }
+            
+            EditorUtility.SetDirty(target);
         }
     }
 }

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Gun Reload
   Cost: 1
-  CardIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  Description: Boost 20 attack point for target ally in 4 seconds.
+  CardIcon: {fileID: 21300000, guid: 7a310518e4ef7294a9392bb03bdd103e, type: 3}
+  Description: Boost 20 <sprite="StatusIcon" index=1> for target ally in 5 seconds.
   CardType: 2
   ActiveType: 3
   Radius: 1

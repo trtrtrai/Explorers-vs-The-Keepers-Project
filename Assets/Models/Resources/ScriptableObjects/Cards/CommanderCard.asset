@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Commander
   Cost: 5
-  CardIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: bb7dd75420508bf498e245971191d554, type: 3}
+  Description: Explorer General. Need at least 15 allies death in war field to summon.
+    Unique skill SQUAD.
   CardType: 1
   ActiveType: 2
   Radius: 0

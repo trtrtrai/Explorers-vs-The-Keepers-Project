@@ -15,7 +15,8 @@ MonoBehaviour:
   Name: Rolling Rock
   Cost: 2
   CardIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  Description: Stun all enemies around <i>1 STEP</i> from choosing position in 1
+    seconds.
   CardType: 2
   ActiveType: 6
   Radius: 1

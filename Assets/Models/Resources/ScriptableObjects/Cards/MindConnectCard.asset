@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Mind Connect
   Cost: 1
-  CardIcon: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 9ce003fe95ccf9840a28066544a03e97, type: 3}
+  Description: Summon a horde wolf on choose road.
   CardType: 2
   ActiveType: 2
   Radius: 0

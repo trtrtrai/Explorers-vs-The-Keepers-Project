@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Sale Off
   Cost: 2
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 330066496e3d0f4448e41bcbe8f8e95a, type: 3}
+  Description: Reduce 1 energy consume by use card in 3 times.
   CardType: 2
   ActiveType: 0
   Radius: 0

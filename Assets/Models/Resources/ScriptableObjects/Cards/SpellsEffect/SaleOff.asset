@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpellsTags: 000000000b0000000c000000
   BoostType: 1
+  Target: {fileID: 0}
   AddingScale: 0
   EffectTimer: 0
   EnergyReducePerConsume: 1

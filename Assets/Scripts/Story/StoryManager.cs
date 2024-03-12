@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Data;
 using Extensions;
+using GUI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,7 +13,7 @@ namespace Story
     {
         [SerializeField] private Image talker;
         [SerializeField] private TMP_Text labelName;
-        [SerializeField] private TMP_Text speechText;
+        [SerializeField] private StoryWriter speechText;
 
         [SerializeField] private List<Speech> current;
         [SerializeField] private int speechIndex;
@@ -45,7 +46,7 @@ namespace Story
                 talker.sprite = Resources.Load<Sprite>(speech.talkerSpriteName);
                 labelName.text = GUIExtension.SpaceBetweenWord(speech.talker.ToString());
             }
-            speechText.text = speech.speechTexts[speechCurrentTextIndex];
+            speechText.SetupWriter(speech.speechTexts[speechCurrentTextIndex]);
         }
         
         private CutScene GetCutScene(int index)
@@ -63,22 +64,32 @@ namespace Story
                     speechTextIndex = current[speechCurrentIndex].speechTexts.Count - 1;
                     speechCurrentTextIndex = 0;
                 
-                    StartSpeech();
+                    if (speechText.IsCompleted) StartSpeech();
+                    else speechText.SkipWriter();
                 }
                 else if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex == speechIndex)
                 {
                     Time.timeScale = 1;
-                    if (updateProcessCallbackAction is not null) updateProcessCallbackAction();
-                    if (callbackAction is not null) callbackAction();
+                    updateProcessCallbackAction?.Invoke();
+                    callbackAction?.Invoke();
                     Destroy(gameObject);
                 }
                 else if (speechCurrentTextIndex < speechTextIndex)
                 {
                     speechCurrentTextIndex++;
                 
-                    StartSpeech();
+                    if (speechText.IsCompleted) StartSpeech();
+                    else speechText.SkipWriter();
                 }
             }
+        }
+
+        public void SkipCutScene()
+        {
+            Time.timeScale = 1;
+            updateProcessCallbackAction?.Invoke();
+            callbackAction?.Invoke();
+            Destroy(gameObject);
         }
     }
 }

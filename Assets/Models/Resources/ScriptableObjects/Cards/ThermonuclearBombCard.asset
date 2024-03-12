@@ -15,7 +15,7 @@ MonoBehaviour:
   Name: Thermonuclear Bomb
   Cost: 7
   CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  Description: The explosive bomb can destroy everything in sight.
   CardType: 2
   ActiveType: 7
   Radius: 0

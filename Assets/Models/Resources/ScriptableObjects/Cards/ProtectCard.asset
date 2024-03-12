@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Protect
   Cost: 1
-  CardIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 2986b22700e4616489e7feaa7ca75989, type: 3}
+  Description: The target ally get 100 <sprite="StatusIcon" index=0>.
   CardType: 2
   ActiveType: 3
   Radius: 0

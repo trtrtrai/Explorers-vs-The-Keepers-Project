@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: The Forest
   Cost: 5
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: ef9145ae2cf70654fa6043acf3482173, type: 3}
+  Description: Forest General. Need at least 20 allies death in war field to summon.
+    Unique skill PURIFIED.
   CardType: 1
   ActiveType: 2
   Radius: 0

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Minefield Worker
   Cost: 1
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 5f2da023a5d648f4ea7859097751e92c, type: 3}
+  Description: Setup 4 bomb that give 50 damages to the enemy touch it. Can attack
+    <i>Sky Force</i> enemy.
   CardType: 0
   ActiveType: 2
   Radius: 0

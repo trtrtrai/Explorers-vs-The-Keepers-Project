@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Armor Soldier
   Cost: 3
-  CardIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  Description: 
+  CardIcon: {fileID: 21300000, guid: 8ecc197419e4fb84a9c74072243dcdab, type: 3}
+  Description: Soldier with full armor. Effectively for protect headquarter.
   CardType: 0
   ActiveType: 2
   Radius: 0
