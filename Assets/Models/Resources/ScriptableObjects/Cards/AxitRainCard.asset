@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Axit Rain
   Cost: 7
-  CardIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  CardIcon: {fileID: 21300000, guid: 73c3db93a0008024891f1bd25f2dbd2a, type: 3}
   Description: Disaster of the forest. No one in war field alive after this.
   CardType: 2
   ActiveType: 7

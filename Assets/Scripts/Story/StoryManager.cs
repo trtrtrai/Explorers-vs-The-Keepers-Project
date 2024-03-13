@@ -5,11 +5,12 @@ using Extensions;
 using GUI;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Story
 {
-    public class StoryManager : MonoBehaviour
+    public class StoryManager : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private Image talker;
         [SerializeField] private TMP_Text labelName;
@@ -23,6 +24,8 @@ namespace Story
 
         private Action callbackAction;
         private Action updateProcessCallbackAction;
+        private IPointerClickHandler _pointerClickHandlerImplementation;
+
         public void PlayCutScene(int index, Action callback, Action updateStoryProcessCallback)
         {
             Time.timeScale = 0;
@@ -54,7 +57,7 @@ namespace Story
             return DataManager.Story.CutScenes[index];
         }
 
-        private void Update()
+        /*private void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -82,7 +85,7 @@ namespace Story
                     else speechText.SkipWriter();
                 }
             }
-        }
+        }*/
 
         public void SkipCutScene()
         {
@@ -90,6 +93,40 @@ namespace Story
             updateProcessCallbackAction?.Invoke();
             callbackAction?.Invoke();
             Destroy(gameObject);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.clickCount == 1)
+            {
+                if (speechCurrentTextIndex < speechTextIndex)
+                {
+                    speechCurrentTextIndex++;
+                
+                    if (speechText.IsCompleted) StartSpeech();
+                    else speechText.SkipWriter();
+                }
+                else if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex < speechIndex)
+                {
+                    speechCurrentIndex++;
+                    speechTextIndex = current[speechCurrentIndex].speechTexts.Count - 1;
+                    speechCurrentTextIndex = 0;
+                
+                    if (speechText.IsCompleted) StartSpeech();
+                    else speechText.SkipWriter();
+                }
+                else if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex == speechIndex)
+                {
+                    if (speechText.IsCompleted)
+                    {
+                        Time.timeScale = 1;
+                        updateProcessCallbackAction?.Invoke();
+                        callbackAction?.Invoke();
+                        Destroy(gameObject);
+                    }
+                    else speechText.SkipWriter();
+                }
+            }
         }
     }
 }

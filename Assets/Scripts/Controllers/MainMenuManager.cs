@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Data;
 using Story;
@@ -57,6 +58,11 @@ namespace Controllers
         public void Exit()
         {
             Application.Quit();
+        }
+
+        private void OnApplicationQuit()
+        {
+            DataManager.SaveGameData();
         }
     }
 }

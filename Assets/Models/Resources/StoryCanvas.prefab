@@ -1128,7 +1128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speechTxt: {fileID: 3747239404824101222}
   timePerChar: 0
-  timer: 0.1
+  timer: 0.5
   charIndex: 0
   maxChar: 0
   IsCompleted: 1

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Poison Swamp
   Cost: 3
-  CardIcon: {fileID: 0}
+  CardIcon: {fileID: 21300000, guid: e13524e048dea5e4a8b9035489f838ad, type: 3}
   Description: Poisoned all grounds around <i>1 STEP</i> exist in 25 seconds. Enemy
     go through will take 75 damage.
   CardType: 2

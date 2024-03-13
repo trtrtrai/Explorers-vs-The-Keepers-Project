@@ -24,12 +24,15 @@ namespace GUI
                 {
                     case RewardItem.Card:
                         var card = Instantiate(cardPrefab, content);
+                        card.GetComponent<RewardItemUI>().Setup(reward.value);
                         break;
                     case RewardItem.Coin:
                         var coin = Instantiate(coinPrefab, content);
+                        coin.GetComponent<RewardItemUI>().Setup(reward.value);
                         break;
                     case RewardItem.Cash:
                         var cash = Instantiate(cashPrefab, content);
+                        cash.GetComponent<RewardItemUI>().Setup(reward.value);
                         break;
                 }
             }

@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -17,16 +16,18 @@ namespace GUI
 
         public void SetupWriter(string content)
         {
+            IsCompleted = false;
+            
             speechContent = content;
             maxChar = speechContent.Length;
             charIndex = 0;
             timer = 0f;
-            
-            IsCompleted = false;
         }
 
         private void Update()
         {
+            if (IsCompleted) return;
+            
             if (charIndex < maxChar)
             {
                 timer -= Time.deltaTime;
@@ -37,18 +38,17 @@ namespace GUI
                     speechTxt.text = speechContent[..charIndex];
                 }
             }
-
-            if (charIndex != maxChar) return;
-            maxChar = 0;
-            IsCompleted = true;
+            else
+            {
+                IsCompleted = true;
+            }
         }
 
         public void SkipWriter()
         {
-            charIndex = maxChar;
-
-            speechTxt.text = speechContent;
             IsCompleted = true;
+            charIndex = maxChar;
+            speechTxt.text = speechContent;
         }
     }
 }

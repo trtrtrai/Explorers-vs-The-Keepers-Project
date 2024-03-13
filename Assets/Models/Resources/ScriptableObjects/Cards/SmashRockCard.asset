@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Smash Rock
   Cost: 3
-  CardIcon: {fileID: 0}
+  CardIcon: {fileID: 21300000, guid: 7e33cbc7ee515394995677d374d55684, type: 3}
   Description: Take 50% total <sprite="StatusIcon" index=0> passed its <sprite="StatusIcon"
     index=2>.
   CardType: 2

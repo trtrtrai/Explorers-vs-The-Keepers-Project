@@ -20,7 +20,7 @@ MonoBehaviour:
     Defense: 15
     Critical: 0
     Speed: 300
-    Step: 0
+    Step: 1
     Agility: 50
     Aim: 0
   CharacterTags: 000000000e000000

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Rolling Rock
   Cost: 2
-  CardIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  CardIcon: {fileID: 21300000, guid: ef3d86232e2c75d4e9446ea19037b2db, type: 3}
   Description: Stun all enemies around <i>1 STEP</i> from choosing position in 1
     seconds.
   CardType: 2

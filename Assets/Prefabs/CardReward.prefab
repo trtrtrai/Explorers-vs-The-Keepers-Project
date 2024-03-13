@@ -219,6 +219,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 772374635588910554}
+  - component: {fileID: 3182026294165648589}
   m_Layer: 5
   m_Name: CardReward
   m_TagString: Untagged
@@ -248,6 +249,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3182026294165648589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029189478521542523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22276861743c4423b6669cff30b97c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemValue: 0
+  cardTypeTxt: {fileID: 4632847569742085188}
+  cardNameTxt: {fileID: 7026446856727402488}
+  cardIconImg: {fileID: 8446327018209021327}
 --- !u!1 &7545398060224700076
 GameObject:
   m_ObjectHideFlags: 0

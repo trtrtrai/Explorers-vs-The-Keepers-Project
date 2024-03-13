@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Controllers;
 using GUI.SelectCardDeck;
@@ -16,7 +17,8 @@ namespace GUI
 
         [Header("Card Forward")]
         [SerializeField] private TMP_Text cardType;
-        [SerializeField] private TMP_Text activeType; //icon after
+        [SerializeField] private Image activeTypeIcon;
+        [SerializeField] private TMP_Text activeType;
         [SerializeField] private TMP_Text cardName;
         [SerializeField] private TMP_Text cost;
         [SerializeField] private Image cardIcon;
@@ -73,7 +75,8 @@ namespace GUI
                 cardIcon.sprite = self.CardIcon;
                 description.text = self.Description;
                 cardType.text = self.CardType.ToString();
-                activeType.text = SpaceBetweenWord(self.ActiveType.ToString());
+                activeTypeIcon.sprite = GetActiveTypeIcon(self.ActiveType);
+                activeType.text = SpaceBetweenWord(self.ActiveType.ToString().Replace("Enemy", ""));
 
                 var hand = transform.parent.GetComponent<Hand>();
                 var cardTagContent = hand.cardTagContentPrefab;
@@ -156,7 +159,8 @@ namespace GUI
                 cardIcon.sprite = self.CardIcon;
                 description.text = self.Description;
                 cardType.text = self.CardType.ToString();
-                activeType.text = SpaceBetweenWord(self.ActiveType.ToString());
+                activeTypeIcon.sprite = GetActiveTypeIcon(self.ActiveType);
+                activeType.text = SpaceBetweenWord(self.ActiveType.ToString().Replace("Enemy", ""));
                 
                 var cardTagContent = PlanetManager.Instance.CardInventory.cardTagContentPrefab;
                 var cardTag = PlanetManager.Instance.CardInventory.cardTagPrefab;
@@ -249,6 +253,35 @@ namespace GUI
             return bgColor.r * 0.2126f + bgColor.g * 0.7152f + bgColor.b * 0.0722f > 186 / 255f
                 ? Color.black
                 : Color.white;
+        }
+
+        private Sprite GetActiveTypeIcon(CardActiveType type)
+        {
+            Sprite sprite = null;
+
+            switch (type)
+            {
+                case CardActiveType.WarField:
+                case CardActiveType.WarFieldEnemy:
+                    sprite = Resources.Load<Sprite>("warField");
+                    break;
+                case CardActiveType.Road:
+                    sprite = Resources.Load<Sprite>("road");
+                    break;
+                case CardActiveType.Single:
+                case CardActiveType.SingleEnemy:
+                    sprite = Resources.Load<Sprite>("single");
+                    break;
+                case CardActiveType.Area:
+                case CardActiveType.AreaEnemy:
+                    sprite = Resources.Load<Sprite>("area");
+                    break;
+                case CardActiveType.World:
+                    sprite = Resources.Load<Sprite>("world");
+                    break;
+            }
+
+            return sprite;
         }
 
         private void Update()

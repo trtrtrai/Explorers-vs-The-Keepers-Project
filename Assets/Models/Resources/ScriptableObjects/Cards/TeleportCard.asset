@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Teleport
   Cost: 2
-  CardIcon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  CardIcon: {fileID: 21300000, guid: 5abf584e22e12b04bb885fdd5f5cf476, type: 3}
   Description: Teleport target ally to ahead upto <i>3 STEP</i>.
   CardType: 2
   ActiveType: 3

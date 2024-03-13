@@ -18,7 +18,7 @@ namespace Data
         public void Save(GameData gameData)
         {
             string fullPath = Path.Combine(dataFilePath, dataFileName);
-
+            //Debug.Log(fullPath);
             try
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(fullPath));

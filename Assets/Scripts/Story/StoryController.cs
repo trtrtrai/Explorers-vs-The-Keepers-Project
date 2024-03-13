@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using GUI;
 using UnityEngine;
 
 namespace Story
@@ -10,6 +11,8 @@ namespace Story
     {
         [SerializeField] private int missionIndex;
         [SerializeField] private List<CutSceneAttach> attaches;
+
+        [SerializeField] private CollectionTab collection;
 
         public bool CheckTrigger(CutSceneTrigger currentTrigger, Action callback, int cardSelectionMission = -1)
         {
@@ -25,6 +28,18 @@ namespace Story
 
                 void UpdateStoryProcessCallback()
                 {
+                    if (planetCutSceneIndex == 0)
+                    {
+                        var card1 = new Reward { rewardItem = RewardItem.Card, value = 0 };
+                        DataManager.UpdateInventory(card1);
+                        var card2 = new Reward { rewardItem = RewardItem.Card, value = 2 };
+                        DataManager.UpdateInventory(card2);
+                        collection.gameObject.SetActive(true);
+                        collection.ShowReward(new List<Reward>
+                        {
+                            card1, card2
+                        });
+                    }
                     DataManager.PlanetTrigger.Planet1[planetCutSceneIndex].triggerActive = false;
                 }
 
