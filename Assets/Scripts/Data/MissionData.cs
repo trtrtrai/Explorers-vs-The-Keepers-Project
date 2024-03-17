@@ -9,12 +9,7 @@ namespace Data
         Locked, // cannot play
         ComingSoon, // does not created yet
     }
-    
-    public class PlanetData : GameData
-    {
-        public List<MissionData> Missions;
-    }
-    
+
     [Serializable]
     public class MissionData
     {

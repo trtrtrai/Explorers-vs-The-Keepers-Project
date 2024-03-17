@@ -11,7 +11,6 @@ namespace GUI
         [SerializeField] private GameObject cardPrefab;
         [SerializeField] private GameObject coinPrefab;
         [SerializeField] private GameObject cashPrefab;
-        private IPointerClickHandler _pointerClickHandlerImplementation;
 
         public void ShowReward(List<Reward> rewards)
         {

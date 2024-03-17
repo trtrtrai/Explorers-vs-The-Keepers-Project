@@ -31,6 +31,12 @@ namespace Editor
                 _controller.Generate();
             }
             
+            GUILayout.Space(20);
+            if (GUILayout.Button("Random decor"))
+            {
+                _controller.UpdateAllDecor();
+            }
+            
             EditorUtility.SetDirty(target);
             EditorSceneManager.MarkAllScenesDirty();
         }

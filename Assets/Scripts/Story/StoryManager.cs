@@ -24,7 +24,6 @@ namespace Story
 
         private Action callbackAction;
         private Action updateProcessCallbackAction;
-        private IPointerClickHandler _pointerClickHandlerImplementation;
 
         public void PlayCutScene(int index, Action callback, Action updateStoryProcessCallback)
         {

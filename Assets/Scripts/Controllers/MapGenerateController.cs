@@ -5,6 +5,7 @@ using Models;
 using ScriptableObjects;
 using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Controllers
 {
@@ -19,6 +20,9 @@ namespace Controllers
 
         [SerializeField] private TileData[] _vertexes;
         [SerializeField] private List<TileData> _tileDatas;
+
+        [SerializeField] private List<GameObject> forestDetails;
+        [SerializeField] private List<GameObject> rockDetails;
         
         /// <summary>
         /// Function use for test only.
@@ -337,7 +341,7 @@ namespace Controllers
         }
         #endregion
 
-        #region DrawingMap
+        #region Drawing Map
         public void UpdateAllTileData()
         {
             var none = Resources.Load<TileProperty>("ScriptableObjects/" + TileTag.None).TileMaterial;
@@ -369,13 +373,43 @@ namespace Controllers
                     case TileTag.Magma:
                         tile.CurMaterial = magma;
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
                 
                 tile.RendererUpdateMesh();
             }
         }
+        #endregion
+
+        #region Decor Map
+
+        public void UpdateAllDecor()
+        {
+            var tiles = WarField.GetComponentsInChildren<TileData>();
+            foreach (var tile in tiles)
+            {
+                if (tile.transform.childCount > 1) return;
+                switch (tile.TileTag)
+                {
+                    case TileTag.None:
+                        break;
+                    case TileTag.Forest:
+                        var objF = Instantiate(forestDetails[Random.Range(0, forestDetails.Count)], tile.transform);
+                        objF.transform.localPosition = Vector3.up * 0.2f;
+                        break;
+                    case TileTag.Rock:
+                        var objR = Instantiate(rockDetails[Random.Range(0, rockDetails.Count)], tile.transform);
+                        objR.transform.localPosition = Vector3.up * 0.2f;
+                        break;
+                    case TileTag.Water:
+                        break;
+                    case TileTag.Snowing:
+                        break;
+                    case TileTag.Magma:
+                        break;
+                }
+            }
+        }
+
         #endregion
         
         //TODO: generate all map, update map with exist map already, reset localPosition if tile moving while edit, if tile GameObject was manually delete?
