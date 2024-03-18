@@ -59,7 +59,7 @@ namespace Editor
                 cardInfo.Character = (GameObject)EditorGUILayout.ObjectField(new GUIContent("Character"),
                     cardInfo.Character, typeof(GameObject), false);
             }
-
+            
             EditorUtility.SetDirty(target);
             EditorSceneManager.MarkAllScenesDirty();
         }

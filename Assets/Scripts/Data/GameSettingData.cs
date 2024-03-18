@@ -6,6 +6,9 @@ namespace Data
     {
         public int PlanetAmount;
         public bool IsFirstPlay;
+        public bool BgmNSfx;
+        public float MusicVolume;
+        public float SoundVolume;
     }
 
     [Serializable]

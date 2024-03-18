@@ -7,11 +7,17 @@ namespace Controllers
     {
         [SerializeField] private Animator anim;
         [SerializeField] private bool isDeath;
+        [SerializeField] private AudioSource atkSfx;
+        [SerializeField] private bool atkSfxAvailable;
+        [SerializeField] private bool attacking;
 
         private void Start()
         {
             isDeath = false;
             anim = GetComponent<Animator>();
+            atkSfx = GetComponentInParent<AudioSource>();
+            atkSfxAvailable = atkSfx is not null;
+            attacking = false;
             PlayIdle();
         }
 
@@ -20,6 +26,11 @@ namespace Controllers
             if (isDeath) return;
             /*anim.ResetTrigger("Walking");
             anim.SetTrigger("Idle");*/
+            if (attacking)
+            {
+                atkSfx.Stop();
+                attacking = false;
+            }
             anim.Play("Armature|Idle");
         }
 
@@ -28,18 +39,35 @@ namespace Controllers
             if (isDeath) return;
             /*anim.ResetTrigger("Idle");
             anim.SetTrigger("Walking");*/
+            if (attacking)
+            {
+                atkSfx.Stop();
+                attacking = false;
+            }
             anim.Play("Armature|Walk");
         }
 
         public void PlayAttack()
         {
             if (isDeath) return;
+            
+            if (atkSfxAvailable)
+            {
+                attacking = true;
+                atkSfx.Play();
+            }
             anim.Play("Armature|Attack");
         }
 
         public void PlayDeath()
         {
             if (isDeath) return;
+            
+            if (attacking)
+            {
+                atkSfx.Stop();
+                attacking = false;
+            }
             isDeath = true;
             anim.Play("Armature|Death");
             StartCoroutine(WaitToPlayDeath());
@@ -48,6 +76,12 @@ namespace Controllers
         public void PlayDeathDestroy(GameObject obj)
         {
             if (isDeath) return;
+            
+            if (attacking)
+            {
+                atkSfx.Stop();
+                attacking = false;
+            }
             isDeath = true;
             anim.Play("Armature|Death");
             StartCoroutine(WaitToPlayDeathDestroy(obj));

@@ -651,6 +651,7 @@ namespace Controllers
                     
                     if (TryConsumeCard(card))
                     {
+                        AudioController.Instance.Play(card.ObjectName);
                         SpellsExecute.Activate(characterTarget, card.SpellsEffect);
                     }
                     break;
@@ -680,6 +681,7 @@ namespace Controllers
                             
                             if (TryConsumeCard(card))
                             {
+                                AudioController.Instance.Play(card.ObjectName);
                                 foreach (var character in charactersOnArea)
                                 {
                                     SpellsExecute.Activate(character, card.SpellsEffect);
@@ -735,6 +737,7 @@ namespace Controllers
                         {
                             summonSpells.RoadIndex = dropPosition.RoadIndex;
                             summonSpells.Team = GetAllyTeam();
+                            AudioController.Instance.Play(card.ObjectName);
                             SpellsExecute.Activate(null, spellsEff);
                         }
                     }
