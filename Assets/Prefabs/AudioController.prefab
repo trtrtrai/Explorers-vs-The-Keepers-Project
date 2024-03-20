@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4591098441326198486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3931404340241488214}
+  - component: {fileID: 910168328685042857}
+  m_Layer: 0
+  m_Name: AudioController
+  m_TagString: AudioController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3931404340241488214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4591098441326198486}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &910168328685042857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4591098441326198486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 780d816aad2747e0a84a36b9b0aa7137, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicMixerGroup: {fileID: -7753414595507462702, guid: 08b27e2a1f0c5e64489229421e08a4f8,
+    type: 2}
+  sfxMixerGroup: {fileID: -455686691391987321, guid: 08b27e2a1f0c5e64489229421e08a4f8,
+    type: 2}
+  audios:
+  - type: 0
+    name: AngrySpiritCard
+    clip: {fileID: 8300000, guid: faf619e6da8c5764f80ec9809325d809, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: GunReloadCard
+    clip: {fileID: 8300000, guid: 1b9f1537a76be864ba705ab2563267f8, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: MindConnectCard
+    clip: {fileID: 8300000, guid: 38b029c8abbd27a4194c11fc45ec2ad2, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: PoisonSwampCard
+    clip: {fileID: 8300000, guid: e36282590527f264e8116b198e742d33, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: StunBombCard
+    clip: {fileID: 8300000, guid: d0de97d5d652b534097d84950e8be6a1, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: RollingRockCard
+    clip: {fileID: 8300000, guid: da4ba4da35221b94f800f159c6295aaf, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: TargetLauncherCard
+    clip: {fileID: 8300000, guid: 8ce7c291ca4c02947b4de4ba1156bbc9, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: ProtectCard
+    clip: {fileID: 8300000, guid: d56c881d40034e443886cd164935caf1, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: AxitRainCard
+    clip: {fileID: 8300000, guid: 9da1886676f0b0f48907dbce09ad39d1, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: DestructiveRayCard
+    clip: {fileID: 8300000, guid: bede67c5c6724454dbb33e2b6ef363f7, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: SmashRockCard
+    clip: {fileID: 8300000, guid: 491ef0e42d6da174db3b832ab9fb4a94, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: SaleOffCard
+    clip: {fileID: 8300000, guid: debf0456f026c1a4c99c63ea06de6c68, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: GoHomeCard
+    clip: {fileID: 8300000, guid: cd240b2bdf22e634f8396a36af0eb63a, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: TeleportCard
+    clip: {fileID: 8300000, guid: cba6641fd67db944dbd0fffad2395125, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - type: 0
+    name: SupportPackCard
+    clip: {fileID: 8300000, guid: c7dcac567438b8b48b2bf84e5d9eaf24, type: 3}
+    isLoop: 0
+    volume: 0.5

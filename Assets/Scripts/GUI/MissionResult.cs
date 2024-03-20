@@ -40,9 +40,9 @@ namespace GUI
             var old = SceneManager.GetActiveScene().name;
             var asyncLoad = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
 
-            Camera.main!.GetComponent<AudioListener>().enabled = false;
+            //Camera.main!.GetComponent<AudioListener>().enabled = false;
             Destroy(EventSystem.current.gameObject);
-
+            Destroy(GameObject.FindGameObjectWithTag("AudioController"));
             while (!asyncLoad.isDone) yield return null;
             
             asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);

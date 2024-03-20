@@ -346,6 +346,8 @@ namespace Controllers
                     if (team2Hand.Count < 5) RandomCard(team, card.HandIndex);
                 }
                 
+                AudioController.Instance.Play(card.ObjectName);
+                
                 return true;
             }
 
@@ -446,6 +448,8 @@ namespace Controllers
                 //Debug.Log(card.name + " activated.");
                 OnCardUsed?.Invoke(team, Enum.Parse<CardName>(TeamDeckCardName(card)));
                 CardRedraw(team, card);
+                
+                AudioController.Instance.Play(card.name);
             }
         }
 

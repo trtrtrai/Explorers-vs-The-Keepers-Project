@@ -84,9 +84,10 @@ namespace Controllers
             var old = SceneManager.GetActiveScene().name;
             var asyncLoad = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
 
-            Camera.main!.GetComponent<AudioListener>().enabled = false;
+            //Camera.main!.GetComponent<AudioListener>().enabled = false;
             Destroy(EventSystem.current.gameObject);
 
+            AudioListener.pause = true;
             while (!asyncLoad.isDone) yield return null;
             
             asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
@@ -110,10 +111,12 @@ namespace Controllers
                 }
             };
             SceneManager.MoveGameObjectToScene(deckData, SceneManager.GetSceneByName(sceneName));
+            SceneManager.MoveGameObjectToScene(GameObject.FindGameObjectWithTag("AudioController"), SceneManager.GetSceneByName(sceneName));
 
             WorldManager.Instance.enabled = true;
             SceneManager.UnloadSceneAsync("Loading");
             SceneManager.UnloadSceneAsync(old);
+            AudioListener.pause = false;
         }
 
         private void OnDisable()

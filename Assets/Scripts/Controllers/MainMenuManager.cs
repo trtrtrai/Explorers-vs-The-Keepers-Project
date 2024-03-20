@@ -9,7 +9,7 @@ namespace Controllers
 {
     public class MainMenuManager : MonoBehaviour
     {
-        private void Start()
+        private void Awake()
         {
             DataManager.LoadGameData();
             /*var data = DataManager.GetPlanetData();

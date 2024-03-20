@@ -32,7 +32,7 @@ namespace Controllers
         {
             var au = audios.FirstOrDefault(a => a.name.Equals(soundName));
 
-            if (au is null) return;
+            if (au is null) return; // TODO: default sound in here
 
             var audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.clip = au.clip;
@@ -72,6 +72,15 @@ namespace Controllers
             {
                 Play(audios[index].name);
             }
+        }
+        
+        /// <summary>
+        /// Test scene only
+        /// </summary>
+        /// <param name="source"></param>
+        public void Play(AudioSource source)
+        {
+            source.Play();
         }
 
         public void MixerGroupUpdate(AudioMixerType type, float value)
