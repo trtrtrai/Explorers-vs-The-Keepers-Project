@@ -1,3 +1,4 @@
+using Controllers;
 using UnityEngine;
 
 namespace Models
@@ -27,6 +28,9 @@ namespace Models
                 {
                     //Debug.Log("Bomb detect enemy!");
                     active = true;
+                    var charPos = character.CharacterWorldPosition();
+                    EffectsController.Instance.TriggeredEffect("BombExplosion", charPos, charPos);
+                    AudioController.Instance.Play("TargetLauncherCard");
                     character.TakeDamage(damage);
                     Destroy();
                 }

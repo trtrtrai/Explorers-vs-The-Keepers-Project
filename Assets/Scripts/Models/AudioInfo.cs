@@ -12,8 +12,8 @@ namespace Models
     [Serializable]
     public class AudioInfo
     {
-        public AudioMixerType type;
         public string name;
+        public AudioMixerType type;
         public AudioClip clip;
         public bool isLoop;
         [Range(0, 1f)] public float volume = 0.5f;

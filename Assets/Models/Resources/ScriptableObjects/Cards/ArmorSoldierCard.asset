@@ -22,4 +22,3 @@ MonoBehaviour:
   SpellsEffect: {fileID: 0}
   Character: {fileID: 8563812943044693868, guid: 542c84364b4a6a147b7d1cd96c082920,
     type: 3}
-  CardActiveSound: {fileID: 0}

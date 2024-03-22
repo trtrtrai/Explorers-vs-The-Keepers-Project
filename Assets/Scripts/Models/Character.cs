@@ -202,7 +202,7 @@ namespace Models
             if (!cannotAtk)
             {
                 PlayAttack();
-                attacking.AttackEnemy(target, status.GetDamage());
+                attacking.AttackEnemy(characterInfo.name, target, status.GetDamage());
                 
                 yield return new WaitForSeconds(100f / status.Agi); // attack delay
             }
@@ -219,7 +219,7 @@ namespace Models
         public void Teleport(TeleportType type, int step)
         {
             OnDisable();
-            
+            var origin = Position.transform.localPosition;
             switch (type)
             {
                 case TeleportType.BackToHeadquarter:
@@ -240,7 +240,9 @@ namespace Models
                     break;
             }
 
-            transform.localPosition = Position.transform.localPosition;
+            var target = Position.transform.localPosition;
+            EffectsController.Instance.TriggeredEffect("Teleport", origin, target);
+            transform.localPosition = target;
             Enable();
         }
         
@@ -292,6 +294,17 @@ namespace Models
         protected void PlayDeath(int groupNumber)
         {
             characterObjs[groupNumber].PlayDeath();
+        }
+
+        public Vector3 CharacterWorldPosition()
+        {
+            /*if (status.GroupNumber != 0)
+            {
+                return characterObjs[status.GroupNumber - 1].transform.localPosition;
+            }
+            */
+
+            return transform.localPosition;
         }
 
         protected virtual void OnDisable()

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3931404340241488214}
   - component: {fileID: 910168328685042857}
+  - component: {fileID: 1101189797700011487}
   m_Layer: 0
   m_Name: AudioController
   m_TagString: AudioController
@@ -49,78 +50,101 @@ MonoBehaviour:
   sfxMixerGroup: {fileID: -455686691391987321, guid: 08b27e2a1f0c5e64489229421e08a4f8,
     type: 2}
   audios:
-  - type: 0
-    name: AngrySpiritCard
+  - name: AngrySpiritCard
+    type: 0
     clip: {fileID: 8300000, guid: faf619e6da8c5764f80ec9809325d809, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: GunReloadCard
+  - name: GunReloadCard
+    type: 0
     clip: {fileID: 8300000, guid: 1b9f1537a76be864ba705ab2563267f8, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: MindConnectCard
+  - name: MindConnectCard
+    type: 0
     clip: {fileID: 8300000, guid: 38b029c8abbd27a4194c11fc45ec2ad2, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: PoisonSwampCard
+  - name: PoisonSwampCard
+    type: 0
     clip: {fileID: 8300000, guid: e36282590527f264e8116b198e742d33, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: StunBombCard
+  - name: StunBombCard
+    type: 0
     clip: {fileID: 8300000, guid: d0de97d5d652b534097d84950e8be6a1, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: RollingRockCard
+  - name: RollingRockCard
+    type: 0
     clip: {fileID: 8300000, guid: da4ba4da35221b94f800f159c6295aaf, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: TargetLauncherCard
+  - name: TargetLauncherCard
+    type: 0
     clip: {fileID: 8300000, guid: 8ce7c291ca4c02947b4de4ba1156bbc9, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: ProtectCard
+  - name: ProtectCard
+    type: 0
     clip: {fileID: 8300000, guid: d56c881d40034e443886cd164935caf1, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: AxitRainCard
+  - name: AxitRainCard
+    type: 0
     clip: {fileID: 8300000, guid: 9da1886676f0b0f48907dbce09ad39d1, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: DestructiveRayCard
+  - name: DestructiveRayCard
+    type: 0
     clip: {fileID: 8300000, guid: bede67c5c6724454dbb33e2b6ef363f7, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: SmashRockCard
+  - name: SmashRockCard
+    type: 0
     clip: {fileID: 8300000, guid: 491ef0e42d6da174db3b832ab9fb4a94, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: SaleOffCard
+  - name: SaleOffCard
+    type: 0
     clip: {fileID: 8300000, guid: debf0456f026c1a4c99c63ea06de6c68, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: GoHomeCard
+  - name: GoHomeCard
+    type: 0
     clip: {fileID: 8300000, guid: cd240b2bdf22e634f8396a36af0eb63a, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: TeleportCard
+  - name: TeleportCard
+    type: 0
     clip: {fileID: 8300000, guid: cba6641fd67db944dbd0fffad2395125, type: 3}
     isLoop: 0
     volume: 0.5
-  - type: 0
-    name: SupportPackCard
+  - name: SupportPackCard
+    type: 0
     clip: {fileID: 8300000, guid: c7dcac567438b8b48b2bf84e5d9eaf24, type: 3}
     isLoop: 0
     volume: 0.5
+  - name: Commander-Attack
+    type: 0
+    clip: {fileID: 8300000, guid: 8ce7c291ca4c02947b4de4ba1156bbc9, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - name: TheForest-Attack
+    type: 0
+    clip: {fileID: 8300000, guid: 4c85980f3fbe4964d959111bc8579955, type: 3}
+    isLoop: 0
+    volume: 0.5
+  - name: TheRock-Attack
+    type: 0
+    clip: {fileID: 8300000, guid: af2ef3ca462f3534e8e73db0327c74dc, type: 3}
+    isLoop: 0
+    volume: 0.1
+--- !u!81 &1101189797700011487
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4591098441326198486}
+  m_Enabled: 1

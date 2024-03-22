@@ -21,4 +21,3 @@ MonoBehaviour:
   Radius: 0
   SpellsEffect: {fileID: 11400000, guid: 72765d7de6f29a84289c51bb819b11a0, type: 2}
   Character: {fileID: 0}
-  CardActiveSound: {fileID: 0}

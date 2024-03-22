@@ -747,6 +747,7 @@ namespace Controllers
                     
                     if (TryConsumeCard(card))
                     {
+                        EffectsController.Instance.CameraShake(1.5f, 0.8f);
                         foreach (var character in worldCharacters.ToList())
                         {
                             SpellsExecute.Activate(character, card.SpellsEffect);

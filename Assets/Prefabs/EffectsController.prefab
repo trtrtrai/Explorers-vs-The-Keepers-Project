@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6975341943332487427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4043640512590282423}
+  - component: {fileID: 5418018381887099967}
+  m_Layer: 0
+  m_Name: EffectsController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4043640512590282423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6975341943332487427}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5418018381887099967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6975341943332487427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b1a8e983204bc19d6eefc1623ef31f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectsInfos:
+  - effectsName: Commander-Attack
+    prefab: {fileID: 2131564177999535496, guid: da8ef198c61390e4c951fc108ca5c42e,
+      type: 3}
+    offset: {x: 0, y: 1.5, z: 0}
+  - effectsName: TheForest-Attack
+    prefab: {fileID: 5110656501767200835, guid: cc60b6435081ed84d932def473208748,
+      type: 3}
+    offset: {x: 0, y: 0, z: 0}
+  - effectsName: TheRock-Attack
+    prefab: {fileID: 1701376906518344925, guid: d6731524f71b74246b5616eff6bb4440,
+      type: 3}
+    offset: {x: 0, y: 0, z: 0.75}
+  - effectsName: Teleport
+    prefab: {fileID: 746016309255386540, guid: 46ded49c499f8a64a86c027e1a87d93e, type: 3}
+    offset: {x: 0, y: 0, z: 0}
+  - effectsName: AttackBoost
+    prefab: {fileID: 4892916728370264379, guid: f9b7092d93843f8428ddca55472b7ea5,
+      type: 3}
+    offset: {x: 0, y: 0, z: 0}
+  - effectsName: HealthHealed
+    prefab: {fileID: 5087006185506580375, guid: cc1baf0432c202e4ab549f1d86fad41a,
+      type: 3}
+    offset: {x: 0, y: 0, z: 0}
+  - effectsName: BombExplosion
+    prefab: {fileID: 1512955695274663945, guid: 31280a44952b7eb4896d5b1d39de0755,
+      type: 3}
+    offset: {x: 0, y: 0, z: 0}

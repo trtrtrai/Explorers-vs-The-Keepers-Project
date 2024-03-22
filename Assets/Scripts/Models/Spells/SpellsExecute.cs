@@ -60,9 +60,16 @@ namespace Models.Spells
 
                     if (script.Setup(statsSpells.EffectTimer, statsSpells.StatsType, realChange))
                     {
+                        var charPos = character.CharacterWorldPosition();
+                        EffectsController.Instance.TriggeredEffect("AttackBoost", charPos, charPos);
                         script.StartCounting();
                         return true;
                     }
+                }
+                else
+                {
+                    var charPos = character.CharacterWorldPosition();
+                    EffectsController.Instance.TriggeredEffect("AttackBoost", charPos, charPos);
                 }
             }
             else if (effect is HealthEffectSpells healthEffSpells)
@@ -87,7 +94,7 @@ namespace Models.Spells
 
                     if (healthEffSpells.IsPassDefense)
                     {
-                        var defResistDmg = Mathf.RoundToInt(Mathf.Clamp(damage - character.GetStatus().Def * 0.75f, damage * 0.2f, damage));
+                        var defResistDmg = Mathf.RoundToInt(damage + character.GetStatus().Def * 0.75f);
                         var result= character.TakeDamage(defResistDmg);
                         //Debug.Log(character.name + " take " + result + " damage from pass defense spells.");
                         return true;
@@ -99,7 +106,9 @@ namespace Models.Spells
                         return true;
                     }
                 }
-                
+
+                var charPos = character.CharacterWorldPosition();
+                EffectsController.Instance.TriggeredEffect("HealthHealed", charPos, charPos);
                 var healing = character.Healing(healthEffSpells.Quantity, healthEffSpells.IsScale, healthEffSpells.IsScaleWithMaxHealth);
                 //Debug.Log(character.name + " get heal " + healing + " point(s) from spells.");
                 return true;
