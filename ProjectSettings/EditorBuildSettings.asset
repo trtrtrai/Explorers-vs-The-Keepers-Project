@@ -15,9 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/PlanetMap1.unity
     guid: b6fc7921c6b376d4e9c847029a7bbd31
   - enabled: 1
-    path: Assets/Scenes/Loading.unity
-    guid: e9762223d53b45d4da502d38330bd4d9
-  - enabled: 1
     path: Assets/Scenes/Mission1.unity
     guid: 54e73f04a37e1244f960709af4afc37c
   - enabled: 1
@@ -32,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Mission5.unity
     guid: 34444252172422b4393b847f5f2d579e
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: e9762223d53b45d4da502d38330bd4d9
   m_configObjects: {}

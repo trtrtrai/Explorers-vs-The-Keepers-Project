@@ -4,6 +4,7 @@ using Data;
 using Story;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Extensions.LoadSceneExtension;
 
 namespace Controllers
 {
@@ -37,12 +38,6 @@ namespace Controllers
             {
                 LoadMapScene();
             }
-        }
-
-        private void LoadMapScene()
-        {
-            DataManager.SettingData.IsFirstPlay = false;
-            SceneManager.LoadScene("PlanetMap1");
         }
 
         public void Setting()

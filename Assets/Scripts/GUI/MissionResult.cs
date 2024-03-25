@@ -5,12 +5,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using static Extensions.LoadSceneExtension;
 
 namespace GUI
 {
     public class MissionResult : MonoBehaviour
     {
         [SerializeField] private MissionReward reward;
+        [SerializeField] private Transform failed;
         
         private void Start()
         {
@@ -25,34 +27,21 @@ namespace GUI
                 // unlock new mission
                 // reward items
                 DataManager.UpdateDataStory();
+                reward.gameObject.SetActive(true);
+                reward.ShowReward(WorldManager.Instance.GameResult);
             }
-            
-            reward.ShowReward(WorldManager.Instance.GameResult);
+            else
+            {
+                failed.gameObject.SetActive(true);
+            }
         }
 
         public void BackToPlanet(SceneAsset sceneAsset)
         {
-            StartCoroutine(BackToPlanetAsync(sceneAsset.name));
-        }
-        
-        private IEnumerator BackToPlanetAsync(string sceneName)
-        {
-            var old = SceneManager.GetActiveScene().name;
-            var asyncLoad = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
-
-            //Camera.main!.GetComponent<AudioListener>().enabled = false;
-            Destroy(EventSystem.current.gameObject);
-            Destroy(GameObject.FindGameObjectWithTag("AudioController"));
-            while (!asyncLoad.isDone) yield return null;
-            
-            asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-
-            while (!asyncLoad.isDone) yield return null;
-
-            Time.timeScale = 1f;
-            
-            SceneManager.UnloadSceneAsync("Loading");
-            SceneManager.UnloadSceneAsync(old);
+            StartCoroutine(BackToPlanetAsync(sceneAsset.name, () => {
+                Destroy(EventSystem.current.gameObject);
+                Destroy(GameObject.FindGameObjectWithTag("AudioController"));
+            }));
         }
     }
 }

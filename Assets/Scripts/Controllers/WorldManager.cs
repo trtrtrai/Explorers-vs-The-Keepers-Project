@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Agents;
+using Data;
 using EventArgs;
 using Extensions;
 using GUI;
@@ -15,6 +16,7 @@ using Story;
 using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
+using MissionData = Models.Structs.MissionData;
 using Random = System.Random;
 
 namespace Controllers
@@ -99,8 +101,10 @@ namespace Controllers
 
         private void Awake()
         {
+            //Debug.Log("Awake call");
             if (Instance != null && Instance != this)
             {
+                //Debug.Log("Awake destroy");
                 Destroy(this);
             }
             else
@@ -177,9 +181,18 @@ namespace Controllers
         private void Start()
         {
             var deckData = GameObject.FindGameObjectWithTag("DataContainer");
-            MissionData = (MissionData)deckData.GetComponent<DataContainer>().Datas[0];
-            team1CardList = ((DeckData)deckData.GetComponent<DataContainer>().Datas[1]).CardList;
-            Destroy(deckData);
+            if (deckData is null)
+            {
+                MissionData = (MissionData)DataManager.CurrentMission[0];
+                team1CardList = ((DeckData)DataManager.CurrentMission[1]).CardList;
+            }
+            else
+            {
+                MissionData = (MissionData)deckData.GetComponent<DataContainer>().Datas[0];
+                team1CardList = ((DeckData)deckData.GetComponent<DataContainer>().Datas[1]).CardList;
+                deckData.transform.SetParent(transform);
+                DataManager.CurrentMission = deckData.GetComponent<DataContainer>().Datas;
+            }
             
             Instantiate(cardControllerPref, transform);
             StartCoroutine(WaitToSettingCardController());
@@ -1327,6 +1340,7 @@ namespace Controllers
 
         private void OnDisable()
         {
+            //Debug.Log("Disable");
             Instance = null;
         }
     }

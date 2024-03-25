@@ -110,8 +110,10 @@ namespace Controllers
                     CardList = CardInventory.GetCardSelected()
                 }
             };
-            SceneManager.MoveGameObjectToScene(deckData, SceneManager.GetSceneByName(sceneName));
-            SceneManager.MoveGameObjectToScene(GameObject.FindGameObjectWithTag("AudioController"), SceneManager.GetSceneByName(sceneName));
+
+            var scene = SceneManager.GetSceneByName(sceneName);
+            SceneManager.MoveGameObjectToScene(deckData, scene);
+            SceneManager.MoveGameObjectToScene(GameObject.FindGameObjectWithTag("AudioController"), scene);
 
             WorldManager.Instance.enabled = true;
             SceneManager.UnloadSceneAsync("Loading");

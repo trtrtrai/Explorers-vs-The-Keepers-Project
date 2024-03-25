@@ -1,9 +1,8 @@
-using System;
-using System.Collections;
+using Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using static Extensions.LoadSceneExtension;
 
 namespace GUI
 {
@@ -11,27 +10,16 @@ namespace GUI
     {
         public void BackToPlanet(SceneAsset sceneAsset)
         {
-            StartCoroutine(BackToPlanetAsync(sceneAsset.name));
+            StartCoroutine(BackToPlanetAsync(sceneAsset.name, () =>
+            {
+                Destroy(EventSystem.current.gameObject);
+                Destroy(GameObject.FindGameObjectWithTag("AudioController"));
+            }));
         }
-        
-        private IEnumerator BackToPlanetAsync(string sceneName)
+
+        public void Restart()
         {
-            var old = SceneManager.GetActiveScene().name;
-            var asyncLoad = SceneManager.LoadSceneAsync("Loading", LoadSceneMode.Additive);
-
-            Camera.main!.GetComponent<AudioListener>().enabled = false;
-            Destroy(EventSystem.current.gameObject);
-
-            while (!asyncLoad.isDone) yield return null;
-            
-            asyncLoad = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-
-            while (!asyncLoad.isDone) yield return null;
-
-            Time.timeScale = 1;
-            
-            SceneManager.UnloadSceneAsync("Loading");
-            SceneManager.UnloadSceneAsync(old);
+            GameObject.FindGameObjectWithTag("SceneManagement").GetComponent<LoadSceneExtension>().MissionRestart();
         }
 
         private void OnEnable()

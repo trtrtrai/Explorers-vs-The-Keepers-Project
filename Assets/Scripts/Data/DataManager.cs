@@ -18,7 +18,8 @@ namespace Data
         public static StoryData Story;
         public static StoryPlanetTrigger PlanetTrigger;
         public static CardSelectionTrigger CardSelectionTrigger;
-
+        public static List<object> CurrentMission;
+        
         /// <summary>
         /// Load readonly data in Streaming Assets folder and create new in data folder.
         /// </summary>
