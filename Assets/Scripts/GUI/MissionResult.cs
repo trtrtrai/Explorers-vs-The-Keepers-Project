@@ -1,6 +1,7 @@
 using System.Collections;
 using Controllers;
 using Data;
+using Extensions;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -42,6 +43,11 @@ namespace GUI
                 Destroy(EventSystem.current.gameObject);
                 Destroy(GameObject.FindGameObjectWithTag("AudioController"));
             }));
+        }
+        
+        public void Restart()
+        {
+            GameObject.FindGameObjectWithTag("SceneManagement").GetComponent<LoadSceneExtension>().MissionRestart();
         }
     }
 }

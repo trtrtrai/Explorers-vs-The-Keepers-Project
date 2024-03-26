@@ -40,16 +40,6 @@ namespace Controllers
             }
         }
 
-        public void Setting()
-        {
-            
-        }
-
-        public void About()
-        {
-            
-        }
-
         public void Exit()
         {
             Application.Quit();

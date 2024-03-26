@@ -10,11 +10,14 @@ namespace GUI.Setting
 {
     public class GameSettingUI : MonoBehaviour
     {
-        [SerializeField] private Toggle bmgNSfxToggle;
+        [SerializeField] private Toggle bgmNSfxToggle;
         [SerializeField] private Slider musicsSlider;
         [SerializeField] private Slider soundsSlider;
         [SerializeField] private TMP_Text musicsTxt;
         [SerializeField] private TMP_Text soundsTxt;
+        [SerializeField] private bool lastBgmNSfx;
+        [SerializeField] private float lastMusicVolume;
+        [SerializeField] private float lastSoundVolume;
 
         private void Start()
         {
@@ -27,8 +30,10 @@ namespace GUI.Setting
             
             if (!gameSetting.BgmNSfx)
             {
-                bmgNSfxToggle.isOn = false;
+                bgmNSfxToggle.isOn = false;
             }
+
+            gameObject.SetActive(false);
         }
 
         public void OnToggleBgmAndSfx(bool value)
@@ -60,6 +65,23 @@ namespace GUI.Setting
             DataManager.SettingData.SoundVolume = value;
             soundsTxt.text = "" + (int)(DataManager.SettingData.SoundVolume * 100f);
             AudioController.Instance.MixerGroupUpdate(AudioMixerType.SoundEffect, value);
+        }
+
+        public void OnEnable()
+        {
+            if (DataManager.SettingData is null) return;
+            
+            lastBgmNSfx = DataManager.SettingData.BgmNSfx;
+            lastMusicVolume = DataManager.SettingData.MusicVolume;
+            lastSoundVolume = DataManager.SettingData.SoundVolume;
+        }
+
+        public void OnIgnoreChange()
+        {
+            musicsSlider.value = lastMusicVolume;
+            soundsSlider.value = lastSoundVolume;
+            bgmNSfxToggle.isOn = lastBgmNSfx;
+            gameObject.SetActive(false);
         }
 
         /*private void OnApplicationQuit() //test scene

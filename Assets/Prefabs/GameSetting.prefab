@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1199,11 +1199,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38081a97a5f146fe9725d38f7f015c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bmgNSfxToggle: {fileID: 6716723590448086057}
+  bgmNSfxToggle: {fileID: 6716723590448086057}
   musicsSlider: {fileID: 6545183307426514559}
   soundsSlider: {fileID: 4188222933805136653}
   musicsTxt: {fileID: 5477737228073784635}
   soundsTxt: {fileID: 1494101826160510507}
+  lastBgmNSfx: 0
+  lastMusicVolume: 0
+  lastSoundVolume: 0
 --- !u!1 &3352271966482769361
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,7 +1442,7 @@ GameObject:
   - component: {fileID: 5009735300429831541}
   - component: {fileID: 230507111451933821}
   m_Layer: 5
-  m_Name: Back
+  m_Name: Ignore Change
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1486,7 +1489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.79622644, g: 0.7108349, b: 0.49125668, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1546,7 +1549,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5009735300429831541}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4770183345548612914}
+        m_TargetAssemblyTypeName: GUI.Setting.GameSettingUI, Assembly-CSharp
+        m_MethodName: OnIgnoreChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4551946287248167823
 GameObject:
   m_ObjectHideFlags: 0
@@ -1817,7 +1832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.79622644, g: 0.7108349, b: 0.49125668, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1877,7 +1892,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6589229989020712438}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3306497711990045922}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5715210330406766177
 GameObject:
   m_ObjectHideFlags: 0
@@ -2142,7 +2169,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Back
+  m_text: ignore change
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2c8aeea836bbe34dbb399d4692dff97, type: 2}
   m_sharedMaterial: {fileID: 8855325644823155206, guid: f2c8aeea836bbe34dbb399d4692dff97,
