@@ -1,4 +1,5 @@
 using Data;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ namespace GUI
         [SerializeField] private bool firstPlay;
 
         [SerializeField] private Button missionBtn;
-        [SerializeField] private Transform comingSoonLabel;
+        [SerializeField] private TMP_Text comingSoonLabel;
 
         public void Setup(MissionData data)
         {
@@ -27,10 +28,13 @@ namespace GUI
                     break;
                 case MissionStatus.Locked:
                     missionBtn.interactable = false;
-                    comingSoonLabel.gameObject.SetActive(false);
+                    comingSoonLabel.text = "locked";
+                    comingSoonLabel.gameObject.SetActive(true);
                     break;
                 case MissionStatus.ComingSoon:
                     missionBtn.interactable = false;
+                    missionBtn.image.color = Color.black;
+                    comingSoonLabel.text = "coming soon!!!";
                     comingSoonLabel.gameObject.SetActive(true);
                     break;
             }
