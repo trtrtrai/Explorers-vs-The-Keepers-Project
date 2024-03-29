@@ -1,9 +1,6 @@
-using System;
-using System.Linq;
 using Data;
 using Story;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using static Extensions.LoadSceneExtension;
 
 namespace Controllers

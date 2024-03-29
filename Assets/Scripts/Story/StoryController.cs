@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using Extensions;
 using GUI;
 using UnityEngine;
 
@@ -13,6 +14,11 @@ namespace Story
         [SerializeField] private List<CutSceneAttach> attaches;
 
         [SerializeField] private CollectionTab collection;
+
+        private void Awake()
+        {
+            LoadSceneExtension.AddButtonSound();
+        }
 
         public bool CheckTrigger(CutSceneTrigger currentTrigger, Action callback, int cardSelectionMission = -1)
         {

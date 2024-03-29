@@ -4,6 +4,7 @@ using Controllers;
 using Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Extensions
 {
@@ -19,6 +20,16 @@ namespace Extensions
             }
 
             DontDestroyOnLoad(gameObject);
+            AddButtonSound();
+        }
+
+        public static void AddButtonSound()
+        {
+            var btns = FindObjectsOfType<Button>(true);
+            foreach (var btn in btns)
+            {
+                btn.onClick.AddListener(() => AudioController.Instance.Play("Button"));
+            }
         }
         
         public static void LoadMapScene()

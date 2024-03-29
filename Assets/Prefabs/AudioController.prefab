@@ -132,12 +132,17 @@ MonoBehaviour:
     volume: 0.5
   - name: TheForest-Attack
     type: 0
-    clip: {fileID: 8300000, guid: 4c85980f3fbe4964d959111bc8579955, type: 3}
+    clip: {fileID: 8300000, guid: b7e61888676c4bd4f9ebe244e3363666, type: 3}
     isLoop: 0
     volume: 0.5
   - name: TheRock-Attack
     type: 0
     clip: {fileID: 8300000, guid: af2ef3ca462f3534e8e73db0327c74dc, type: 3}
+    isLoop: 0
+    volume: 0.1
+  - name: Button
+    type: 0
+    clip: {fileID: 8300000, guid: 15cb7b2a78536c84bb386441983afbce, type: 3}
     isLoop: 0
     volume: 0.1
 --- !u!81 &1101189797700011487
