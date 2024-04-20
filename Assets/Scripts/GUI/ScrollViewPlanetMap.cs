@@ -30,6 +30,14 @@ namespace GUI
             //contentOffset = /*((scroll.transform as RectTransform).rect.width - ratioPerLevel * scroll.content.sizeDelta.x)*/66.67f / scroll.content.sizeDelta.x;
         }
 
+        public void ScrollToMission(int index)
+        {
+            newLevel = index;
+            scroll.horizontalNormalizedPosition = (ratioPerLevel + contentOffset) * newLevel;
+            curLevel = newLevel;
+            missionLvlLabel.text = $"mission {curLevel + 1}";
+        }
+
         public void Change(Vector2 v)
         {
             //Debug.Log(v);
@@ -48,7 +56,7 @@ namespace GUI
 
         private IEnumerator Sleep()
         {
-            timer = .5f;
+            timer = .3f;
 
             while (timer > 0f)
             {

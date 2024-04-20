@@ -98,20 +98,16 @@ namespace Story
         {
             if (eventData.clickCount == 1)
             {
-                if (speechCurrentTextIndex < speechTextIndex)
+                if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex < speechIndex)
                 {
-                    speechCurrentTextIndex++;
-                
-                    if (speechText.IsCompleted) StartSpeech();
-                    else speechText.SkipWriter();
-                }
-                else if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex < speechIndex)
-                {
-                    speechCurrentIndex++;
-                    speechTextIndex = current[speechCurrentIndex].speechTexts.Count - 1;
-                    speechCurrentTextIndex = 0;
-                
-                    if (speechText.IsCompleted) StartSpeech();
+                    if (speechText.IsCompleted)
+                    {
+                        speechCurrentIndex++;
+                        speechTextIndex = current[speechCurrentIndex].speechTexts.Count - 1;
+                        speechCurrentTextIndex = 0;
+                        
+                        StartSpeech();
+                    }
                     else speechText.SkipWriter();
                 }
                 else if (speechCurrentTextIndex == speechTextIndex && speechCurrentIndex == speechIndex)
@@ -122,6 +118,16 @@ namespace Story
                         updateProcessCallbackAction?.Invoke();
                         callbackAction?.Invoke();
                         Destroy(gameObject);
+                    }
+                    else speechText.SkipWriter();
+                }
+                else if (speechCurrentTextIndex < speechTextIndex)
+                {
+                    if (speechText.IsCompleted)
+                    {
+                        speechCurrentTextIndex++;
+                        
+                        StartSpeech();
                     }
                     else speechText.SkipWriter();
                 }

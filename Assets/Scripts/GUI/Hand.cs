@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +14,7 @@ namespace GUI
         public GameObject cardInfoUIPrefab;
         public GameObject cardTagContentPrefab;
         public GameObject cardTagPrefab;
+        public bool isMainFaceCardFlip;
 
         [SerializeField] private CardTagTooltip tagTooltip;
         
@@ -42,6 +42,8 @@ namespace GUI
             {
                 CardController.Instance.OnTeam2DrawCard += OnPlayerDrawNewCard;
             }
+
+            isMainFaceCardFlip = true;
         }
 
         private void OnGameReset(object sender, System.EventArgs args)
@@ -72,7 +74,8 @@ namespace GUI
             if (eventData.pointerDrag.TryGetComponent(out Draggable draggable) && draggable.Placeholder is not null)
             {
                 draggable.DraggableObjOutOfHand = false;
-                draggable.Placeholder.SetActive(true);
+                
+                if (!draggable.PlaceHolderDestroy) draggable.Placeholder.SetActive(true);
             }
         }
 
@@ -85,7 +88,8 @@ namespace GUI
                 if (draggable.PlaceHolderDestroy) return;
 
                 draggable.DraggableObjOutOfHand = true;
-                draggable.Placeholder.SetActive(false);
+                
+                if (!draggable.PlaceHolderDestroy) draggable.Placeholder.SetActive(false);
             }
         }
 
@@ -110,6 +114,14 @@ namespace GUI
         {
             return listTagExplain.FirstOrDefault(e =>
                 e.IsCharacterTag == isCharacterTag && GetEnumString(e, e.IsCharacterTag).Equals(tags));
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isMainFaceCardFlip = !isMainFaceCardFlip;
+            }
         }
 
         public void DisableTooltip()

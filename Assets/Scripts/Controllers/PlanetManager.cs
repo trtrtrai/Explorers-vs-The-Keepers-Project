@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Data;
@@ -7,18 +6,17 @@ using GUI.SelectCardDeck;
 using Models;
 using Models.Structs;
 using Story;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using MissionData = Data.MissionData;
 
 namespace Controllers
 {
     public class PlanetManager : MonoBehaviour
     {
         [SerializeField] private StoryController story;
-        [SerializeField] private SceneAsset currentSelectedScene;
+        [SerializeField] private ScrollViewPlanetMap scrollView;
+        [SerializeField] private string currentSelectedScene;
         [SerializeField] private Transform cardSelectSpace;
         [SerializeField] private int missionCurrentIndex;
         public CardInventoryUI CardInventory;
@@ -52,15 +50,17 @@ namespace Controllers
                 var missionData = missions[i];
                 missionsUI[i].Setup(missionData);
             }
+            
+            scrollView.ScrollToMission(DataManager.GetLastMissionAvailable());
 
             story.CheckTrigger(CutSceneTrigger.PlanetMap, null);
         }
 
         public Transform GetCardSelectSpace() => cardSelectSpace;
 
-        public void StartMission(SceneAsset mission)
+        public void StartMission(string missionName)
         {
-            currentSelectedScene = mission;
+            currentSelectedScene = missionName;
 
             story.CheckTrigger(CutSceneTrigger.CardSelection, null, missionCurrentIndex);
         }
@@ -74,9 +74,17 @@ namespace Controllers
 
         public void MoveToGameScene()
         {
-            if (currentSelectedScene is null) return;
+            if (currentSelectedScene.Length == 0) return;
             
-            StartCoroutine(LoadSceneAsync(currentSelectedScene.name));
+            StartCoroutine(LoadSceneAsync(currentSelectedScene));
+        }
+
+        public void ClosedCardSelection()
+        {
+            foreach (var cardDrag in CardInventory.GetCardDragSelected())
+            {
+                cardDrag.BackToOrigin();
+            }
         }
         
         private IEnumerator LoadSceneAsync(string sceneName)

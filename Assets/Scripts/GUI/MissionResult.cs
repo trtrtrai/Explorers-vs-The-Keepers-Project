@@ -1,11 +1,8 @@
-using System.Collections;
 using Controllers;
 using Data;
 using Extensions;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using static Extensions.LoadSceneExtension;
 
 namespace GUI
@@ -27,9 +24,9 @@ namespace GUI
                 // update data
                 // unlock new mission
                 // reward items
-                DataManager.UpdateDataStory();
+                var updateRs = DataManager.UpdateDataStory(WorldManager.Instance.MissionData.MissionIndex);
                 reward.gameObject.SetActive(true);
-                reward.ShowReward(WorldManager.Instance.GameResult);
+                reward.ShowReward(updateRs);
             }
             else
             {
@@ -37,9 +34,9 @@ namespace GUI
             }
         }
 
-        public void BackToPlanet(SceneAsset sceneAsset)
+        public void BackToPlanet(string sceneName)
         {
-            StartCoroutine(BackToPlanetAsync(sceneAsset.name, () => {
+            StartCoroutine(BackToPlanetAsync(sceneName, () => {
                 Destroy(EventSystem.current.gameObject);
                 Destroy(GameObject.FindGameObjectWithTag("AudioController"));
             }));

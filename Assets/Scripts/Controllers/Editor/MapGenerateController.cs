@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Extensions;
 using Models;
@@ -7,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Controllers
+namespace Controllers.Editor
 {
     [ExecuteInEditMode]
     public class MapGenerateController : MonoBehaviour

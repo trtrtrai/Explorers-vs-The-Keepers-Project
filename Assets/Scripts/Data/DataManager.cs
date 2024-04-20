@@ -138,11 +138,14 @@ namespace Data
             }
         }
 
-        public static void UpdateDataStory()
+        public static bool UpdateDataStory(int currentMissionIndex)
         {
-            var currentMissionIndex = planetDatas[0].Missions.FindIndex(p => p.firstPlay);
-
-            if (currentMissionIndex == -1) return;
+            var firstPlay = planetDatas[0].Missions[currentMissionIndex].firstPlay;
+            if (!firstPlay)
+            {
+                cardInventory.Coin += 50; // reward after first win
+                return false;
+            }
 
             planetDatas[0].Missions[currentMissionIndex].firstPlay = false;
 
@@ -174,6 +177,13 @@ namespace Data
                 PlanetTrigger.Planet1[nextMission].triggerActive = true;
                 CardSelectionTrigger.Planet1[nextMission].triggerActive = true;
             }
+
+            return true;
+        }
+
+        public static int GetLastMissionAvailable()
+        {
+            return planetDatas[0].Missions.FindLastIndex(m => m.status == MissionStatus.Playable);
         }
 
         public static CardInfo GetCardInfo(string cardName)

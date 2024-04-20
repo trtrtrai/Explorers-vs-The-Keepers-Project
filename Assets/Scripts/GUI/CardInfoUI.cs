@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using Controllers;
-using GUI.SelectCardDeck;
 using static Extensions.GUIExtension;
 using Models;
 using ScriptableObjects;
@@ -60,6 +58,7 @@ namespace GUI
                 else
                 {
                     SetupPlayMode();
+                    if (!parent.isMainFaceCardFlip) FlipCard();
                 }
             }
             else
@@ -288,12 +287,17 @@ namespace GUI
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                var show = transform.GetChild(0).gameObject;
-                var hide = transform.GetChild(1).gameObject;
-                
-                show.SetActive(!show.activeSelf);
-                hide.SetActive(!hide.activeSelf);
+                FlipCard();
             }
+        }
+
+        private void FlipCard()
+        {
+            var show = transform.GetChild(0).gameObject;
+            var hide = transform.GetChild(1).gameObject;
+            
+            show.SetActive(!show.activeSelf);
+            hide.SetActive(!hide.activeSelf);
         }
     }
 }

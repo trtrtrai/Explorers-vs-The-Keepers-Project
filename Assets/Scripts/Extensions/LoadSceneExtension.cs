@@ -44,7 +44,8 @@ namespace Extensions
             
             destroyObjCallback?.Invoke();
             while (!asyncLoad.isDone) yield return null;
-
+            
+            Time.timeScale = 1f;
             SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         }
 

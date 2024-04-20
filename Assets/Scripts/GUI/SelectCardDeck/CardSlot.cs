@@ -43,7 +43,7 @@ namespace GUI.SelectCardDeck
                     draggable.SameSlot = cardDrag;
                 }
                 cardDrag = draggable;
-                draggable.Placeholder.SetActive(true);
+                if (!draggable.PlaceHolderDestroy) draggable.Placeholder.SetActive(true);
             }
         }
 
@@ -58,7 +58,7 @@ namespace GUI.SelectCardDeck
                 draggable.Parent = null;
                 card = GetComponentInChildren<Card>();
                 cardDrag = GetComponentInChildren<CardDrag>();
-                draggable.Placeholder.SetActive(false);
+                if (!draggable.PlaceHolderDestroy) draggable.Placeholder.SetActive(false);
             }
         }
 

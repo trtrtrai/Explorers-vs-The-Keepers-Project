@@ -20,6 +20,7 @@ namespace GUI
         private void Awake()
         {
             card = GetComponent<Card>();
+            PlaceHolderDestroy = true;
             DraggableObjOutOfHand = false;
             removeHoldingCard = true;
         }

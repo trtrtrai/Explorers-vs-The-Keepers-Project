@@ -11,9 +11,14 @@ namespace GUI
         [SerializeField] private GameObject coinPrefab;
         [SerializeField] private GameObject cashPrefab;
         
-        public void ShowReward(bool result)
+        public void ShowReward(bool isFirstPlay)
         {
-            if (!result) return;
+            if (!isFirstPlay) // show reward after first win
+            {
+                var coin = Instantiate(coinPrefab, content);
+                coin.GetComponent<RewardItemUI>().Setup(50);
+                return;
+            }
 
             var missionData = WorldManager.Instance.MissionData;
             var rewards = DataManager.GetPlanetData()[missionData.PlanetMap].Missions[missionData.MissionIndex].rewards;

@@ -55,5 +55,7 @@ namespace GUI.SelectCardDeck
 
             return cardDrags.Select(d => d.CardName).ToList();
         }
+        
+        public CardDrag[] GetCardDragSelected() => cardSlots.GetComponentsInChildren<CardDrag>();
     }
 }

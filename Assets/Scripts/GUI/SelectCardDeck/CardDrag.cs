@@ -106,5 +106,12 @@ namespace GUI.SelectCardDeck
                 Destroy(destroyPlaceholder);
             }
         }
+
+        public void BackToOrigin()
+        {
+            transform.SetParent(myOrigin);
+            transform.parent.GetComponent<CardSlot>().UpdateCardDrag();
+            transform.localPosition = Vector3.zero;
+        }
     }
 }

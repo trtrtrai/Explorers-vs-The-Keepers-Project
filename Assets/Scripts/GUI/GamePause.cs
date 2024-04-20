@@ -1,5 +1,4 @@
 using Extensions;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static Extensions.LoadSceneExtension;
@@ -8,9 +7,9 @@ namespace GUI
 {
     public class GamePause : MonoBehaviour
     {
-        public void BackToPlanet(SceneAsset sceneAsset)
+        public void BackToPlanet(string sceneName)
         {
-            StartCoroutine(BackToPlanetAsync(sceneAsset.name, () =>
+            StartCoroutine(BackToPlanetAsync(sceneName, () =>
             {
                 Destroy(EventSystem.current.gameObject);
                 Destroy(GameObject.FindGameObjectWithTag("AudioController"));

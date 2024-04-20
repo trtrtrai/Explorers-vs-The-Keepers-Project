@@ -654,14 +654,13 @@ MonoBehaviour:
       - m_Target: {fileID: 5273577432920504956}
         m_TargetAssemblyTypeName: GUI.GamePause, Assembly-CSharp
         m_MethodName: BackToPlanet
-        m_Mode: 2
+        m_Mode: 5
         m_Arguments:
-          m_ObjectArgument: {fileID: 102900000, guid: b6fc7921c6b376d4e9c847029a7bbd31,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEditor.SceneAsset, UnityEditor.CoreModule
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: PlanetMap1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &2167963993394522745
@@ -2388,14 +2387,13 @@ MonoBehaviour:
       - m_Target: {fileID: 3618952772885399381}
         m_TargetAssemblyTypeName: GUI.MissionResult, Assembly-CSharp
         m_MethodName: BackToPlanet
-        m_Mode: 2
+        m_Mode: 5
         m_Arguments:
-          m_ObjectArgument: {fileID: 102900000, guid: b6fc7921c6b376d4e9c847029a7bbd31,
-            type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEditor.SceneAsset, UnityEditor.CoreModule
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: PlanetMap1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &4269314609882961964
@@ -5635,6 +5633,7 @@ MonoBehaviour:
     type: 3}
   cardTagPrefab: {fileID: 8214862777088503531, guid: 2b3b11ca5b3ca9443938e48d04e0df79,
     type: 3}
+  isMainFaceCardFlip: 0
   tagTooltip: {fileID: 1111769493234781191}
   listTagExplain:
   - IsCharacterTag: 1
@@ -7000,10 +6999,20 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3886816342854892228, guid: 43673724b53729c48bac6aef76c9bf32,
         type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3886816342854892228, guid: 43673724b53729c48bac6aef76c9bf32,
+        type: 3}
       propertyPath: m_fontAsset
       value: 
       objectReference: {fileID: 11400000, guid: f2c8aeea836bbe34dbb399d4692dff97,
         type: 2}
+    - target: {fileID: 3886816342854892228, guid: 43673724b53729c48bac6aef76c9bf32,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 3886816342854892228, guid: 43673724b53729c48bac6aef76c9bf32,
         type: 3}
       propertyPath: m_sharedMaterial
